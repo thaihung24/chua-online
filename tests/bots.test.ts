@@ -55,16 +55,16 @@ describe('BotColony (20 Phật tử ảo)', () => {
     expect(movedCount).toBeGreaterThan(20);
     expect(says.length).toBeGreaterThan(0);
 
-    // Chỉ nói các câu vui trong BOT_QUIPS, không spam: hai câu tự phát cách nhau ≥ 22 giây
+    // Chỉ nói các câu vui trong BOT_QUIPS, không spam: hai câu tự phát cách nhau ≥ 6 giây
     const quipIds = new Set(BOT_QUIPS.map((p) => p.id));
     for (const s of says) expect(quipIds.has(s.phraseId)).toBe(true);
     const sayTimes: number[] = [];
     let simNow = Date.now();
     const counted = new BotColony(DEFAULT_BOT_COUNT, { onSay: () => sayTimes.push(simNow) }, 777);
     for (let i = 0; i < 5 * 60 * 5; i++) { simNow += 200; counted.step(0.2, simNow); }
-    expect(sayTimes.length).toBeGreaterThanOrEqual(5);
-    expect(sayTimes.length).toBeLessThanOrEqual(15);
-    for (let i = 1; i < sayTimes.length; i++) expect(sayTimes[i] - sayTimes[i - 1]).toBeGreaterThanOrEqual(22_000);
+    expect(sayTimes.length).toBeGreaterThanOrEqual(15);
+    expect(sayTimes.length).toBeLessThanOrEqual(50);
+    for (let i = 1; i < sayTimes.length; i++) expect(sayTimes[i] - sayTimes[i - 1]).toBeGreaterThanOrEqual(6_000);
 
     // Kiểm tra đáp lễ khi người thật đứng gần chắp tay
     const current = colony.toRemotePlayers(phraseText);
