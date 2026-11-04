@@ -13,7 +13,7 @@ export interface LabelParts {
   bubble: HTMLElement;
 }
 
-export const SAY_MAX = 40;
+export const SAY_MAX = 100;
 
 export function createLabelEl(): LabelParts {
   const root = document.createElement('div');

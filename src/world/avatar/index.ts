@@ -502,7 +502,7 @@ export function createAvatar(profile: Profile, level: number): AvatarRig {
       curLevel = lv;
       if (nt.id !== tier.id) { tier = nt; applyTier(); }
     },
-    say(text, ms = 4000) {
+    say(text, ms) {
       const t = text.trim();
       if (!t) return;
       const chars = Array.from(t);
@@ -510,7 +510,8 @@ export function createAvatar(profile: Profile, level: number): AvatarRig {
       lab.bubble.classList.remove('on');
       void lab.bubble.offsetWidth; // chạy lại hoạt ảnh
       lab.bubble.classList.add('on');
-      sayLeft = ms / 1000;
+      // Câu dài hiện lâu hơn để kịp đọc (tối thiểu 4 giây, tối đa 8 giây)
+      sayLeft = (ms ?? Math.min(8000, Math.max(4000, 1500 + Math.min(chars.length, SAY_MAX) * 75))) / 1000;
     },
     headAnchor(out) {
       return out.set(group.position.x, group.position.y + 1.36 + Math.min(0, body.position.y) * 0.8, group.position.z);

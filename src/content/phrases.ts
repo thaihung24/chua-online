@@ -48,6 +48,70 @@ export const PHRASES: Phrase[] = [
   { id: 'ru-ba-hoi-tho', group: 'Rủ công phu', text: 'Mình cùng thở ba hơi thật chậm nhé' },
 ];
 
+/**
+ * Câu nói vui của Phật tử ảo (NPC) — chỉ NPC dùng, không hiện trong bảng "Lời chào" của người chơi
+ * và máy chủ không nhận các id này từ người chơi gửi lên.
+ */
+export const BOT_QUIPS: Phrase[] = [
+  { id: 'vui-trung-sinh', group: 'Vui', text: 'Trùng sinh tôi vào chùa quét lá đa' },
+  { id: 'vui-anh-em', group: 'Vui', text: 'Anh em ta cứ thế thôi hẹ hẹ hẹ' },
+  { id: 'vui-kiep-nan', group: 'Vui', text: 'Kiếp nạn thứ 82' },
+  { id: 'vui-ba-tho', group: 'Vui', text: 'Bà nói thiệt hả bà Thơ?' },
+  { id: 'vui-thuyet-hom', group: 'Vui', text: 'Thuyệt hôm bà?' },
+  { id: 'vui-mieng-gian', group: 'Vui', text: 'Xin lỗi bà nha cái miệng tui hơi giãn' },
+  { id: 'vui-than-chua', group: 'Vui', text: 'Thân chưa mà giỡn kiểu đó?' },
+  { id: 'vui-ao-ca-sa', group: 'Vui', text: 'Thiếu cái áo cà sa là thành Phật' },
+  { id: 'vui-ve-ke', group: 'Vui', text: 'Về kể không ai tin' },
+  { id: 'vui-gian-zi', group: 'Vui', text: 'Trí thông minh giản zị' },
+  { id: 'vui-kho-nhat', group: 'Vui', text: 'Tui khổ nhất thế giới' },
+  { id: 'vui-doan-voi', group: 'Vui', text: 'Đoán vội…' },
+  { id: 'vui-gopi', group: 'Vui', text: 'Im lặng đi gopi' },
+  { id: 'vui-long-may', group: 'Vui', text: 'Cặp lông mày skinship' },
+  { id: 'vui-bai-trinh', group: 'Vui', text: 'Nghe bài Trình chưa?' },
+  { id: 'vui-quan-1', group: 'Vui', text: 'Ở ngay trung tâm quận 1' },
+  { id: 'vui-lay-ai-anh', group: 'Vui', text: 'Anh mà vô chùa là không biết lạy ai luôn đó' },
+  { id: 'vui-lay-ai-chi', group: 'Vui', text: 'Chị mà vô chùa là không biết lạy ai luôn đó' },
+  { id: 'vui-oi-gioi', group: 'Vui', text: 'Ối giời ôi, ối dồi ôi' },
+  { id: 'vui-tu-tri', group: 'Vui', text: 'Hơn cả khu tự trị' },
+  { id: 'vui-flex', group: 'Vui', text: 'Flex' },
+  { id: 'vui-slay', group: 'Vui', text: 'Slay' },
+  { id: 'vui-red-flag', group: 'Vui', text: 'Red flag' },
+  { id: 'vui-pressing', group: 'Vui', text: 'Pressing' },
+  { id: 'vui-4-ty', group: 'Vui', text: 'Giờ tao đưa mày 4 tỷ, tao kêu mày biến, mày biến không?' },
+  { id: 'vui-danh-thoi-gian', group: 'Vui', text: 'Em dành thời gian cho em đi em! Ra ngoài đường kết bạn làm điều gì đó ý nghĩa đi em' },
+  { id: 'vui-pakistan', group: 'Vui', text: 'Tại sao anh Pakistan lại gọi cho Ny bằng số điện thoại?' },
+  { id: 'vui-cham-dau', group: 'Vui', text: 'Đã làm gì đâu? Đã chạm vào đâu?' },
+  { id: 'vui-mieng-to', group: 'Vui', text: 'Mình xin phép ăn miếng to nhé' },
+  { id: 'vui-dai-dai', group: 'Vui', text: 'Đại đại đi' },
+  { id: 'vui-cung-cung', group: 'Vui', text: 'Cũng cũng' },
+  { id: 'vui-chua-wow', group: 'Vui', text: 'Chưa có đủ wow' },
+  { id: 'vui-e-nha', group: 'Vui', text: 'Ê nha' },
+  { id: 'vui-stk', group: 'Vui', text: 'Đọc stk đây' },
+  { id: 'vui-com-nuoc', group: 'Vui', text: 'Cơm nước gì chưa người đẹp?' },
+  { id: 'vui-boc-trung', group: 'Vui', text: 'Bóc trúng sít rịt' },
+  { id: 'vui-cong-1-may', group: 'Vui', text: '+1 máy' },
+  { id: 'vui-huong-noi', group: 'Vui', text: 'Hướng nội hết phần đời còn lại' },
+  { id: 'vui-gion-vay', group: 'Vui', text: 'Giỡn vậy có nên không trời' },
+  { id: 'vui-kho-nha-bro', group: 'Vui', text: 'Ê khó nha bro, khó nha, khó nha bro' },
+  { id: 'vui-anh-nhac', group: 'Vui', text: 'Anh nhắc em' },
+  { id: 'vui-pickleball', group: 'Vui', text: 'Vượt mức pickleball' },
+  { id: 'vui-thua-doi', group: 'Vui', text: 'Thua đời 1:0' },
+  { id: 'vui-thang-doi', group: 'Vui', text: 'Thắng đời 1:0' },
+  { id: 'vui-ten-ten', group: 'Vui', text: 'Tẻn tẻn, mát mát' },
+  { id: 'vui-tin-chau', group: 'Vui', text: 'Cậu bé đó tin tưởng cháu quá ha' },
+  { id: 'vui-mua-thu', group: 'Vui', text: 'Mùa thu Hà Nội' },
+  { id: 'vui-baby-three', group: 'Vui', text: 'Baby Three' },
+  { id: 'vui-gia-cat', group: 'Vui', text: 'Thua Gia Cát Lượng mỗi cái quạt' },
+  { id: 'vui-thuc-dan', group: 'Vui', text: 'Thua Thực Dân Pháp mỗi cái quốc tịch' },
+  { id: 'vui-thuoc-nam', group: 'Vui', text: 'Chuyển qua thuốc nam coi thử đỡ không?' },
+  { id: 'vui-cac-mom', group: 'Vui', text: 'Các mom ơi' },
+  { id: 'vui-dieu-thuyen', group: 'Vui', text: 'Dính chiêu 2 Điêu Thuyền' },
+  { id: 'vui-fen', group: 'Vui', text: 'Fen ơi' },
+  { id: 'vui-can-phuoc', group: 'Vui', text: 'Cạn phước' },
+  { id: 'vui-hen-lam', group: 'Vui', text: 'Hên lắm mới xui được như vậy' },
+  { id: 'vui-dien-anh', group: 'Vui', text: 'Nhìn điện ảnh' },
+];
+
 export function phraseText(id: string): string | undefined {
-  return PHRASES.find((p) => p.id === id)?.text;
+  return PHRASES.find((p) => p.id === id)?.text ?? BOT_QUIPS.find((p) => p.id === id)?.text;
 }

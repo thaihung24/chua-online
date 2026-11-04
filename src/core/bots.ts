@@ -4,11 +4,11 @@
  * - Tự tìm đường A* (`findPath`) quanh vật cản trên toàn khuôn viên chùa (không đi xuyên tường/hồ).
  * - Thực hiện đầy đủ hoạt động: lễ Phật ở Chánh điện, thắp hương Lư đồng, cầu nguyện Quan Âm & Cây Bồ Đề,
  *   ngồi thiền/tụng kinh trên bồ đoàn (chừa tối thiểu 5/8 bồ đoàn trống cho người thật), quét lá sân gạch,
- *   lần tràng hạt, ngắm Giếng ngọc, thả đèn hoa đăng ở Ao sen và gửi lời chào hoan hỷ, đáp lễ khi người thật chắp tay.
+ *   lần tràng hạt, ngắm Giếng ngọc, thả đèn hoa đăng ở Ao sen; thỉnh thoảng buông một câu vui (BOT_QUIPS) — ngẫu nhiên, có giãn cách, không spam.
  */
 import { OUTFITS, type Gender, type OutfitId, type Profile, type RemotePlayer } from './contracts';
 import { randomName } from './profile';
-import { PHRASES } from '../content/phrases';
+import { BOT_QUIPS } from '../content/phrases';
 import { ACCESSORIES } from '../content/wardrobe';
 import { CUSHION_COUNT, cushionSlot, LOTUS_POND, RELEASE_POND, WELL, type Vec2 } from '../world/layout';
 import { findPath, nearestFree } from '../world/nav';
@@ -60,15 +60,14 @@ interface BotActor {
 }
 
 const LANTERN_HEX = ['#f3c25a', '#f28ca8', '#f7e3a4', '#8fe0bd', '#ff9f68'];
-const GREET_PHRASES = [
-  'chao-adidaphat', 'chao-namo', 'chao-binhan', 'chao-anlac', 'chao-moi-vui', 'chao-ngay-lanh',
-  'tuyhy-tuyhy', 'tuyhy-sadhu', 'nguyen-anlac', 'nguyen-gia-dinh', 'nguyen-hoa-binh',
-  'camon-phat', 'camon-ngay-nay', 'ru-niem-phat', 'ru-ngoi-thien', 'ru-thap-huong', 'ru-tha-den',
-].filter((id) => PHRASES.some((p) => p.id === id));
-
-const REPLY_PHRASES = [
-  'chao-adidaphat', 'chao-namo', 'chao-binhan', 'chao-moi-vui', 'tuyhy-tuyhy', 'tuyhy-lanh',
-].filter((id) => PHRASES.some((p) => p.id === id));
+/** NPC chỉ nói các câu vui trong BOT_QUIPS, chọn ngẫu nhiên và không lặp lại câu vừa nói. */
+const QUIP_IDS = BOT_QUIPS.map((p) => p.id);
+/** Khoảng lặng chung cả sân chùa giữa hai câu nói tự phát (ms). */
+const GLOBAL_SAY_GAP: [number, number] = [22_000, 40_000];
+/** Mỗi NPC nói lại sau ít nhất (ms). */
+const BOT_SAY_GAP: [number, number] = [120_000, 240_000];
+/** Khoảng lặng chung giữa hai lần NPC đáp lại người chơi (ms). */
+const REPLY_GAP_MS = 9_000;
 
 const r2 = (n: number): number => Math.round(n * 100) / 100;
 
@@ -99,13 +98,15 @@ export class BotColony {
   private occupiedCushions = new Set<number>();
   private globalNextSayAt = 0;
   private globalNextLanternAt = 0;
+  private globalNextReplyAt = 0;
+  private recentQuips: string[] = [];
 
   constructor(count: number, private hooks: BotHooks = {}, seed = 20261104) {
     this.rng = mulberry32(seed);
     const usedNames = new Set<string>();
     const outfits = OUTFITS.map((o) => o.id) as OutfitId[];
     const now = Date.now();
-    this.globalNextSayAt = now + 4500;
+    this.globalNextSayAt = now + 12_000;
     this.globalNextLanternAt = now + 9000;
 
     for (let i = 0; i < count; i++) {
@@ -159,7 +160,7 @@ export class BotColony {
         cushionIdx: null,
         say: null,
         sayUntil: 0,
-        nextSayAt: now + 8000 + Math.floor(this.rng() * 45_000),
+        nextSayAt: now + 15_000 + Math.floor(this.rng() * 150_000),
         pendingReplyAt: 0,
         pendingReplyPhrase: null,
         frag: null,
@@ -318,8 +319,20 @@ export class BotColony {
     b.frag = null;
   }
 
-  /** Gọi khi một người chơi thật chắp tay hoặc gửi lời chào ở `(hx, hz)` — bot đứng gần có thể hoan hỷ đáp lễ. */
+  /** Chọn ngẫu nhiên một câu vui, tránh lặp lại các câu vừa nói gần đây (tối đa 1/3 kho câu). */
+  private pickQuip(): string | null {
+    if (QUIP_IDS.length === 0) return null;
+    const pool = QUIP_IDS.filter((id) => !this.recentQuips.includes(id));
+    const list = pool.length > 0 ? pool : QUIP_IDS;
+    const id = list[Math.floor(this.rng() * list.length)];
+    this.recentQuips.push(id);
+    while (this.recentQuips.length > Math.min(20, Math.floor(QUIP_IDS.length / 3))) this.recentQuips.shift();
+    return id;
+  }
+
+  /** Gọi khi một người chơi thật chắp tay hoặc gửi lời chào ở `(hx, hz)` — bot đứng gần có thể đáp lại (có giãn cách, không spam). */
   notifyHumanGesture(hx: number, hz: number, now = Date.now()): void {
+    if (now < this.globalNextReplyAt) return;
     let best: BotActor | null = null;
     let bestDist = 6.5;
     for (const b of this.bots) {
@@ -330,9 +343,10 @@ export class BotColony {
         best = b;
       }
     }
-    if (!best || REPLY_PHRASES.length === 0 || this.rng() > 0.72) return;
+    if (!best || QUIP_IDS.length === 0 || this.rng() > 0.6) return;
+    this.globalNextReplyAt = now + REPLY_GAP_MS;
     best.pendingReplyAt = now + 900 + Math.floor(this.rng() * 1300);
-    best.pendingReplyPhrase = REPLY_PHRASES[Math.floor(this.rng() * REPLY_PHRASES.length)];
+    best.pendingReplyPhrase = this.pickQuip();
     if (best.path.length === 0 && best.cushionIdx === null) {
       best.ry = faceToward({ x: best.x, z: best.z }, { x: hx, z: hz });
       best.anim = 'pray';
@@ -409,11 +423,11 @@ export class BotColony {
       } else {
         // Đang dừng thực hiện hành động tại điểm đến
         b.dwellLeft -= dt;
-        if (!b.say && now >= b.nextSayAt && now >= this.globalNextSayAt && GREET_PHRASES.length > 0) {
-          const phrase = GREET_PHRASES[Math.floor(this.rng() * GREET_PHRASES.length)];
-          this.triggerSay(b, phrase, now);
-          b.nextSayAt = now + 35_000 + Math.floor(this.rng() * 55_000);
-          this.globalNextSayAt = now + 7500 + Math.floor(this.rng() * 9000);
+        if (!b.say && now >= b.nextSayAt && now >= this.globalNextSayAt && QUIP_IDS.length > 0) {
+          const phrase = this.pickQuip();
+          if (phrase) this.triggerSay(b, phrase, now);
+          b.nextSayAt = now + BOT_SAY_GAP[0] + Math.floor(this.rng() * (BOT_SAY_GAP[1] - BOT_SAY_GAP[0]));
+          this.globalNextSayAt = now + GLOBAL_SAY_GAP[0] + Math.floor(this.rng() * (GLOBAL_SAY_GAP[1] - GLOBAL_SAY_GAP[0]));
           changed = true;
         }
         if (b.dwellLeft <= 0) {
@@ -428,7 +442,8 @@ export class BotColony {
 
   private triggerSay(b: BotActor, phraseId: string, now: number): void {
     b.say = phraseId;
-    b.sayUntil = now + 4500;
+    const len = Array.from(BOT_QUIPS.find((p) => p.id === phraseId)?.text ?? '').length;
+    b.sayUntil = now + Math.min(8000, Math.max(4500, 1500 + len * 75));
     b.frag = null;
     this.hooks.onSay?.(b.id, phraseId);
   }
