@@ -31,6 +31,11 @@ export function createLabelEl(): LabelParts {
   const level = document.createElement('span');
   level.className = 'w2-lv';
   pill.append(me, name, level);
+  // "z Z z" bay lên khi nhân vật đứng ngủ gật (chỉ hiện với lớp .w2-doze)
+  const zzz = document.createElement('span');
+  zzz.className = 'w2-zzz';
+  zzz.innerHTML = '<i>z</i><i>Z</i><i>z</i>';
+  pill.append(zzz);
   root.append(bubble, pill);
   return { root, pill, me, name, level, bubble };
 }

@@ -1,6 +1,6 @@
 /** Kiểm thử hệ thống 20 Phật tử ảo (BotColony) trên cả core và máy chủ WebSocket/HTTP. */
 import { describe, expect, it } from 'vitest';
-import { BotColony, DEFAULT_BOT_COUNT } from '../src/core/bots';
+import { BotColony, DEFAULT_BOT_COUNT, SLEEPER_ID, SLEEPER_POS } from '../src/core/bots';
 import { validateName } from '../src/core/profile';
 import { BOT_QUIPS, phraseText } from '../src/content/phrases';
 import { BLOCKS, BOUNDS } from '../src/world/layout';
@@ -78,6 +78,42 @@ describe('BotColony (20 Phật tử ảo)', () => {
       }
     }
     expect(says.length).toBeGreaterThan(saysBefore);
+  });
+
+  it('ThaisHungw đứng cố định cạnh lối vào, cầm chổi ngủ gật; bị chắp tay gần thì giật mình quét lá rồi ngủ tiếp', () => {
+    const says: string[] = [];
+    const colony = new BotColony(DEFAULT_BOT_COUNT, { onSay: (id, phrase) => { if (id === SLEEPER_ID) says.push(phrase); } }, 99);
+    const find = () => colony.toRemotePlayers().find((p) => p.id === SLEEPER_ID)!;
+    const s0 = find();
+    expect(colony.size).toBe(DEFAULT_BOT_COUNT);
+    expect(s0.profile.name).toBe('ThaisHungw');
+    expect(s0.anim).toBe('doze');
+    expect(Math.hypot(s0.x - SLEEPER_POS.x, s0.z - SLEEPER_POS.z)).toBeLessThan(0.01);
+    // Thấy được ngay khi vừa vào chùa: đứng trước mặt điểm sinh (z nhỏ hơn) và gần lối giữa
+    expect(s0.z).toBeLessThan(28);
+    expect(Math.abs(s0.x)).toBeLessThan(4);
+
+    let now = Date.now();
+    for (let i = 0; i < 600; i++) { now += 200; colony.step(0.2, now); }
+    const s1 = find();
+    expect(s1.x).toBe(s0.x);
+    expect(s1.z).toBe(s0.z);
+    expect(s1.anim).toBe('doze');
+    expect(says).toHaveLength(0); // ngủ thì không tự nói
+
+    // Chắp tay ngay cạnh: tỉnh dậy quét lá, lẩm bẩm một câu, rồi ngủ gật lại
+    let woke = false;
+    for (let attempt = 0; attempt < 12 && !woke; attempt++) {
+      now += 5000;
+      colony.notifyHumanGesture(SLEEPER_POS.x, SLEEPER_POS.z + 0.8, now);
+      colony.step(0.2, now);
+      woke = find().anim === 'sweep';
+    }
+    expect(woke).toBe(true);
+    for (let i = 0; i < 15; i++) { now += 200; colony.step(0.2, now); }
+    expect(says.length).toBeGreaterThan(0);
+    for (let i = 0; i < 40; i++) { now += 200; colony.step(0.2, now); }
+    expect(find().anim).toBe('doze');
   });
 
   it('đồng bộ 20 bot qua máy chủ WebSocket, đếm đúng 21 người khi có 1 người thật và xuất hiện trên /api/bxh', async () => {

@@ -8,7 +8,7 @@ export { BOUNDS, SPAWN };
 const phraseIds = new Set(PHRASES.map((p) => p.id));
 export const isPhrase = (id: unknown): id is string => typeof id === 'string' && phraseIds.has(id);
 
-export const ANIMS = ['idle', 'walk', 'pray', 'bow', 'sweep', 'sit', 'chant', 'meditate', 'beads'] as const;
+export const ANIMS = ['idle', 'walk', 'pray', 'bow', 'sweep', 'sit', 'chant', 'meditate', 'beads', 'doze'] as const;
 export type Anim = (typeof ANIMS)[number];
 export const isAnim = (a: unknown): a is Anim => typeof a === 'string' && (ANIMS as readonly string[]).includes(a);
 

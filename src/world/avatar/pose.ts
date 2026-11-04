@@ -208,8 +208,44 @@ function beads(p: Pose, c: AnimCtx): void {
   p[P.ROOT_Y] = Math.sin(c.time * 2.0) * 0.004;
 }
 
+/**
+ * Đứng ngủ gật tựa chổi: hai tay ôm cán chổi dựng trước ngực, đầu gục dần rồi giật mình ngẩng lên,
+ * người lắc lư nhẹ như sắp ngã (chu kỳ ~6 giây, lệch pha theo từng nhân vật).
+ */
+const DOZE_T = 6.2;
+function doze(p: Pose, c: AnimCtx): void {
+  standBase(p);
+  c.smooth = 7;
+  const t = (c.t + c.seed * 3) % DOZE_T;
+  const sink = seg(t, 0.3, 4.6);            // gục dần
+  const jerk = seg(t, 4.75, 5.0);            // giật mình ngẩng lên
+  const nod = sink * (1 - jerk);
+  const sway = Math.sin(c.time * 0.9 + c.seed);
+  // Tay phải ôm cán ngang ngực, mũi chổi chống xuống sân phía trước bên phải
+  const rx = 0.05, ry = 0.15 - nod * 0.03, rz = 0.2;
+  handR(p, rx, ry, rz);
+  p[P.AIM_X] = -0.08 + sway * 0.02;
+  p[P.AIM_Y] = -0.3;
+  p[P.AIM_Z] = 0.34;
+  const dx = p[P.AIM_X] - (-rx);
+  const dy = p[P.AIM_Y] - ry;
+  const dz = p[P.AIM_Z] - rz;
+  const l = Math.hypot(dx, dy, dz) || 1;
+  const up = 0.13;
+  handL(p, -rx - (dx / l) * up, ry - (dy / l) * up, rz - (dz / l) * up);
+  // Thân & đầu: nghiêng tựa vào chổi, đầu gục, lắc lư
+  p[P.PITCH] = 0.1 + nod * 0.08;
+  p[P.ROLL] = sway * 0.035 + nod * 0.02;
+  p[P.H_PITCH] = 0.08 + nod * 0.62 - jerk * 0.1 * (1 - seg(t, 5.0, 5.6));
+  p[P.H_ROLL] = sway * 0.08 + nod * 0.12;
+  p[P.H_YAW] = sway * 0.05;
+  p[P.ROOT_Y] = -nod * 0.012 + Math.sin(c.time * 1.4 + c.seed) * 0.003;
+  p[P.KNEE_L] = p[P.KNEE_R] = 0.08 + nod * 0.08;
+  p[P.HIP_LX] = p[P.HIP_RX] = -0.04 - nod * 0.04;
+}
+
 export const ANIMS: Record<Anim, (p: Pose, c: AnimCtx) => void> = {
-  idle, walk, pray, bow, sweep, sit, chant, meditate, beads,
+  idle, walk, pray, bow, sweep, sit, chant, meditate, beads, doze,
 };
 
 // ───────────────────────── Cử chỉ ngắn ─────────────────────────

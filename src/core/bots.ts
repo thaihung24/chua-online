@@ -57,7 +57,23 @@ interface BotActor {
   pendingReplyAt: number;
   pendingReplyPhrase: string | null;
   frag: string | null;
+  /** NPC đứng cố định (vd ThaisHungw ngủ gật cạnh lối vào), không đi lại, không tự nói. */
+  fixed?: boolean;
+  /** Lúc bị đánh thức thì quét lá tới thời điểm này rồi ngủ gật tiếp. */
+  wakeUntil?: number;
 }
+
+/**
+ * ThaisHungw: cầm chổi quét lá đa nhưng đứng ngủ gật ngay bên lối đá trước mặt cổng vào —
+ * ai vừa vào chùa (sinh ra quanh x=0, z≈29, nhìn về chánh điện) cũng thấy ngay.
+ */
+export const SLEEPER_ID = 'b0700000';
+export const SLEEPER_POS: Vec2 = { x: 2.3, z: 25.4 };
+const SLEEPER_LOOK: Vec2 = { x: 0, z: 30 };
+/** Câu ThaisHungw lẩm bẩm khi bị người chơi chắp tay / chào làm giật mình tỉnh giấc. */
+const SLEEPER_REPLIES = ['vui-cham-dau', 'vui-trung-sinh', 'vui-gopi', 'vui-than-chua', 'vui-kiep-nan', 'vui-huong-noi']
+  .filter((id) => BOT_QUIPS.some((p) => p.id === id));
+const SLEEPER_WAKE_MS = 4_500;
 
 const LANTERN_HEX = ['#f3c25a', '#f28ca8', '#f7e3a4', '#8fe0bd', '#ff9f68'];
 /** NPC chỉ nói các câu vui trong BOT_QUIPS, chọn ngẫu nhiên và không lặp lại câu vừa nói. */
@@ -82,6 +98,14 @@ function wrapPi(a: number): number {
 
 function faceToward(from: Vec2, lookAt: Vec2): number {
   return Math.atan2(-(lookAt.x - from.x), -(lookAt.z - from.z));
+}
+
+/** Không cho Phật tử ảo khác dừng chân đè lên chỗ ThaisHungw đang ngủ gật. */
+function awayFromSleeper(p: Vec2): Vec2 {
+  const dx = p.x - SLEEPER_POS.x;
+  const dz = p.z - SLEEPER_POS.z;
+  if (dx * dx + dz * dz >= 1.6 * 1.6) return p;
+  return nearestFree(SLEEPER_POS.x + (dx >= 0 ? 1.9 : -1.9), p.z);
 }
 
 function mulberry32(seed: number): () => number {
@@ -111,7 +135,7 @@ export class BotColony {
     this.globalNextSayAt = now + 4_000;
     this.globalNextLanternAt = now + 9000;
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < (count > 0 ? count - 1 : 0); i++) {
       const gender: Gender = i % 2 === 0 ? 'female' : 'male';
       let name = '';
       for (let tries = 0; tries < 40; tries++) {
@@ -187,6 +211,35 @@ export class BotColony {
         this.assignNextGoal(bot);
       }
       this.bots.push(bot);
+    }
+
+    if (count > 0) {
+      const ry = faceToward(SLEEPER_POS, SLEEPER_LOOK);
+      this.bots.push({
+        id: SLEEPER_ID,
+        profile: { name: 'ThaisHungw', gender: 'male', outfit: 'ba-ba', colorIndex: 0, accessory: 'conical-hat' },
+        level: 82,
+        streak: 81,
+        x: SLEEPER_POS.x,
+        z: SLEEPER_POS.z,
+        ry,
+        anim: 'doze',
+        speed: 0,
+        path: [],
+        goalKind: 'sweepYard',
+        goalFace: ry,
+        goalAnim: 'doze',
+        dwellLeft: Infinity,
+        cushionIdx: null,
+        say: null,
+        sayUntil: 0,
+        nextSayAt: Infinity,
+        pendingReplyAt: 0,
+        pendingReplyPhrase: null,
+        frag: null,
+        fixed: true,
+        wakeUntil: 0,
+      });
     }
   }
 
@@ -283,12 +336,12 @@ export class BotColony {
         return { kind, pos, face: faceToward(pos, { x: WELL.x, z: WELL.z }), anim: 'pray', dwell: this.randRange(5, 9), cushionIdx: null };
       }
       case 'sweepYard': {
-        const pos = nearestFree(this.randRange(-6.5, 6.5), this.randRange(8, 24));
+        const pos = awayFromSleeper(nearestFree(this.randRange(-6.5, 6.5), this.randRange(8, 24)));
         return { kind, pos, face: this.randRange(-Math.PI, Math.PI), anim: 'sweep', dwell: this.randRange(8, 15), cushionIdx: null };
       }
       case 'stroll':
       default: {
-        const pos = nearestFree(this.randRange(-14, 14), this.randRange(-6, 28));
+        const pos = awayFromSleeper(nearestFree(this.randRange(-14, 14), this.randRange(-6, 28)));
         const anim: RemotePlayer['anim'] = this.rng() < 0.35 ? 'beads' : 'idle';
         return { kind: 'stroll', pos, face: this.randRange(-Math.PI, Math.PI), anim, dwell: this.randRange(3, 7), cushionIdx: null };
       }
@@ -348,6 +401,16 @@ export class BotColony {
     if (!best || QUIP_IDS.length === 0 || this.rng() > REPLY_CHANCE) return;
     this.globalNextReplyAt = now + REPLY_GAP_MS;
     best.pendingReplyAt = now + 900 + Math.floor(this.rng() * 1300);
+    if (best.fixed) {
+      // Giật mình tỉnh giấc: quét vội vài nhát rồi lẩm bẩm, xong lại ngủ gật tiếp
+      best.pendingReplyPhrase = SLEEPER_REPLIES.length
+        ? SLEEPER_REPLIES[Math.floor(this.rng() * SLEEPER_REPLIES.length)]
+        : this.pickQuip();
+      best.wakeUntil = now + SLEEPER_WAKE_MS;
+      best.anim = 'sweep';
+      best.frag = null;
+      return;
+    }
     best.pendingReplyPhrase = this.pickQuip();
     if (best.path.length === 0 && best.cushionIdx === null) {
       best.ry = faceToward({ x: best.x, z: best.z }, { x: hx, z: hz });
@@ -378,6 +441,17 @@ export class BotColony {
           this.triggerSay(b, phrase, now);
           changed = true;
         }
+      }
+
+      // NPC đứng cố định: ngủ gật tựa chổi, chỉ tỉnh dậy quét lá chốc lát khi bị đánh thức
+      if (b.fixed) {
+        const want: RemotePlayer['anim'] = (b.wakeUntil ?? 0) > now ? 'sweep' : 'doze';
+        if (b.anim !== want) {
+          b.anim = want;
+          b.frag = null;
+          changed = true;
+        }
+        continue;
       }
 
       // Di chuyển dọc đường A*

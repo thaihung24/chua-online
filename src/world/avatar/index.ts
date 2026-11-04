@@ -346,7 +346,7 @@ export function createAvatar(profile: Profile, level: number): AvatarRig {
     }
     const rightBusy = out.length > 0 && out[0].mount !== 'L';
     if (!rightBusy) {
-      if (anim === 'sweep' || carry === 'broom') out.push({ name: 'broom', mount: 'R' });
+      if (anim === 'sweep' || anim === 'doze' || carry === 'broom') out.push({ name: 'broom', mount: 'R' });
       else if (anim === 'chant') out.push({ name: 'mallet', mount: 'R' });
       else if (look.acc === 'lotus-hand' && anim !== 'bow' && anim !== 'beads') out.push({ name: 'lotusHeld', mount: 'R' });
     }
@@ -435,6 +435,7 @@ export function createAvatar(profile: Profile, level: number): AvatarRig {
     }
     anim = a;
     animT = 0;
+    lab.root.classList.toggle('w2-doze', a === 'doze');
   }
 
   let orbitSpin = Math.random() * 6;

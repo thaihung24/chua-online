@@ -72,7 +72,7 @@ export interface RemotePlayer {
   level: number;
   x: number; z: number; ry: number;
   /** Trạng thái: đứng/đi/lạy/ngồi... để dựng hoạt cảnh. */
-  anim: 'idle' | 'walk' | 'pray' | 'bow' | 'sweep' | 'sit' | 'chant' | 'meditate' | 'beads';
+  anim: 'idle' | 'walk' | 'pray' | 'bow' | 'sweep' | 'sit' | 'chant' | 'meditate' | 'beads' | 'doze';
   /** Câu nói đang hiện (bong bóng lời) hoặc undefined. */
   say?: string;
 }
