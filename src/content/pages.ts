@@ -1,5 +1,5 @@
 /**
- * Nội dung các trang tĩnh SEO của "Chùa Liên Hoa".
+ * Nội dung các trang tĩnh SEO của "Chùa Bình Thạnh".
  * Cú pháp liên kết trong đoạn văn / mục danh sách: [chữ hiển thị](slug)
  *  - slug là một slug trong PAGES, hoặc `kinh`, hoặc `kinh/<sutra-id>`, hoặc `/` (trang chủ ứng dụng).
  * File này không import gì để có thể chạy độc lập bằng tsx.
@@ -30,22 +30,22 @@ const RAW_PAGES: Page[] = [
   // ───────────────────────────── gioi-thieu
   {
     slug: 'gioi-thieu',
-    title: 'Giới thiệu Chùa Liên Hoa – ngôi chùa online để tịnh tâm',
+    title: 'Giới thiệu Chùa Bình Thạnh – ngôi chùa online để tịnh tâm',
     description:
-      'Chùa Liên Hoa là phần mềm độc lập, mô phỏng khuôn viên chùa 3D để niệm Phật, tụng kinh, thiền định và giữ nếp tu tập mỗi ngày. Không phải chùa thật.',
-    h1: 'Chùa Liên Hoa: một góc nhỏ để lắng lòng giữa ngày bận rộn',
+      'Chùa Bình Thạnh là phần mềm độc lập, mô phỏng khuôn viên chùa 3D để niệm Phật, tụng kinh, thiền định và giữ nếp tu tập mỗi ngày. Không phải chùa thật.',
+    h1: 'Chùa Bình Thạnh: một góc nhỏ để lắng lòng giữa ngày bận rộn',
     sections: [
       {
-        h2: 'Chùa Liên Hoa là gì?',
+        h2: 'Chùa Bình Thạnh là gì?',
         p: [
-          'Chùa Liên Hoa là một ứng dụng web mô phỏng khuôn viên chùa bằng đồ họa ba chiều. Bạn có thể mở trình duyệt trên điện thoại hay máy tính, bước đi trong sân chùa, thắp một nén hương, dâng hoa, rung chuông, rồi ngồi xuống niệm Phật hoặc tụng một thời kinh ngắn. Mục đích duy nhất của ứng dụng là tạo ra một không gian yên tĩnh, đẹp mắt và dễ tiếp cận, để những ai bận rộn vẫn có vài phút trở về với hơi thở của chính mình.',
-          'Tên “Liên Hoa” có nghĩa là hoa sen, loài hoa mọc lên từ bùn mà vẫn thanh sạch. Hình ảnh ấy gợi nhắc rằng giữa đời sống nhiều áp lực, chúng ta vẫn có thể giữ được một tâm hồn nhẹ nhàng nếu biết nuôi dưỡng nó mỗi ngày.',
+          'Chùa Bình Thạnh là một ứng dụng web mô phỏng khuôn viên chùa bằng đồ họa ba chiều. Bạn có thể mở trình duyệt trên điện thoại hay máy tính, bước đi trong sân chùa, thắp một nén hương, dâng hoa, rung chuông, rồi ngồi xuống niệm Phật hoặc tụng một thời kinh ngắn. Mục đích duy nhất của ứng dụng là tạo ra một không gian yên tĩnh, đẹp mắt và dễ tiếp cận, để những ai bận rộn vẫn có vài phút trở về với hơi thở của chính mình.',
+          'Tên gọi “Chùa Bình Thạnh” gợi nhắc sự bình an và thanh tịnh giữa nhịp sống đời thường — như đóa sen vươn lên thanh sạch, giúp ta giữ được một tâm hồn nhẹ nhàng và an hòa nếu biết nuôi dưỡng nó mỗi ngày.',
         ],
       },
       {
         h2: 'Điều cần nói rõ: đây không phải chùa thật',
         p: [
-          'Chùa Liên Hoa là phần mềm độc lập, do một nhóm người làm phần mềm xây dựng với lòng thành kính. Đây không phải là một ngôi chùa thật, không có sư thầy hay ban trị sự nào đứng sau, và ứng dụng không thuộc về bất kỳ tổ chức tôn giáo nào. Mọi hoạt động trong ứng dụng, từ thắp hương đến thả đèn, đều là mô phỏng và không thay thế cho việc đến chùa, nghe pháp, thọ giới hay học hỏi với một vị thầy có đạo hạnh.',
+          'Chùa Bình Thạnh là phần mềm độc lập, do một nhóm người làm phần mềm xây dựng với lòng thành kính. Đây không phải là một ngôi chùa thật, không có sư thầy hay ban trị sự nào đứng sau, và ứng dụng không thuộc về bất kỳ tổ chức tôn giáo nào. Mọi hoạt động trong ứng dụng, từ thắp hương đến thả đèn, đều là mô phỏng và không thay thế cho việc đến chùa, nghe pháp, thọ giới hay học hỏi với một vị thầy có đạo hạnh.',
           'Phần kinh văn trong ứng dụng được tổng hợp từ các bản tụng phổ biến để bạn tiện đọc theo. Nếu cần bản chuẩn xác cho việc hành trì lâu dài, bạn nên đối chiếu với kinh sách do các chùa và nhà xuất bản Phật giáo ấn hành, hoặc hỏi quý thầy cô tại ngôi chùa gần nhà.',
         ],
       },
@@ -71,11 +71,11 @@ const RAW_PAGES: Page[] = [
     ],
     faq: [
       {
-        q: 'Chùa Liên Hoa có phải là một ngôi chùa thật không?',
+        q: 'Chùa Bình Thạnh có phải là một ngôi chùa thật không?',
         a: 'Không. Đây là phần mềm độc lập, không phải chùa thật và không thuộc tổ chức tôn giáo nào. Ứng dụng chỉ mô phỏng để hỗ trợ bạn tịnh tâm.',
       },
       {
-        q: 'Sử dụng Chùa Liên Hoa có mất phí không?',
+        q: 'Sử dụng Chùa Bình Thạnh có mất phí không?',
         a: 'Các tính năng chính để niệm Phật, tụng kinh và thiền đều có thể dùng miễn phí, không cần cúng dường tiền bạc trong ứng dụng.',
       },
       {
@@ -90,7 +90,7 @@ const RAW_PAGES: Page[] = [
     slug: 'huong-dan-di-chua-online',
     title: 'Hướng dẫn đi chùa online: từ bước vào cổng đến công phu',
     description:
-      'Hướng dẫn từng bước đi chùa online trên Chùa Liên Hoa: di chuyển trong sân chùa 3D, thắp hương, rung chuông, niệm Phật, tụng kinh, thiền và thả đèn hoa đăng.',
+      'Hướng dẫn từng bước đi chùa online trên Chùa Bình Thạnh: di chuyển trong sân chùa 3D, thắp hương, rung chuông, niệm Phật, tụng kinh, thiền và thả đèn hoa đăng.',
     h1: 'Cách đi chùa online nhẹ nhàng, từng bước một',
     sections: [
       {
@@ -130,7 +130,7 @@ const RAW_PAGES: Page[] = [
     faq: [
       {
         q: 'Tôi cần cài ứng dụng để đi chùa online không?',
-        a: 'Không. Chùa Liên Hoa chạy trên trình duyệt hiện đại; bạn có thể thêm vào màn hình chính điện thoại để mở nhanh như một ứng dụng.',
+        a: 'Không. Chùa Bình Thạnh chạy trên trình duyệt hiện đại; bạn có thể thêm vào màn hình chính điện thoại để mở nhanh như một ứng dụng.',
       },
       {
         q: 'Tôi nên làm gì đầu tiên khi mới vào?',
@@ -146,16 +146,16 @@ const RAW_PAGES: Page[] = [
   // ───────────────────────────── hoi-dap
   {
     slug: 'hoi-dap',
-    title: 'Hỏi đáp về Chùa Liên Hoa – chùa online và niệm Phật',
+    title: 'Hỏi đáp về Chùa Bình Thạnh – chùa online và niệm Phật',
     description:
-      'Giải đáp câu hỏi thường gặp về Chùa Liên Hoa: có phải chùa thật không, miễn phí không, cách niệm Phật, tụng kinh, thiền, xin quẻ, phòng chung, quyền riêng tư.',
+      'Giải đáp câu hỏi thường gặp về Chùa Bình Thạnh: có phải chùa thật không, miễn phí không, cách niệm Phật, tụng kinh, thiền, xin quẻ, phòng chung, quyền riêng tư.',
     h1: 'Những câu hỏi thường gặp khi đi chùa online',
     sections: [
       {
         h2: 'Về ứng dụng',
         p: [
-          'Trang này tổng hợp những câu hỏi mà người mới thường gửi đến. Trước hết, xin nhắc lại một điều quan trọng: Chùa Liên Hoa là phần mềm độc lập, không phải chùa thật và không thuộc bất kỳ tổ chức tôn giáo nào. Bạn có thể đọc thêm tại trang [giới thiệu](gioi-thieu). Các câu hỏi bên dưới được chia theo chủ đề để bạn dễ tìm. Chúng tôi viết phần trả lời bằng ngôn ngữ giản dị, tránh dùng thuật ngữ khó, để cả người chưa từng đến chùa cũng có thể hiểu và thấy yên tâm khi bắt đầu.',
-          'Chùa Liên Hoa được làm ra với mong muốn rất nhỏ: giúp bạn có vài phút lắng lòng giữa ngày bận rộn. Bạn có thể đi dạo trong sân chùa ba chiều, thắp hương, rung chuông, niệm Phật, tụng kinh theo nhịp mõ, ngồi thiền, thả đèn hoa đăng hoặc xin một quẻ cho vui. Mỗi hoạt động đều được thiết kế nhẹ nhàng, không thúc ép và không so đo thành tích.',
+          'Trang này tổng hợp những câu hỏi mà người mới thường gửi đến. Trước hết, xin nhắc lại một điều quan trọng: Chùa Bình Thạnh là phần mềm độc lập, không phải chùa thật và không thuộc bất kỳ tổ chức tôn giáo nào. Bạn có thể đọc thêm tại trang [giới thiệu](gioi-thieu). Các câu hỏi bên dưới được chia theo chủ đề để bạn dễ tìm. Chúng tôi viết phần trả lời bằng ngôn ngữ giản dị, tránh dùng thuật ngữ khó, để cả người chưa từng đến chùa cũng có thể hiểu và thấy yên tâm khi bắt đầu.',
+          'Chùa Bình Thạnh được làm ra với mong muốn rất nhỏ: giúp bạn có vài phút lắng lòng giữa ngày bận rộn. Bạn có thể đi dạo trong sân chùa ba chiều, thắp hương, rung chuông, niệm Phật, tụng kinh theo nhịp mõ, ngồi thiền, thả đèn hoa đăng hoặc xin một quẻ cho vui. Mỗi hoạt động đều được thiết kế nhẹ nhàng, không thúc ép và không so đo thành tích.',
         ],
       },
       {
@@ -173,11 +173,11 @@ const RAW_PAGES: Page[] = [
     ],
     faq: [
       {
-        q: 'Chùa Liên Hoa có phải là chùa thật không?',
+        q: 'Chùa Bình Thạnh có phải là chùa thật không?',
         a: 'Không. Đây là phần mềm độc lập mô phỏng không gian chùa, không phải chùa thật và không thuộc tổ chức tôn giáo nào. Việc thắp hương, thả đèn trong ứng dụng chỉ mang tính mô phỏng và không thay thế việc đến chùa thật hay học hỏi với bậc thầy.',
       },
       {
-        q: 'Dùng Chùa Liên Hoa có mất tiền không?',
+        q: 'Dùng Chùa Bình Thạnh có mất tiền không?',
         a: 'Các tính năng chính như niệm Phật, tụng kinh, thiền, thắp hương và xin quẻ đều dùng miễn phí. Ứng dụng không yêu cầu bạn cúng dường hay thanh toán để được “phước”.',
       },
       {
@@ -218,9 +218,9 @@ const RAW_PAGES: Page[] = [
   // ───────────────────────────── niem-phat-online
   {
     slug: 'niem-phat-online',
-    title: 'Niệm Phật online với tràng hạt – Chùa Liên Hoa',
+    title: 'Niệm Phật online với tràng hạt – Chùa Bình Thạnh',
     description:
-      'Niệm Phật online cùng tràng hạt và nhịp mõ dịu nhẹ: cách bắt đầu, đếm hạt, giữ tâm chuyên nhất và duy trì thói quen niệm Phật mỗi ngày ngay trên Chùa Liên Hoa.',
+      'Niệm Phật online cùng tràng hạt và nhịp mõ dịu nhẹ: cách bắt đầu, đếm hạt, giữ tâm chuyên nhất và duy trì thói quen niệm Phật mỗi ngày ngay trên Chùa Bình Thạnh.',
     h1: 'Niệm Phật online: mỗi hạt một câu danh hiệu',
     sections: [
       {
@@ -233,7 +233,7 @@ const RAW_PAGES: Page[] = [
       {
         h2: 'Dùng tràng hạt trong ứng dụng',
         p: [
-          'Tràng hạt giúp bạn đếm số câu niệm mà không cần nhớ trong đầu. Trong Chùa Liên Hoa, mỗi lần bạn chạm vào một hạt, ứng dụng ghi nhận một câu và phát nhịp mõ nhẹ để giữ nhịp. Chuỗi thường có 108 hạt, tượng trưng cho việc đoạn trừ muôn phiền não. Bạn có thể chọn niệm một vòng, nửa vòng hoặc vài chục hạt tùy thời gian.',
+          'Tràng hạt giúp bạn đếm số câu niệm mà không cần nhớ trong đầu. Trong Chùa Bình Thạnh, mỗi lần bạn chạm vào một hạt, ứng dụng ghi nhận một câu và phát nhịp mõ nhẹ để giữ nhịp. Chuỗi thường có 108 hạt, tượng trưng cho việc đoạn trừ muôn phiền não. Bạn có thể chọn niệm một vòng, nửa vòng hoặc vài chục hạt tùy thời gian.',
         ],
         list: [
           'Ngồi thẳng lưng, thả lỏng vai, hít vào thật chậm.',
@@ -277,14 +277,14 @@ const RAW_PAGES: Page[] = [
     slug: 'thien-online',
     title: 'Thiền online – ngồi thiền với đồng hồ hẹn giờ yên tĩnh',
     description:
-      'Thiền online trên Chùa Liên Hoa: ngồi thiền theo hơi thở với đồng hồ hẹn giờ, chuông nhẹ báo đầu và cuối thời, cùng hướng dẫn tư thế đơn giản cho người mới.',
+      'Thiền online trên Chùa Bình Thạnh: ngồi thiền theo hơi thở với đồng hồ hẹn giờ, chuông nhẹ báo đầu và cuối thời, cùng hướng dẫn tư thế đơn giản cho người mới.',
     h1: 'Thiền online: vài phút ngồi yên cùng hơi thở',
     sections: [
       {
         h2: 'Thiền là gì và vì sao nên thử?',
         p: [
           'Thiền là thực hành đưa sự chú ý về một điểm, thường là hơi thở, để tâm dần lắng lại và nhìn rõ những gì đang diễn ra bên trong mình. Trong truyền thống Phật giáo, thiền gắn liền với việc nuôi dưỡng sự tỉnh thức và lòng từ bi. Nhưng bạn không cần phải là Phật tử mới ngồi thiền được; nhiều người chỉ đơn giản muốn nghỉ ngơi đầu óc, giảm bớt căng thẳng sau một ngày dài.',
-          'Tính năng thiền trong Chùa Liên Hoa (xem thêm [hướng dẫn đi chùa online](huong-dan-di-chua-online)) là một đồng hồ hẹn giờ yên tĩnh: bạn chọn số phút, ứng dụng sẽ gióng một tiếng chuông nhẹ để bắt đầu và một tiếng chuông khi hết giờ. Trong khoảng giữa, không có gì làm bạn xao lãng.',
+          'Tính năng thiền trong Chùa Bình Thạnh (xem thêm [hướng dẫn đi chùa online](huong-dan-di-chua-online)) là một đồng hồ hẹn giờ yên tĩnh: bạn chọn số phút, ứng dụng sẽ gióng một tiếng chuông nhẹ để bắt đầu và một tiếng chuông khi hết giờ. Trong khoảng giữa, không có gì làm bạn xao lãng.',
         ],
       },
       {
@@ -332,7 +332,7 @@ const RAW_PAGES: Page[] = [
     slug: 'thap-huong-online',
     title: 'Thắp hương online – dâng hương, hoa và nến trong sân chùa',
     description:
-      'Thắp hương online trên Chùa Liên Hoa: cách dâng hương, hoa, nến, rung chuông trong sân chùa 3D, ý nghĩa của nén hương và cách giữ tâm thành kính khi lễ.',
+      'Thắp hương online trên Chùa Bình Thạnh: cách dâng hương, hoa, nến, rung chuông trong sân chùa 3D, ý nghĩa của nén hương và cách giữ tâm thành kính khi lễ.',
     h1: 'Thắp hương online: một nén hương tâm',
     sections: [
       {
@@ -343,7 +343,7 @@ const RAW_PAGES: Page[] = [
         ],
       },
       {
-        h2: 'Cách thắp hương, dâng hoa và nến trong Chùa Liên Hoa',
+        h2: 'Cách thắp hương, dâng hoa và nến trong Chùa Bình Thạnh',
         p: ['Bạn có thể thực hiện lần lượt theo thứ tự quen thuộc khi đến chùa:'],
         list: [
           'Đi chậm đến lư hương trước chính điện, chắp tay trong lòng.',
@@ -386,15 +386,15 @@ const RAW_PAGES: Page[] = [
   // ───────────────────────────── noi-quy
   {
     slug: 'noi-quy',
-    title: 'Nội quy cộng đồng Chùa Liên Hoa – giữ không gian thanh tịnh',
+    title: 'Nội quy cộng đồng Chùa Bình Thạnh – giữ không gian thanh tịnh',
     description:
-      'Nội quy khi vào Chùa Liên Hoa: cách ứng xử hòa nhã trong phòng chung và phòng riêng, quy định tên gọi, câu chào soạn sẵn, nội dung bị cấm và cách báo vi phạm.',
+      'Nội quy khi vào Chùa Bình Thạnh: cách ứng xử hòa nhã trong phòng chung và phòng riêng, quy định tên gọi, câu chào soạn sẵn, nội dung bị cấm và cách báo vi phạm.',
     h1: 'Nội quy chung để cùng giữ sân chùa thanh tịnh',
     sections: [
       {
         h2: 'Tinh thần chung',
         p: [
-          'Chùa Liên Hoa là một không gian để mọi người tìm chút yên tĩnh. Vì vậy, nội quy không nhằm kiểm soát mà để bảo vệ sự thanh tịnh ấy cho tất cả. Bạn hãy cư xử như khi bước vào một ngôi chùa thật: nhẹ nhàng, lễ độ, biết lắng nghe. Xin nhớ rằng đây là phần mềm độc lập, không phải chùa thật và không thuộc tổ chức tôn giáo nào, nên mọi người đến đây với nhiều hoàn cảnh và niềm tin khác nhau; hãy tôn trọng sự khác biệt đó.',
+          'Chùa Bình Thạnh là một không gian để mọi người tìm chút yên tĩnh. Vì vậy, nội quy không nhằm kiểm soát mà để bảo vệ sự thanh tịnh ấy cho tất cả. Bạn hãy cư xử như khi bước vào một ngôi chùa thật: nhẹ nhàng, lễ độ, biết lắng nghe. Xin nhớ rằng đây là phần mềm độc lập, không phải chùa thật và không thuộc tổ chức tôn giáo nào, nên mọi người đến đây với nhiều hoàn cảnh và niềm tin khác nhau; hãy tôn trọng sự khác biệt đó.',
         ],
       },
       {
@@ -447,7 +447,7 @@ const RAW_PAGES: Page[] = [
   // ───────────────────────────── go-mo-online
   {
     slug: 'go-mo-online',
-    title: 'Gõ mõ online – tụng kinh theo nhịp mõ trên Chùa Liên Hoa',
+    title: 'Gõ mõ online – tụng kinh theo nhịp mõ trên Chùa Bình Thạnh',
     description:
       'Gõ mõ online: tìm hiểu vai trò của mõ khi tụng kinh, cách gõ đúng nhịp, luyện nhịp đều và dùng chế độ chữ chạy theo nhịp mõ để tụng kinh thuận lợi mỗi ngày.',
     h1: 'Gõ mõ online: giữ nhịp cho một thời kinh',
@@ -505,13 +505,13 @@ const RAW_PAGES: Page[] = [
     slug: 'xin-que-online',
     title: 'Xin quẻ online cho vui – lời nhắc tích cực mỗi ngày',
     description:
-      'Xin quẻ online trên Chùa Liên Hoa là trò vui nhẹ nhàng: mỗi quẻ là một bài thơ và lời nhắc tu tập tích cực, không bói toán và không dự đoán vận mệnh.',
+      'Xin quẻ online trên Chùa Bình Thạnh là trò vui nhẹ nhàng: mỗi quẻ là một bài thơ và lời nhắc tu tập tích cực, không bói toán và không dự đoán vận mệnh.',
     h1: 'Xin quẻ online: một lời nhắc nhẹ nhàng, không phải bói toán',
     sections: [
       {
-        h2: 'Xin quẻ trong Chùa Liên Hoa là gì?',
+        h2: 'Xin quẻ trong Chùa Bình Thạnh là gì?',
         p: [
-          'Ở nhiều ngôi chùa, người ta có tục rút một lá xăm rồi đọc bài thơ ghi trên đó. Chùa Liên Hoa mượn hình thức quen thuộc ấy để tạo ra một trò vui nhẹ nhàng. Khi bạn “xin quẻ”, ứng dụng chọn ngẫu nhiên một trong 60 quẻ, mỗi quẻ gồm tên quẻ, bốn câu thơ do chúng tôi tự sáng tác và một lời giải ngắn.',
+          'Ở nhiều ngôi chùa, người ta có tục rút một lá xăm rồi đọc bài thơ ghi trên đó. Chùa Bình Thạnh mượn hình thức quen thuộc ấy để tạo ra một trò vui nhẹ nhàng. Khi bạn “xin quẻ”, ứng dụng chọn ngẫu nhiên một trong 60 quẻ, mỗi quẻ gồm tên quẻ, bốn câu thơ do chúng tôi tự sáng tác và một lời giải ngắn.',
           'Điều cần nói rõ: đây không phải bói toán. Quẻ không dự đoán tương lai, không phán về tiền bạc, tình duyên hay sức khỏe. Mỗi quẻ chỉ là một lời nhắc tích cực, ví dụ nhớ thở chậm, nói lời dịu dàng, biết ơn những điều nhỏ bé. Hãy xem như đang đọc một dòng chữ khích lệ vào buổi sáng.',
         ],
       },
@@ -535,7 +535,7 @@ const RAW_PAGES: Page[] = [
       {
         h2: 'Lưu ý',
         p: [
-          'Chùa Liên Hoa là phần mềm độc lập, không phải chùa thật; bạn có thể đọc thêm ở trang [giới thiệu](gioi-thieu). Nếu có điều gì thắc mắc về cách dùng, xin xem phần [hỏi đáp](hoi-dap). Muốn nghe thêm những lời dạy sâu hơn, bạn có thể ghé mục [pháp thoại](phap-thoai).',
+          'Chùa Bình Thạnh là phần mềm độc lập, không phải chùa thật; bạn có thể đọc thêm ở trang [giới thiệu](gioi-thieu). Nếu có điều gì thắc mắc về cách dùng, xin xem phần [hỏi đáp](hoi-dap). Muốn nghe thêm những lời dạy sâu hơn, bạn có thể ghé mục [pháp thoại](phap-thoai).',
         ],
       },
     ],
@@ -567,7 +567,7 @@ const RAW_PAGES: Page[] = [
         h2: 'Pháp thoại là gì?',
         p: [
           'Pháp thoại là buổi nói chuyện về Phật pháp của một vị thầy hay một giảng sư, nhằm giải thích kinh điển, chia sẻ kinh nghiệm tu học và gợi ý cách áp dụng lời Phật dạy vào cuộc sống. Ngày nay, nhờ Internet, nhiều pháp thoại được thu âm, quay hình và chia sẻ rộng rãi, giúp những ai ở xa chùa vẫn có thể nghe và học hỏi.',
-          'Mục pháp thoại trong Chùa Liên Hoa tập hợp một số gợi ý dưới dạng liên kết tìm kiếm theo chủ đề trên các nền tảng video công khai. Chúng tôi không sản xuất các bài giảng ấy, và ứng dụng không đại diện cho vị thầy nào.',
+          'Mục pháp thoại trong Chùa Bình Thạnh tập hợp một số gợi ý dưới dạng liên kết tìm kiếm theo chủ đề trên các nền tảng video công khai. Chúng tôi không sản xuất các bài giảng ấy, và ứng dụng không đại diện cho vị thầy nào.',
         ],
       },
       {
@@ -597,7 +597,7 @@ const RAW_PAGES: Page[] = [
     faq: [
       {
         q: 'Pháp thoại trong ứng dụng do ai giảng?',
-        a: 'Chùa Liên Hoa không sản xuất pháp thoại. Ứng dụng chỉ gợi ý liên kết tìm kiếm theo chủ đề trên các nền tảng công khai.',
+        a: 'Chùa Bình Thạnh không sản xuất pháp thoại. Ứng dụng chỉ gợi ý liên kết tìm kiếm theo chủ đề trên các nền tảng công khai.',
       },
       {
         q: 'Người mới nên nghe chủ đề nào trước?',
@@ -624,7 +624,7 @@ const RAW_PAGES: Page[] = [
       {
         h2: 'Mùng một và rằm trong đời sống Phật tử',
         p: [
-          'Với nhiều gia đình, ngày mùng một và ngày rằm là dịp đến chùa lễ Phật, ăn chay, làm việc thiện. Bạn có thể tìm hiểu thêm ở bài [ngày rằm, mùng một](ngay-ram-mung-mot) và [đi chùa mùng một, rằm](di-chua-ram-mung-mot). Nếu chưa thể đến chùa, bạn có thể [lễ Phật tại nhà](cach-le-phat-tai-nha) hoặc ghé sân chùa trong Chùa Liên Hoa để [niệm Phật](niem-phat-online).',
+          'Với nhiều gia đình, ngày mùng một và ngày rằm là dịp đến chùa lễ Phật, ăn chay, làm việc thiện. Bạn có thể tìm hiểu thêm ở bài [ngày rằm, mùng một](ngay-ram-mung-mot) và [đi chùa mùng một, rằm](di-chua-ram-mung-mot). Nếu chưa thể đến chùa, bạn có thể [lễ Phật tại nhà](cach-le-phat-tai-nha) hoặc ghé sân chùa trong Chùa Bình Thạnh để [niệm Phật](niem-phat-online).',
         ],
       },
       {
@@ -674,7 +674,7 @@ const RAW_PAGES: Page[] = [
       {
         h2: 'Mùng một và rằm là những ngày nào?',
         p: [
-          'Theo âm lịch, mùng một là ngày đầu mỗi tháng, còn rằm là ngày 15, khi trăng thường tròn nhất. Hai ngày này đánh dấu hai nửa của tháng, nên từ lâu người Việt có thói quen dừng lại, nhìn lại mình và làm điều tốt lành. Để biết hôm nay là ngày mấy âm lịch, bạn có thể xem [lịch âm](lich-am) trên Chùa Liên Hoa.',
+          'Theo âm lịch, mùng một là ngày đầu mỗi tháng, còn rằm là ngày 15, khi trăng thường tròn nhất. Hai ngày này đánh dấu hai nửa của tháng, nên từ lâu người Việt có thói quen dừng lại, nhìn lại mình và làm điều tốt lành. Để biết hôm nay là ngày mấy âm lịch, bạn có thể xem [lịch âm](lich-am) trên Chùa Bình Thạnh.',
         ],
       },
       {
@@ -699,7 +699,7 @@ const RAW_PAGES: Page[] = [
       {
         h2: 'Với người ở xa chùa hay bận rộn',
         p: [
-          'Nếu công việc không cho phép bạn đến chùa, đừng tự trách. Bạn có thể ghé sân chùa online, thắp hương, rung chuông, niệm Phật cùng bạn đạo trong phòng chung. Chùa Liên Hoa không phải chùa thật và không thay thế việc đến chùa, nhưng hy vọng giúp bạn giữ được nếp nhớ ngày rằm, mùng một. Muốn biết thêm về các ngày lễ khác trong năm, mời xem bài [ngày lễ Phật giáo](ngay-le-phat-giao).',
+          'Nếu công việc không cho phép bạn đến chùa, đừng tự trách. Bạn có thể ghé sân chùa online, thắp hương, rung chuông, niệm Phật cùng bạn đạo trong phòng chung. Chùa Bình Thạnh không phải chùa thật và không thay thế việc đến chùa, nhưng hy vọng giúp bạn giữ được nếp nhớ ngày rằm, mùng một. Muốn biết thêm về các ngày lễ khác trong năm, mời xem bài [ngày lễ Phật giáo](ngay-le-phat-giao).',
         ],
       },
     ],
@@ -759,7 +759,7 @@ const RAW_PAGES: Page[] = [
       {
         h2: 'Cách đón ngày lễ cho thật ý nghĩa',
         p: [
-          'Dù là ngày lễ nào, cốt lõi vẫn là hiểu và noi theo hạnh của chư Phật, chư Bồ Tát. Bạn có thể đọc một bài kinh liên quan, nghe một buổi [pháp thoại](phap-thoai), [thắp hương](thap-huong-online) hoặc [thả đèn hoa đăng](tha-den-hoa-dang) trong ứng dụng, rồi làm một việc thiện ngoài đời. Chùa Liên Hoa là phần mềm độc lập, không phải chùa thật; nếu có thể, hãy đến chùa gần nhà để cùng đại chúng tham dự lễ.',
+          'Dù là ngày lễ nào, cốt lõi vẫn là hiểu và noi theo hạnh của chư Phật, chư Bồ Tát. Bạn có thể đọc một bài kinh liên quan, nghe một buổi [pháp thoại](phap-thoai), [thắp hương](thap-huong-online) hoặc [thả đèn hoa đăng](tha-den-hoa-dang) trong ứng dụng, rồi làm một việc thiện ngoài đời. Chùa Bình Thạnh là phần mềm độc lập, không phải chùa thật; nếu có thể, hãy đến chùa gần nhà để cùng đại chúng tham dự lễ.',
         ],
       },
     ],
@@ -814,7 +814,7 @@ const RAW_PAGES: Page[] = [
       {
         h2: 'Tâm quan trọng hơn hình thức',
         p: [
-          'Không có một cách lễ Phật duy nhất. Mỗi vùng, mỗi chùa có thể hướng dẫn hơi khác nhau; điều cốt yếu là sự thành kính và hiểu biết đúng đắn, không mê tín. Nếu băn khoăn về nghi thức, hãy hỏi quý thầy cô tại chùa quen thuộc. Khi chưa thể đến chùa, bạn có thể ghé sân chùa trong Chùa Liên Hoa (phần mềm độc lập, không phải chùa thật) để có thêm cảm hứng. Xem thêm bài [hướng dẫn đi chùa online](huong-dan-di-chua-online).',
+          'Không có một cách lễ Phật duy nhất. Mỗi vùng, mỗi chùa có thể hướng dẫn hơi khác nhau; điều cốt yếu là sự thành kính và hiểu biết đúng đắn, không mê tín. Nếu băn khoăn về nghi thức, hãy hỏi quý thầy cô tại chùa quen thuộc. Khi chưa thể đến chùa, bạn có thể ghé sân chùa trong Chùa Bình Thạnh (phần mềm độc lập, không phải chùa thật) để có thêm cảm hứng. Xem thêm bài [hướng dẫn đi chùa online](huong-dan-di-chua-online).',
         ],
       },
     ],
@@ -860,7 +860,7 @@ const RAW_PAGES: Page[] = [
       {
         h2: 'Các bước thực hành',
         p: [
-          'Trước tiên, ngồi hoặc đứng ở nơi yên tĩnh, thả lỏng vai và hít thở sâu vài lần. Sau đó bắt đầu niệm, vừa niệm vừa nghe rõ từng chữ. Khi tâm lơ đãng, hãy đưa sự chú ý trở lại câu niệm một cách nhẹ nhàng, không trách mình. Có thể dùng tràng hạt để đếm; trong Chùa Liên Hoa, bạn có thể làm việc này ngay với tính năng [niệm Phật online](niem-phat-online) và [gõ mõ](go-mo-online) giữ nhịp.',
+          'Trước tiên, ngồi hoặc đứng ở nơi yên tĩnh, thả lỏng vai và hít thở sâu vài lần. Sau đó bắt đầu niệm, vừa niệm vừa nghe rõ từng chữ. Khi tâm lơ đãng, hãy đưa sự chú ý trở lại câu niệm một cách nhẹ nhàng, không trách mình. Có thể dùng tràng hạt để đếm; trong Chùa Bình Thạnh, bạn có thể làm việc này ngay với tính năng [niệm Phật online](niem-phat-online) và [gõ mõ](go-mo-online) giữ nhịp.',
           'Kết thúc, hãy dành một phút lặng yên cảm nhận sự thay đổi trong thân tâm, rồi hồi hướng bằng [Kệ hồi hướng](kinh/ke-hoi-huong). Bạn không cần chờ thấy điều gì đặc biệt; sự bình tĩnh dần dần đến là đủ.',
         ],
       },
@@ -979,7 +979,7 @@ const RAW_PAGES: Page[] = [
       {
         h2: 'Xây dựng thói quen',
         p: [
-          'Chọn một giờ cố định, ví dụ ngay sau khi thức dậy. Đặt chỗ ngồi sẵn, tắt thông báo. Dùng chuỗi ngày “giữ lửa” trong Chùa Liên Hoa như một lời nhắc nhẹ nhàng, nhưng đừng để nó thành áp lực. Nếu bỏ lỡ một hôm, hãy bắt đầu lại hôm sau. Nếu muốn học sâu hơn, bạn nên tìm một khóa thiền hoặc một người thầy; ứng dụng này là phần mềm độc lập, chỉ giúp bạn tập đều đặn. Mời xem thêm [hỏi đáp](hoi-dap) để biết cách dùng các tính năng.',
+          'Chọn một giờ cố định, ví dụ ngay sau khi thức dậy. Đặt chỗ ngồi sẵn, tắt thông báo. Dùng chuỗi ngày “giữ lửa” trong Chùa Bình Thạnh như một lời nhắc nhẹ nhàng, nhưng đừng để nó thành áp lực. Nếu bỏ lỡ một hôm, hãy bắt đầu lại hôm sau. Nếu muốn học sâu hơn, bạn nên tìm một khóa thiền hoặc một người thầy; ứng dụng này là phần mềm độc lập, chỉ giúp bạn tập đều đặn. Mời xem thêm [hỏi đáp](hoi-dap) để biết cách dùng các tính năng.',
         ],
       },
     ],
@@ -1035,7 +1035,7 @@ const RAW_PAGES: Page[] = [
       {
         h2: 'Đón Vu Lan khi ở xa nhà',
         p: [
-          'Nếu bạn đang ở xa, hãy nhắn một lời hỏi thăm, thắp một nén hương trong lòng, [niệm Phật](niem-phat-online) hoặc ghé sân chùa trong Chùa Liên Hoa để thả một chiếc đèn gửi lời nguyện lành. Ứng dụng là phần mềm độc lập, không phải chùa thật, nhưng hy vọng giúp bạn nhớ nghĩ đến cha mẹ. Khi có dịp, hãy về chùa dự lễ cùng đại chúng. Xem thêm [ngày lễ Phật giáo](ngay-le-phat-giao) để biết các dịp lễ khác trong năm.',
+          'Nếu bạn đang ở xa, hãy nhắn một lời hỏi thăm, thắp một nén hương trong lòng, [niệm Phật](niem-phat-online) hoặc ghé sân chùa trong Chùa Bình Thạnh để thả một chiếc đèn gửi lời nguyện lành. Ứng dụng là phần mềm độc lập, không phải chùa thật, nhưng hy vọng giúp bạn nhớ nghĩ đến cha mẹ. Khi có dịp, hãy về chùa dự lễ cùng đại chúng. Xem thêm [ngày lễ Phật giáo](ngay-le-phat-giao) để biết các dịp lễ khác trong năm.',
         ],
       },
     ],
@@ -1090,7 +1090,7 @@ const RAW_PAGES: Page[] = [
       {
         h2: 'Cách đón Phật Đản khi ở xa chùa',
         p: [
-          'Nếu không thể đến chùa, bạn có thể [thắp hương](thap-huong-online), [niệm Phật](niem-phat-online) hoặc ngồi [thiền](thien-online) tại nhà. Chùa Liên Hoa là phần mềm độc lập, không phải chùa thật, nhưng bạn có thể dùng sân chùa online để có một phút dừng lại giữa ngày bận rộn. Khi có điều kiện, hãy đến chùa gần nhà để dự lễ cùng đại chúng. Xem thêm bài tổng hợp [ngày lễ Phật giáo](ngay-le-phat-giao).',
+          'Nếu không thể đến chùa, bạn có thể [thắp hương](thap-huong-online), [niệm Phật](niem-phat-online) hoặc ngồi [thiền](thien-online) tại nhà. Chùa Bình Thạnh là phần mềm độc lập, không phải chùa thật, nhưng bạn có thể dùng sân chùa online để có một phút dừng lại giữa ngày bận rộn. Khi có điều kiện, hãy đến chùa gần nhà để dự lễ cùng đại chúng. Xem thêm bài tổng hợp [ngày lễ Phật giáo](ngay-le-phat-giao).',
         ],
       },
     ],
@@ -1115,7 +1115,7 @@ const RAW_PAGES: Page[] = [
     slug: 'tha-den-hoa-dang',
     title: 'Thả đèn hoa đăng online – gửi lời nguyện lành bằng đèn sen',
     description:
-      'Thả đèn hoa đăng online trên Chùa Liên Hoa: chọn màu đèn, ghi một chữ nguyện, ý nghĩa tục thả đèn dịp rằm, Vu Lan, Phật Đản và cách thả đèn thật giữ môi trường.',
+      'Thả đèn hoa đăng online trên Chùa Bình Thạnh: chọn màu đèn, ghi một chữ nguyện, ý nghĩa tục thả đèn dịp rằm, Vu Lan, Phật Đản và cách thả đèn thật giữ môi trường.',
     h1: 'Thả đèn hoa đăng online: một ngọn đèn, một lời nguyện',
     sections: [
       {
@@ -1125,7 +1125,7 @@ const RAW_PAGES: Page[] = [
         ],
       },
       {
-        h2: 'Thả đèn trong Chùa Liên Hoa',
+        h2: 'Thả đèn trong Chùa Bình Thạnh',
         p: [
           'Trong ứng dụng, bạn có thể chọn một chiếc đèn sen với một trong sáu màu: vàng, hồng sen, trắng, đỏ, xanh ngọc hoặc tím. Mỗi màu gợi một ý nghĩa nhẹ nhàng, ví dụ trắng gợi sự thanh tịnh, vàng gợi sự ấm áp và trí tuệ. Sau đó, bạn chọn một chữ nguyện, như bình an, biết ơn hay từ bi, rồi thả đèn lên mặt hồ trong sân chùa. Chiếc đèn sẽ trôi chậm rãi cùng những chiếc đèn khác.',
         ],
@@ -1198,7 +1198,7 @@ const RAW_PAGES: Page[] = [
       {
         h2: 'Cây bồ đề trong sân chùa và trong ứng dụng',
         p: [
-          'Nhiều chùa ở Việt Nam trồng cây bồ đề trong khuôn viên, và vào dịp [Phật Đản](phat-dan) hoặc [rằm tháng Giêng](ngay-ram-mung-mot), người ta thường đến ngồi dưới gốc cây để thiền hoặc lặng lẽ cầu nguyện. Trong sân chùa của Chùa Liên Hoa, bạn có thể đến gần một cội bồ đề, ngồi lặng và thực hành [thiền online](thien-online). Cây chỉ là phương tiện nhắc nhớ; sự giác ngộ nằm ở việc rèn luyện tâm mỗi ngày. Chùa Liên Hoa là phần mềm độc lập, không phải chùa thật.',
+          'Nhiều chùa ở Việt Nam trồng cây bồ đề trong khuôn viên, và vào dịp [Phật Đản](phat-dan) hoặc [rằm tháng Giêng](ngay-ram-mung-mot), người ta thường đến ngồi dưới gốc cây để thiền hoặc lặng lẽ cầu nguyện. Trong sân chùa của Chùa Bình Thạnh, bạn có thể đến gần một cội bồ đề, ngồi lặng và thực hành [thiền online](thien-online). Cây chỉ là phương tiện nhắc nhớ; sự giác ngộ nằm ở việc rèn luyện tâm mỗi ngày. Chùa Bình Thạnh là phần mềm độc lập, không phải chùa thật.',
         ],
       },
     ],
@@ -1252,7 +1252,7 @@ const RAW_PAGES: Page[] = [
         h2: 'Cách niệm danh hiệu và học theo hạnh Bồ Tát',
         p: [
           'Bạn có thể niệm danh hiệu Quán Thế Âm bằng tràng hạt, giống cách [niệm Phật](cach-niem-phat). Hãy niệm thong thả, thấy câu niệm như một lời nhắc: hôm nay mình đã lắng nghe ai chưa? Đã nói điều gì làm dịu lòng người khác chưa? Cách học theo Bồ Tát không phải chờ phép màu, mà là thực hành sự lắng nghe, kiên nhẫn và giúp đỡ trong khả năng của mình.',
-          'Trong Chùa Liên Hoa, bạn có thể [thắp hương](thap-huong-online), niệm danh hiệu và dùng [mõ](go-mo-online) giữ nhịp. Ứng dụng là phần mềm độc lập, không phải chùa thật; để học sâu về Bồ Tát, nên tìm hiểu cùng quý thầy cô ở chùa.',
+          'Trong Chùa Bình Thạnh, bạn có thể [thắp hương](thap-huong-online), niệm danh hiệu và dùng [mõ](go-mo-online) giữ nhịp. Ứng dụng là phần mềm độc lập, không phải chùa thật; để học sâu về Bồ Tát, nên tìm hiểu cùng quý thầy cô ở chùa.',
         ],
       },
     ],
@@ -1307,7 +1307,7 @@ const RAW_PAGES: Page[] = [
       {
         h2: 'Khi chưa thể đến chùa',
         p: [
-          'Nếu bận hoặc ở xa, bạn có thể [lễ Phật tại nhà](cach-le-phat-tai-nha) và ghé sân chùa online trong Chùa Liên Hoa để [thắp hương](thap-huong-online) và niệm Phật. Chùa Liên Hoa là phần mềm độc lập, không phải chùa thật, nên không thể thay thế việc đến chùa; nhưng hy vọng là một cách nhắc bạn nhớ ngày rằm và mùng một. Bài [ngày rằm, mùng một](ngay-ram-mung-mot) có thêm nhiều gợi ý khác.',
+          'Nếu bận hoặc ở xa, bạn có thể [lễ Phật tại nhà](cach-le-phat-tai-nha) và ghé sân chùa online trong Chùa Bình Thạnh để [thắp hương](thap-huong-online) và niệm Phật. Chùa Bình Thạnh là phần mềm độc lập, không phải chùa thật, nên không thể thay thế việc đến chùa; nhưng hy vọng là một cách nhắc bạn nhớ ngày rằm và mùng một. Bài [ngày rằm, mùng một](ngay-ram-mung-mot) có thêm nhiều gợi ý khác.',
         ],
       },
     ],
@@ -1332,7 +1332,7 @@ const RAW_PAGES: Page[] = [
     slug: 'ngoi-thien-ngoai-troi',
     title: 'Ngồi thiền ngoài trời: chọn nơi, tư thế và cách giữ tâm yên',
     description:
-      'Hướng dẫn ngồi thiền ngoài trời: chọn nơi yên tĩnh, tư thế, cảm nhận âm thanh thiên nhiên, lưu ý an toàn và cách kết hợp với thiền online trong Chùa Liên Hoa.',
+      'Hướng dẫn ngồi thiền ngoài trời: chọn nơi yên tĩnh, tư thế, cảm nhận âm thanh thiên nhiên, lưu ý an toàn và cách kết hợp với thiền online trong Chùa Bình Thạnh.',
     h1: 'Ngồi thiền ngoài trời: lắng nghe gió và tiếng chim',
     sections: [
       {
@@ -1362,7 +1362,7 @@ const RAW_PAGES: Page[] = [
       {
         h2: 'Kết hợp với sân chùa online',
         p: [
-          'Khi không thể ra ngoài, bạn có thể bước vào sân chùa trong Chùa Liên Hoa, nghe tiếng chuông, tiếng gió và ngồi thiền với hơi thở. Hãy xem đó như một cách luyện tập trước khi ra ngoài đời. Ứng dụng là phần mềm độc lập, không phải chùa thật. Khi có dịp, hãy thử [đi chùa](di-chua-ram-mung-mot) và ngồi lặng trong khuôn viên, hoặc [niệm Phật](niem-phat-online) khi đi dạo chậm.',
+          'Khi không thể ra ngoài, bạn có thể bước vào sân chùa trong Chùa Bình Thạnh, nghe tiếng chuông, tiếng gió và ngồi thiền với hơi thở. Hãy xem đó như một cách luyện tập trước khi ra ngoài đời. Ứng dụng là phần mềm độc lập, không phải chùa thật. Khi có dịp, hãy thử [đi chùa](di-chua-ram-mung-mot) và ngồi lặng trong khuôn viên, hoặc [niệm Phật](niem-phat-online) khi đi dạo chậm.',
         ],
       },
     ],
@@ -1414,7 +1414,7 @@ const RAW_PAGES: Page[] = [
       {
         h2: 'Một vài lưu ý để chùa luôn trang nghiêm',
         p: [
-          'Tránh chen lấn, đốt quá nhiều hương, đốt vàng mã hoặc thả rác trong khuôn viên chùa. Không nên chạy theo những lời đồn về “giải hạn”, “cúng sao” có thu phí. Giáo lý nhà Phật nhấn mạnh nhân quả và việc làm lành, không phải mua bán phước báu. Khi chưa thể đến chùa, bạn có thể [lễ Phật tại nhà](cach-le-phat-tai-nha) hoặc ghé sân chùa online trong Chùa Liên Hoa, một phần mềm độc lập, không phải chùa thật. Đọc thêm bài [đi chùa ngày rằm, mùng một](di-chua-ram-mung-mot).',
+          'Tránh chen lấn, đốt quá nhiều hương, đốt vàng mã hoặc thả rác trong khuôn viên chùa. Không nên chạy theo những lời đồn về “giải hạn”, “cúng sao” có thu phí. Giáo lý nhà Phật nhấn mạnh nhân quả và việc làm lành, không phải mua bán phước báu. Khi chưa thể đến chùa, bạn có thể [lễ Phật tại nhà](cach-le-phat-tai-nha) hoặc ghé sân chùa online trong Chùa Bình Thạnh, một phần mềm độc lập, không phải chùa thật. Đọc thêm bài [đi chùa ngày rằm, mùng một](di-chua-ram-mung-mot).',
         ],
       },
     ],
@@ -1437,15 +1437,15 @@ const RAW_PAGES: Page[] = [
   // ───────────────────────────── chinh-sach-quyen-rieng-tu
   {
     slug: 'chinh-sach-quyen-rieng-tu',
-    title: 'Chính sách quyền riêng tư – Chùa Liên Hoa',
+    title: 'Chính sách quyền riêng tư – Chùa Bình Thạnh',
     description:
-      'Chính sách quyền riêng tư của Chùa Liên Hoa: dữ liệu lưu trên thiết bị, khi nào dùng email tài khoản, phòng chung, lời nhắc và quyền xóa dữ liệu của bạn.',
-    h1: 'Chính sách quyền riêng tư của Chùa Liên Hoa',
+      'Chính sách quyền riêng tư của Chùa Bình Thạnh: dữ liệu lưu trên thiết bị, khi nào dùng email tài khoản, phòng chung, lời nhắc và quyền xóa dữ liệu của bạn.',
+    h1: 'Chính sách quyền riêng tư của Chùa Bình Thạnh',
     sections: [
       {
         h2: 'Nguyên tắc chung',
         p: [
-          'Chùa Liên Hoa là phần mềm độc lập, không phải chùa thật và không thuộc tổ chức tôn giáo nào. Chúng tôi cố gắng thu thập ít dữ liệu nhất có thể, chỉ vừa đủ để ứng dụng hoạt động. Chúng tôi không bán dữ liệu cá nhân của bạn. Trang này giải thích bằng ngôn ngữ đơn giản những gì ứng dụng lưu và vì sao. Nếu bạn không đồng ý, bạn có thể ngừng sử dụng bất cứ lúc nào.',
+          'Chùa Bình Thạnh là phần mềm độc lập, không phải chùa thật và không thuộc tổ chức tôn giáo nào. Chúng tôi cố gắng thu thập ít dữ liệu nhất có thể, chỉ vừa đủ để ứng dụng hoạt động. Chúng tôi không bán dữ liệu cá nhân của bạn. Trang này giải thích bằng ngôn ngữ đơn giản những gì ứng dụng lưu và vì sao. Nếu bạn không đồng ý, bạn có thể ngừng sử dụng bất cứ lúc nào.',
         ],
       },
       {
@@ -1478,7 +1478,7 @@ const RAW_PAGES: Page[] = [
     ],
     faq: [
       {
-        q: 'Chùa Liên Hoa có bán dữ liệu cá nhân không?',
+        q: 'Chùa Bình Thạnh có bán dữ liệu cá nhân không?',
         a: 'Không. Chúng tôi không bán dữ liệu cá nhân của người dùng.',
       },
       {
@@ -1495,15 +1495,15 @@ const RAW_PAGES: Page[] = [
   // ───────────────────────────── dieu-khoan-su-dung
   {
     slug: 'dieu-khoan-su-dung',
-    title: 'Điều khoản sử dụng – Chùa Liên Hoa',
+    title: 'Điều khoản sử dụng – Chùa Bình Thạnh',
     description:
-      'Điều khoản sử dụng Chùa Liên Hoa: phần mềm độc lập, không phải chùa thật; quy tắc ứng xử, giới hạn trách nhiệm, tài khoản, nội dung kinh văn.',
-    h1: 'Điều khoản sử dụng Chùa Liên Hoa',
+      'Điều khoản sử dụng Chùa Bình Thạnh: phần mềm độc lập, không phải chùa thật; quy tắc ứng xử, giới hạn trách nhiệm, tài khoản, nội dung kinh văn.',
+    h1: 'Điều khoản sử dụng Chùa Bình Thạnh',
     sections: [
       {
         h2: 'Bản chất của ứng dụng',
         p: [
-          'Chùa Liên Hoa là một phần mềm độc lập, mô phỏng không gian chùa bằng đồ họa ba chiều để hỗ trợ việc tịnh tâm, niệm Phật, tụng kinh và thiền. Đây không phải là một ngôi chùa thật, không thuộc về bất kỳ tổ chức tôn giáo nào, và không có thầy hay tu sĩ nào đại diện. Các hoạt động trong ứng dụng như thắp hương, thả đèn hay xin quẻ chỉ mang tính mô phỏng, giải trí và nhắc nhở tích cực. Bằng việc sử dụng ứng dụng, bạn xác nhận đã đọc và đồng ý với những điều khoản dưới đây.',
+          'Chùa Bình Thạnh là một phần mềm độc lập, mô phỏng không gian chùa bằng đồ họa ba chiều để hỗ trợ việc tịnh tâm, niệm Phật, tụng kinh và thiền. Đây không phải là một ngôi chùa thật, không thuộc về bất kỳ tổ chức tôn giáo nào, và không có thầy hay tu sĩ nào đại diện. Các hoạt động trong ứng dụng như thắp hương, thả đèn hay xin quẻ chỉ mang tính mô phỏng, giải trí và nhắc nhở tích cực. Bằng việc sử dụng ứng dụng, bạn xác nhận đã đọc và đồng ý với những điều khoản dưới đây.',
         ],
       },
       {
@@ -1531,7 +1531,7 @@ const RAW_PAGES: Page[] = [
     ],
     faq: [
       {
-        q: 'Chùa Liên Hoa có thuộc tổ chức tôn giáo nào không?',
+        q: 'Chùa Bình Thạnh có thuộc tổ chức tôn giáo nào không?',
         a: 'Không. Đây là phần mềm độc lập, không phải chùa thật và không thuộc tổ chức tôn giáo nào.',
       },
       {

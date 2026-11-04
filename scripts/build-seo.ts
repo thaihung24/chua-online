@@ -189,10 +189,10 @@ function renderLayout(opts: LayoutOpts): string {
       image: ogImage,
       datePublished: updated,
       dateModified: updated,
-      author: { '@type': 'Organization', name: 'Chùa Liên Hoa', url: opts.siteUrl },
+      author: { '@type': 'Organization', name: 'Chùa Bình Thạnh', url: opts.siteUrl },
       publisher: {
         '@type': 'Organization',
-        name: 'Chùa Liên Hoa',
+        name: 'Chùa Bình Thạnh',
         url: opts.siteUrl,
         logo: { '@type': 'ImageObject', url: `${opts.siteUrl}/icons/icon-512.png` },
       },
@@ -253,7 +253,7 @@ function renderLayout(opts: LayoutOpts): string {
     <link rel="manifest" href="/manifest.webmanifest" />
 
     <meta property="og:type" content="article" />
-    <meta property="og:site_name" content="Chùa Liên Hoa" />
+    <meta property="og:site_name" content="Chùa Bình Thạnh" />
     <meta property="og:locale" content="vi_VN" />
     <meta property="og:title" content="${esc(opts.title)}" />
     <meta property="og:description" content="${esc(opts.description)}" />
@@ -273,10 +273,10 @@ function renderLayout(opts: LayoutOpts): string {
     <header class="seo-header">
       <div class="seo-header__inner">
         <div class="seo-header__top">
-          <a class="seo-brand" href="/" aria-label="Chùa Liên Hoa — Trang chủ chùa 3D">
+          <a class="seo-brand" href="/" aria-label="Chùa Bình Thạnh — Trang chủ chùa 3D">
             ${LOTUS_LOGO_SVG}
             <span class="seo-brand__text">
-              <strong>Chùa Liên Hoa</strong>
+              <strong>Chùa Bình Thạnh</strong>
               <small>Không gian tịnh tâm 3D</small>
             </span>
           </a>
@@ -309,7 +309,7 @@ function renderLayout(opts: LayoutOpts): string {
 
         <aside class="seo-banner" aria-label="Trải nghiệm khuôn viên chùa 3D">
           <div class="seo-banner__body">
-            <strong>Ghé thăm khuôn viên Chùa Liên Hoa 3D</strong>
+            <strong>Ghé thăm khuôn viên Chùa Bình Thạnh 3D</strong>
             <p>Thắp nén hương tâm, lần tràng hạt, gõ mõ tụng kinh và ngồi thiền yên tĩnh ngay trên trình duyệt — hoàn toàn miễn phí.</p>
           </div>
           <a class="seo-cta-btn seo-cta-btn--lg" href="/">Mở cổng chùa <span aria-hidden="true">→</span></a>
@@ -322,9 +322,9 @@ function renderLayout(opts: LayoutOpts): string {
     <footer class="seo-footer">
       <div class="seo-footer__inner">
         <div class="seo-footer__brand">
-          <div class="seo-footer__title">${LOTUS_LOGO_SVG}<span>Chùa Liên Hoa</span></div>
+          <div class="seo-footer__title">${LOTUS_LOGO_SVG}<span>Chùa Bình Thạnh</span></div>
           <p class="seo-footer__disclaimer">
-            Chùa Liên Hoa là dự án phần mềm độc lập mô phỏng không gian tịnh tâm trực tuyến — <strong>không phải chùa thật</strong>, không đại diện hay trực thuộc bất kỳ tổ chức tôn giáo nào, và không nhận cúng dường hay quyên góp dưới mọi hình thức.
+            Chùa Bình Thạnh là dự án phần mềm độc lập mô phỏng không gian tịnh tâm trực tuyến — <strong>không phải chùa thật</strong>, không đại diện hay trực thuộc bất kỳ tổ chức tôn giáo nào, và không nhận cúng dường hay quyên góp dưới mọi hình thức.
           </p>
         </div>
         <nav class="seo-footer__links" aria-label="Liên kết cuối trang">
@@ -565,7 +565,7 @@ function renderKinhIndex(siteUrl: string): string {
 
   const dedicationHtml = `<section class="seo-section">
     <h2 class="seo-h2">Lưu ý về văn bản kinh &amp; Kệ Hồi Hướng</h2>
-    <p>Các bài kinh, thần chú và kệ nguyện tại Chùa Liên Hoa thuộc văn bản công cộng, được đối chiếu từ các nghi thức Hán-Việt và bản đọc phổ thông tại Việt Nam. Từng ngôi chùa hoặc truyền thống tu học có thể khác nhau đôi chữ phiên âm; phần ghi chú cuối mỗi bài luôn nêu rõ nguồn và mức độ đối chiếu để bạn tiện tham khảo. Khi cần hành trì chuyên sâu, bạn nên đối chiếu với kinh sách ấn hành chính thức của nhà chùa.</p>
+    <p>Các bài kinh, thần chú và kệ nguyện tại Chùa Bình Thạnh thuộc văn bản công cộng, được đối chiếu từ các nghi thức Hán-Việt và bản đọc phổ thông tại Việt Nam. Từng ngôi chùa hoặc truyền thống tu học có thể khác nhau đôi chữ phiên âm; phần ghi chú cuối mỗi bài luôn nêu rõ nguồn và mức độ đối chiếu để bạn tiện tham khảo. Khi cần hành trì chuyên sâu, bạn nên đối chiếu với kinh sách ấn hành chính thức của nhà chùa.</p>
     <p>Sau mỗi thời đọc tụng, người con Phật thường đọc bốn câu Kệ Hồi Hướng để đem phước lành vừa tu tập hướng về khắp pháp giới chúng sanh:</p>
     <blockquote class="seo-dedication">
       ${DEDICATION.map((line) => `<p>${esc(line)}</p>`).join('')}
@@ -575,14 +575,14 @@ function renderKinhIndex(siteUrl: string): string {
   return renderLayout({
     siteUrl,
     canonicalPath: '/kinh/',
-    title: 'Mục lục Kinh văn Phật giáo & Thời khóa tụng niệm — Chùa Liên Hoa',
+    title: 'Mục lục Kinh văn Phật giáo & Thời khóa tụng niệm — Chùa Bình Thạnh',
     description:
       'Tổng hợp 14 bài kinh, thần chú và kệ sám nguyện phổ biến: Tâm Kinh, Kinh A Di Đà, Phẩm Phổ Môn, Chú Đại Bi 84 câu, Kinh Bát Đại Nhân Giác, kèm chế độ gõ mõ từng chữ.',
     h1: 'Kinh văn & Thời khóa tụng niệm',
     eyebrow: 'Thư viện kinh tụng phổ thông',
-    lead: 'Đọc toàn văn có đánh số từng câu để dễ dò nhịp thở, hoặc mở thẳng chế độ gõ mõ từng chữ trong không gian Chùa Liên Hoa 3D.',
+    lead: 'Đọc toàn văn có đánh số từng câu để dễ dò nhịp thở, hoặc mở thẳng chế độ gõ mõ từng chữ trong không gian Chùa Bình Thạnh 3D.',
     crumbs: [
-      { name: 'Chùa Liên Hoa', path: '/' },
+      { name: 'Chùa Bình Thạnh', path: '/' },
       { name: 'Kinh văn', path: '/kinh/' },
     ],
     activeNav: 'kinh',
@@ -665,13 +665,13 @@ function renderSutraPage(sutra: Sutra, idx: number, siteUrl: string): string {
   return renderLayout({
     siteUrl,
     canonicalPath: `/kinh/${sutra.slug}/`,
-    title: `${sutra.title} — Toàn văn & Tụng kinh gõ mõ online | Chùa Liên Hoa`,
+    title: `${sutra.title} — Toàn văn & Tụng kinh gõ mõ online | Chùa Bình Thạnh`,
     description: `${sutra.title} (${sutra.subtitle}): ${sutra.blurb} Đọc toàn văn ${sutra.lines.length} câu có đánh số hoặc tụng kèm tiếng mõ trực tuyến.`,
     h1: sutra.title,
     eyebrow: `${sutra.group} · Khoảng ${sutra.minutes} phút`,
     lead: sutra.subtitle,
     crumbs: [
-      { name: 'Chùa Liên Hoa', path: '/' },
+      { name: 'Chùa Bình Thạnh', path: '/' },
       { name: 'Kinh văn', path: '/kinh/' },
       { name: sutra.title, path: `/kinh/${sutra.slug}/` },
     ],
@@ -686,7 +686,7 @@ function renderSutraPage(sutra: Sutra, idx: number, siteUrl: string): string {
 }
 
 // ───────────────────────── CSS dùng chung (dist/seo.css) ─────────────────────────
-const SEO_CSS = `/* Giao diện trang tĩnh SEO — bảng màu gỗ trầm, vàng đồng & sơn mài Chùa Liên Hoa */
+const SEO_CSS = `/* Giao diện trang tĩnh SEO — bảng màu gỗ trầm, vàng đồng & sơn mài Chùa Bình Thạnh */
 :root {
   color-scheme: dark;
   --bg: #140d08;
@@ -1940,11 +1940,11 @@ export async function buildSeo(opts: BuildSeoOptions = {}): Promise<BuildSeoResu
       title: page.title,
       description: page.description,
       h1: page.h1,
-      eyebrow: page.slug === 'lich-am' ? 'Âm lịch Việt Nam · Giờ UTC+7' : 'Cẩm nang Chùa Liên Hoa',
+      eyebrow: page.slug === 'lich-am' ? 'Âm lịch Việt Nam · Giờ UTC+7' : 'Cẩm nang Chùa Bình Thạnh',
       lead: page.description,
       updated: page.updated,
       crumbs: [
-        { name: 'Chùa Liên Hoa', path: '/' },
+        { name: 'Chùa Bình Thạnh', path: '/' },
         { name: page.h1, path: canonicalPath },
       ],
       activeNav: navKeyForSlug(page.slug),

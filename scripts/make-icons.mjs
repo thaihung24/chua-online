@@ -177,7 +177,7 @@ function ogHtml() {
       </div>
       <div class="body">
         <div class="eyebrow">Không gian tịnh tâm trực tuyến</div>
-        <h1>Chùa Liên Hoa</h1>
+        <h1>Chùa Bình Thạnh</h1>
         <p class="sub">Chùa online 3D miễn phí · Lên chùa mọi lúc, mọi nơi</p>
         <div class="pills">
           <span class="pill">Niệm Phật</span>

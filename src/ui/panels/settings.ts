@@ -129,7 +129,7 @@ export const panel: PanelDef = {
       a('/dieu-khoan-su-dung/', 'book', 'Điều khoản sử dụng'),
       a('/chinh-sach-quyen-rieng-tu/', 'lock', 'Chính sách quyền riêng tư'),
     ]);
-    view.append(h('p', { class: 'set-ver', text: `Chùa Liên Hoa · phiên bản ${APP_VERSION}` }), h('p', { class: 'set-ver set-ver--sub', text: 'Phần mềm độc lập, không phải chùa thật và không thuộc tổ chức tôn giáo nào.' }));
+    view.append(h('p', { class: 'set-ver', text: `Chùa Bình Thạnh · phiên bản ${APP_VERSION}` }), h('p', { class: 'set-ver set-ver--sub', text: 'Phần mềm độc lập, không phải chùa thật và không thuộc tổ chức tôn giáo nào.' }));
 
     /** Xác nhận ngay tại dòng (hai bước). */
     function confirmInline(row: HTMLElement, question: string, yes: string, run: () => void, danger = false): void {

@@ -1,9 +1,9 @@
 {
-  "name": "chua-lien-hoa",
+  "name": "chua-binh-thanh",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Chùa Liên Hoa — chùa online 3D: đi chùa, thắp hương, tụng kinh, thiền, cùng mọi người.",
+  "description": "Chùa Bình Thạnh — chùa online 3D: đi chùa, thắp hương, tụng kinh, thiền, cùng mọi người.",
   "scripts": {
     "dev": "concurrently -k -n web,api \"vite\" \"tsx watch server/index.ts\"",
     "dev:web": "vite",

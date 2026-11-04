@@ -263,7 +263,7 @@ describe('public/ và scripts/build-seo.ts', () => {
       expect(st.size, `Tệp rỗng: public/${rel}`).toBeGreaterThan(50);
     }
     const manifest = JSON.parse(await fs.readFile(path.join(pub, 'manifest.webmanifest'), 'utf-8'));
-    expect(manifest.name).toBe('Chùa Liên Hoa');
+    expect(manifest.name).toBe('Chùa Bình Thạnh');
     expect(manifest.display).toBe('standalone');
     expect(manifest.background_color).toBe('#140d08');
     expect(manifest.lang).toBe('vi');

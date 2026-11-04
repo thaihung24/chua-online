@@ -72,14 +72,14 @@ describe('phòng & hiện diện', () => {
     await sleep(100);
   });
 
-  it('tất cả mọi người đều vào chung 1 phòng duy nhất Chùa Liên Hoa (không tách phòng, không tạo phòng riêng)', async () => {
+  it('tất cả mọi người đều vào chung 1 phòng duy nhất Chùa Bình Thạnh (không tách phòng, không tạo phòng riêng)', async () => {
     const cs: Client[] = [];
     for (let i = 0; i < 5; i++) { const c = new Client(S.url); cs.push(c); await c.hello(profileNamed(`Khách ${i + 1}`), 1, i === 4 ? 'p-rieng' : undefined); }
     const rooms = cs.map((c) => c.msgs.find((m) => m.t === 'welcome').room.id);
     expect(rooms).toEqual(['main-1', 'main-1', 'main-1', 'main-1', 'main-1']);
     const lobby = (await new Http(S.url).get('/api/lobby')).json;
     expect(lobby).toHaveLength(1);
-    expect(lobby[0]).toMatchObject({ id: 'main-1', online: 5, label: 'Chùa Liên Hoa', kind: 'public' });
+    expect(lobby[0]).toMatchObject({ id: 'main-1', online: 5, label: 'Chùa Bình Thạnh', kind: 'public' });
     // gửi join sang phòng bất kỳ vẫn ở chung main-1
     const d = cs[4];
     d.msgs.length = 0;

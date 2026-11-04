@@ -293,7 +293,7 @@ export class Hub {
     const id = 'main-1';
     let r = this.rooms.get(id);
     if (!r) {
-      r = { id, label: 'Chùa Liên Hoa', kind: 'public', members: new Set(), dirty: false, createdAt: Date.now(), emptySince: null, n: 1 };
+      r = { id, label: 'Chùa Bình Thạnh', kind: 'public', members: new Set(), dirty: false, createdAt: Date.now(), emptySince: null, n: 1 };
       this.rooms.set(id, r);
     }
     return r;
@@ -308,7 +308,7 @@ export class Hub {
     return { id: r.id, label: r.label, online, capacity: Math.max(this.opts.roomCapacity, online), kind: r.kind };
   }
 
-  /** Mọi người đều vào chung một phòng duy nhất "Chùa Liên Hoa". */
+  /** Mọi người đều vào chung một phòng duy nhất "Chùa Bình Thạnh". */
   private pickPublic(): Room {
     return this.ensurePublic(1);
   }

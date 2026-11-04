@@ -1,6 +1,6 @@
 /**
  * Khuôn viên sân trước & lối vào:
- * - Cổng Tam Quan (z≈38.6) mái cong nhiều tầng, cột đỏ, hoành phi "CHÙA LIÊN HOA", câu đối, đèn lồng, nghê đá.
+ * - Cổng Tam Quan (z≈38.6) mái cong nhiều tầng, cột đỏ, hoành phi "CHÙA BÌNH THẠNH", câu đối, đèn lồng, nghê đá.
  * - Đại lộ lát đá từ cổng tới thềm chánh điện: hàng đèn đá đài sen, chậu cảnh bonsai/mai/đào trên bệ đá, cờ phướn Phật giáo bay theo gió.
  * - Bàn xin xăm & ống xăm gần (-4, -14.5); Giá chổi tre & sọt lá ở (7, 22).
  * - ~108 lá bồ đề rụng trên sân (InstancedMesh) quét được bằng `sweepAt(x,z,r)` có hiệu ứng lốc xoáy lá vàng bay lên.
@@ -175,7 +175,7 @@ export function buildCourtyard(
   // xà ngang & diềm lầu cổng chính + hai cổng phụ
   bMain.box(m.lacquer, 6.8, 0.48, 2.45, 0, 5.55, GZ, 0, 0xa62a20);
   bMain.box(m.gold, 6.88, 0.08, 2.52, 0, 5.5, GZ);
-  // cổ diêm tầng trên cổng chính (nâng cao để bảng hiệu CHÙA LIÊN HOA thoáng trọn vẹn trên đầu đao mái dưới)
+  // cổ diêm tầng trên cổng chính (nâng cao để bảng hiệu CHÙA BÌNH THẠNH thoáng trọn vẹn trên đầu đao mái dưới)
   bMain.box(m.lacquer, 6.0, 2.16, 2.1, 0, 6.02, GZ, 0, 0x98261d);
   bMain.box(m.gold, 6.14, 0.09, 2.2, 0, 6.02, GZ);
   bMain.box(m.gold, 6.14, 0.09, 2.2, 0, 8.12, GZ);
@@ -193,8 +193,8 @@ export function buildCourtyard(
     buildRoof(bMain, m, sx * 4.95, 5.48, GZ, { W: 2.75, D: 2.0, rise: 1.65, bmax: 1, curve: 1.45, curl: 0.72, curlSize: 1.5, ridge: true, finial: false, rafters: true });
   }
 
-  // hoành phi "CHÙA LIÊN HOA" ở cả mặt ngoài (+z) lẫn mặt trong (-z), gộp mặt trước-sau cùng vật liệu
-  const gatePlaque = plaqueTexture('CHÙA LIÊN HOA', { w: 1024, h: 280, sub: 'TỪ BI · THANH TỊNH · AN LẠC' });
+  // hoành phi "CHÙA BÌNH THẠNH" ở cả mặt ngoài (+z) lẫn mặt trong (-z), gộp mặt trước-sau cùng vật liệu
+  const gatePlaque = plaqueTexture('CHÙA BÌNH THẠNH', { w: 1024, h: 280, sub: 'TỪ BI · THANH TỊNH · AN LẠC' });
   const sidePlaqueL = plaqueTexture('TỪ MÔN', { w: 512, h: 192 });
   const sidePlaqueR = plaqueTexture('GIÁC ĐẠO', { w: 512, h: 192 });
   const coupGateL = coupletTexture(['CỬA', 'PHẬT', 'TỪ', 'BI', 'MỞ']);

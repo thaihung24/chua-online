@@ -1,4 +1,4 @@
-# Thư mục nhạc nền chung của Chùa Liên Hoa (`public/music/`)
+# Thư mục nhạc nền chung của Chùa Bình Thạnh (`public/music/`)
 
 Bạn có 2 cách cực dễ để mở nhạc cho **tất cả người chơi trong chùa cùng nghe**:
 

@@ -80,7 +80,7 @@ describe('createNet', () => {
     expect(room).toBeNull();
     const lobby = await a.lobby();
     expect(lobby).toHaveLength(1);
-    expect(lobby[0]).toMatchObject({ id: 'main-1', label: 'Chùa Liên Hoa' });
+    expect(lobby[0]).toMatchObject({ id: 'main-1', label: 'Chùa Bình Thạnh' });
     a.disconnect();
     expect(a.isOnline()).toBe(false);
     expect(aStatus[aStatus.length - 1]).toBe('offline');
@@ -91,7 +91,7 @@ describe('createNet', () => {
     a.disconnect(); b.disconnect();
   });
 
-  it('kể cả có ?room= trong URL vẫn vào chung Chùa Liên Hoa (main-1)', async () => {
+  it('kể cả có ?room= trong URL vẫn vào chung Chùa Bình Thạnh (main-1)', async () => {
     useLocation(S.url + '/?room=p-bat-ky');
     const n = createNet();
     n.connect(profile, 1);

@@ -55,7 +55,7 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
     <div class="hud__top">
       <button type="button" class="hud-pill glass" id="hud-room" aria-label="Không gian chùa">
         ${icon('lotus', { size: 22 })}
-        <span class="hud-pill__name">Chùa Liên Hoa</span><span class="hud-pill__sep">·</span>
+        <span class="hud-pill__name">Chùa Bình Thạnh</span><span class="hud-pill__sep">·</span>
         <span class="hud-dot" data-state="offline" aria-hidden="true"></span>
         <span class="hud-pill__state">Một mình</span>
         ${icon('chevron-down', { size: 16 })}
