@@ -3,6 +3,7 @@
  * kèm tuỳ chọn tạm ẩn người khác khi muốn tịnh tâm một mình.
  */
 import type { PanelDef, RoomInfo } from '@/core/contracts';
+import { DEFAULT_BOT_COUNT } from '@/core/bots';
 import { esc, h } from '@/ui/dom';
 import { icon } from '@/ui/icons';
 import { dialogHead, disposer, skeleton } from '@/ui/pm-kit';
@@ -24,17 +25,21 @@ export const panel: PanelDef = {
       list,
     );
 
+    const isSolo = (): boolean => ctx.isSolo?.() ?? false;
+
     const paintStatus = (): void => {
+      const solo = isSolo();
       const room = ctx.net.room();
-      const on = ctx.net.isOnline();
-      status.className = 'rooms-status' + (on ? ' is-on' : '');
-      status.innerHTML = on && room
-        ? `<span class="hud-dot" data-state="online"></span><span>Đang ở <b>Sân chùa chung (${esc(room.label)})</b> · ${room.online} người đang có mặt</span>`
+      const count = room?.online ?? (DEFAULT_BOT_COUNT + 1);
+      status.className = 'rooms-status' + (!solo ? ' is-on' : '');
+      status.innerHTML = !solo
+        ? `<span class="hud-dot" data-state="online"></span><span>Đang ở <b>Sân chùa chung (${esc(room?.label ?? 'Chùa Liên Hoa')})</b> · ${count} người đang có mặt</span>`
         : `<span class="hud-dot" data-state="offline"></span><span>Bạn đang tịnh tâm một mình trong chùa</span>`;
     };
     paintStatus();
     dis.add(ctx.net.on('status', paintStatus));
     dis.add(ctx.net.on('count', paintStatus));
+    dis.add(ctx.bus.on('solo', () => { paintStatus(); void load(); }));
 
     let loadSeq = 0;
     async function load(): Promise<void> {
@@ -54,15 +59,16 @@ export const panel: PanelDef = {
     }
 
     function sharedTempleRow(r: RoomInfo | null): HTMLElement {
-      const here = ctx.net.isOnline();
-      const count = r?.online ?? (here ? 1 : 0);
+      const here = !isSolo();
+      const count = r?.online ?? ctx.net.room()?.online ?? (DEFAULT_BOT_COUNT + 1);
       const b = h('button', { type: 'button', class: 'room-row' + (here ? ' is-here' : '') });
       b.innerHTML = `<span class="room-row__ic">${icon('lotus', { size: 22 })}</span>
         <span class="room-row__main"><b>Sân chùa chung · Chùa Liên Hoa</b><small>Mọi người vào chùa đều cùng hiện diện tại đây</small></span>
         <span class="room-row__count">${here ? `<span class="pm-pill">Đang ở đây · ${count}</span>` : `${count} <small>người</small>`}</span>`;
       b.addEventListener('click', () => {
         if (here) { ctx.closePanel(); return; }
-        ctx.net.connect(ctx.profile, ctx.progress.view().level);
+        if (ctx.setSolo) ctx.setSolo(false);
+        else ctx.net.connect(ctx.profile, ctx.progress.view().level);
         ctx.toast('Đang vào sân chùa chung cùng mọi người…');
         ctx.closePanel();
       });
@@ -70,7 +76,7 @@ export const panel: PanelDef = {
     }
 
     function soloRow(): HTMLElement {
-      const solo = !ctx.net.isOnline();
+      const solo = isSolo();
       const b = h('button', {
         type: 'button',
         class: 'room-row room-row--solo' + (solo ? ' is-here' : ''),
@@ -78,7 +84,8 @@ export const panel: PanelDef = {
       });
       b.addEventListener('click', () => {
         if (solo) { ctx.closePanel(); return; }
-        ctx.net.disconnect();
+        if (ctx.setSolo) ctx.setSolo(true);
+        else ctx.net.disconnect();
         ctx.toast('Đã chuyển sang chế độ tịnh tâm một mình.');
         ctx.closePanel();
       });

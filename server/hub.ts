@@ -3,6 +3,7 @@ import type http from 'node:http';
 import type { Duplex } from 'node:stream';
 import { WebSocketServer, WebSocket } from 'ws';
 import type { Profile, RoomInfo } from '../src/core/contracts';
+import { BotColony } from '../src/core/bots';
 import { BOUNDS, SPAWN, COLOR_RE, clampLevel, isAnim, isPhrase, parseProfile, plausibleLevel, safeProfile, type Anim } from './validate';
 import { Bucket, clientIp, getCookie, randomHex } from './util';
 import type { ServerOptions } from './config';
@@ -67,6 +68,7 @@ export class Hub {
   private byEmail = new Map<string, Set<Conn>>();
   private perIp = new Map<string, number>();
   private spawnSeq = 0;
+  private bots: BotColony;
   private tickTimer: NodeJS.Timeout;
   private pingTimer: NodeJS.Timeout;
   private cleanTimer: NodeJS.Timeout;
@@ -74,6 +76,16 @@ export class Hub {
 
   constructor(private opts: ServerOptions, private hooks: HubHooks) {
     this.ensurePublic(1);
+    this.bots = new BotColony(Math.max(0, opts.botCount), {
+      onSay: (botId, phraseId) => {
+        const r = this.ensurePublic(1);
+        if (r.members.size > 0) this.broadcast(r, { t: 'say', id: botId, text: phraseId });
+      },
+      onLantern: (botId, color) => {
+        const r = this.ensurePublic(1);
+        if (r.members.size > 0) this.broadcast(r, { t: 'lantern', id: `l-${randomHex(5)}`, color, by: botId });
+      },
+    });
     this.tickTimer = setInterval(() => this.tick(), TICK_MS);
     this.pingTimer = setInterval(() => this.pingAll(), 25_000);
     this.cleanTimer = setInterval(() => this.cleanup(), 15_000);
@@ -240,7 +252,11 @@ export class Hub {
     if (nry > Math.PI) nry -= Math.PI * 2; else if (nry < -Math.PI) nry += Math.PI * 2;
     const changed = r2(nx) !== r2(c.x) || r2(nz) !== r2(c.z) || r2(nry) !== r2(c.ry) || anim !== c.anim;
     c.x = nx; c.z = nz; c.ry = nry; c.anim = anim;
-    if (changed) { c.frag = null; c.room.dirty = true; }
+    if (changed) {
+      c.frag = null;
+      c.room.dirty = true;
+      if ((anim === 'pray' || anim === 'bow') && this.bots.size > 0) this.bots.notifyHumanGesture(c.x, c.z, now);
+    }
   }
 
   private onSay(c: Conn, m: Record<string, unknown>): void {
@@ -257,6 +273,7 @@ export class Hub {
     c.frag = null;
     c.room.dirty = true;
     this.broadcast(c.room, { t: 'say', id: c.id, text: m.phrase }, c);
+    if (this.bots.size > 0) this.bots.notifyHumanGesture(c.x, c.z, now);
   }
 
   private onLantern(c: Conn, m: Record<string, unknown>): void {
@@ -282,8 +299,13 @@ export class Hub {
     return r;
   }
 
+  private roomOnline(r: Room): number {
+    return r.members.size + (r.id === 'main-1' ? this.bots.size : 0);
+  }
+
   private info(r: Room): RoomInfo {
-    return { id: r.id, label: r.label, online: r.members.size, capacity: Math.max(this.opts.roomCapacity, r.members.size), kind: r.kind };
+    const online = this.roomOnline(r);
+    return { id: r.id, label: r.label, online, capacity: Math.max(this.opts.roomCapacity, online), kind: r.kind };
   }
 
   /** Mọi người đều vào chung một phòng duy nhất "Chùa Liên Hoa". */
@@ -332,7 +354,7 @@ export class Hub {
   }
 
   private broadcastCount(r: Room): void {
-    this.broadcast(r, { t: 'count', online: r.members.size });
+    this.broadcast(r, { t: 'count', online: this.roomOnline(r) });
   }
 
   // ───────────── Snapshot / định kỳ ─────────────
@@ -350,11 +372,15 @@ export class Hub {
   private sendPlayers(to: Conn, r: Room, _now: number): void {
     const parts: string[] = [];
     for (const m of r.members) if (m !== to) parts.push(this.fragOf(m));
+    if (r.id === 'main-1' && this.bots.size > 0) parts.push(...this.bots.fragments());
     this.send(to, `{"t":"players","list":[${parts.join(',')}]}`);
   }
 
   private tick(): void {
     const now = Date.now();
+    if (this.bots.size > 0 && this.bots.step(TICK_MS / 1000, now)) {
+      this.ensurePublic(1).dirty = true;
+    }
     for (const c of this.conns) {
       if (c.strikes > 0) c.strikes = Math.max(0, c.strikes - (TICK_MS / 1000) * 0.2);
       if (c.say && now >= c.sayUntil) { c.say = null; c.frag = null; if (c.room) c.room.dirty = true; }
@@ -363,11 +389,13 @@ export class Hub {
       if (!r.dirty) continue;
       r.dirty = false;
       if (r.members.size === 0) continue;
+      const botFrags = r.id === 'main-1' && this.bots.size > 0 ? this.bots.fragments() : [];
       const frags = new Map<Conn, string>();
       for (const m of r.members) frags.set(m, this.fragOf(m));
       for (const m of r.members) {
         const parts: string[] = [];
         for (const [o, f] of frags) if (o !== m) parts.push(f);
+        if (botFrags.length > 0) parts.push(...botFrags);
         this.send(m, `{"t":"players","list":[${parts.join(',')}]}`);
       }
     }
@@ -389,7 +417,7 @@ export class Hub {
   }
 
   // ───────────── API cho HTTP ─────────────
-  online(): number { return this.conns.size; }
+  online(): number { return this.conns.size + this.bots.size; }
   roomCount(): number { return this.rooms.size; }
 
   lobby(): RoomInfo[] {
@@ -415,9 +443,9 @@ export class Hub {
   }
   isUserOnline(email: string): boolean { return this.byEmail.has(email); }
 
-  /** Khách đang online (không đăng nhập) cho bảng xếp hạng. */
+  /** Khách đang online (không đăng nhập) + Phật tử ảo cho bảng xếp hạng. */
   guests(): { name: string; level: number; streak: number }[] {
-    const out: { name: string; level: number; streak: number }[] = [];
+    const out: { name: string; level: number; streak: number }[] = this.bots.leaderboardRows();
     for (const c of this.conns) if (c.hello && !c.email) out.push({ name: c.profile.name, level: c.level, streak: c.streak });
     return out;
   }

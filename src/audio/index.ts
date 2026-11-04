@@ -198,10 +198,10 @@ export function createAudio(): AudioApi {
     syncMusic();
     if (!engine) return;
     engine.setEnabled(cfg.master, cfg.sfx);
-    engine.setVolume(cfg.ambientVolume);
+    engine.setVolume(hasCustomMusic && !wantRadio ? cfg.ambientVolume * 0.35 : cfg.ambientVolume);
     engine.setNight(wantNight);
-    // Khi đã có bài nhạc riêng (YouTube/MP3), tắt hoàn toàn tiếng gió/suối/dế tổng hợp để 0% tạp âm.
-    engine.ambient.setActive(!hasCustomMusic && wantAmbient && cfg.master && cfg.ambient);
+    // Khi có bài nhạc riêng (YouTube/MP3), giữ lại 35% lớp tiếng gió/suối/chim tự nhiên của chùa (tắt pad nhạc tổng hợp để không đụng giai điệu).
+    engine.ambient.setActive(wantAmbient && cfg.master && cfg.ambient);
     engine.ambient.setPad(!hasCustomMusic && wantAmbient && cfg.master && cfg.ambient && cfg.chant);
     engine.chant.set(wantRadio && cfg.master && cfg.chant, wantVoice);
     for (const l of loops) {
@@ -213,7 +213,7 @@ export function createAudio(): AudioApi {
         l.stop = null;
       }
     }
-    if (loops.size === 0 && (hasCustomMusic || !wantAmbient) && !wantRadio) stopTimer();
+    if (loops.size === 0 && !wantAmbient && !wantRadio) stopTimer();
     else startTimer();
   }
 

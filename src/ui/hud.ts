@@ -143,16 +143,19 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
   let roomLabel: string | null = null;
   function paintRoom(state?: 'offline' | 'connecting' | 'online'): void {
     if (state) curState = state;
-    dot.dataset.state = curState;
-    const labelTxt = curState === 'online' ? `${online} người` : curState === 'connecting' ? 'Đang kết nối…' : 'Một mình';
+    const solo = ctx.isSolo?.() ?? false;
+    const effective = solo ? 'offline' : (curState === 'online' || online > 1 ? 'online' : curState);
+    dot.dataset.state = effective;
+    const labelTxt = effective === 'online' ? `${online} người` : effective === 'connecting' ? 'Đang kết nối…' : 'Một mình';
     stateTxt.textContent = labelTxt;
     roomBtn.setAttribute('aria-label', `Không gian chùa. ${roomLabel ? roomLabel + ', ' : ''}${labelTxt}`);
-    (usersBtn.querySelector('.hud-btn__count') as HTMLElement).textContent = String(curState === 'online' ? online : 1);
+    (usersBtn.querySelector('.hud-btn__count') as HTMLElement).textContent = String(effective === 'online' ? online : 1);
   }
   const offStatus = ctx.net.on('status', (s) => {
     roomLabel = s.room?.label ?? roomLabel;
     if (s.state === 'online' && s.room) online = Math.max(1, s.room.online);
-    else if (s.state !== 'online') online = 1;
+    else if (s.state === 'connecting' && online <= 1) online = 1;
+    else if (s.state === 'offline' && (ctx.isSolo?.() ?? false)) online = 1;
     paintRoom(s.state);
   });
   const offCount = ctx.net.on('count', (c) => {
@@ -164,6 +167,10 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
       online = Math.max(online, list.length + 1);
       paintRoom();
     }
+  });
+  const offSolo = ctx.bus.on('solo', ({ solo }) => {
+    if (solo) online = 1;
+    paintRoom();
   });
   paintRoom(curState);
 
@@ -465,7 +472,7 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
     },
     setVisible(v) { el.style.display = v ? '' : 'none'; },
     destroy() {
-      offStatus(); offCount(); offPlayers(); offAudio(); offRadio(); offProgress(); offLevelUp(); offPanel();
+      offStatus(); offCount(); offPlayers(); offSolo(); offAudio(); offRadio(); offProgress(); offLevelUp(); offPanel();
       document.removeEventListener('keydown', onKeyDown);
       document.removeEventListener('pointerdown', onOutsideSound, true);
       window.clearTimeout(bannerTimer); window.clearTimeout(holdTimer);

@@ -22,6 +22,8 @@ export interface ServerOptions {
   privateRoomTtlMs: number;
   roomCapacity: number;
   maxPrivateRooms: number;
+  /** Số Phật tử ảo (bot) sinh hoạt trong sân chùa chung (mặc định 20). */
+  botCount: number;
   wsMaxPerIp: number;
   /** Giới hạn tốc độ (đặt nhỏ trong test). */
   limits: {
@@ -67,6 +69,7 @@ export function loadOptions(over: Partial<ServerOptions> = {}): ServerOptions {
     privateRoomTtlMs: 10 * 60_000,
     roomCapacity: 10_000,
     maxPrivateRooms: 0,
+    botCount: Math.max(0, Math.min(80, num(env.BOT_COUNT, 20))),
     wsMaxPerIp: num(env.WS_MAX_PER_IP, 20),
     limits: { apiPerMin: 300, authFailMax: 8, registerPerHour: 10, feedbackPerHour: 5, roomsPerHour: 10 },
     sayCooldownMs: 3000,

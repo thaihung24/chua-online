@@ -4,6 +4,7 @@
  */
 import type { PanelDef } from '@/core/contracts';
 import { TIERS } from '@/core/contracts';
+import { BotColony, DEFAULT_BOT_COUNT } from '@/core/bots';
 import * as api from '@/net/api';
 import { esc, fmt, h } from '@/ui/dom';
 import { icon } from '@/ui/icons';
@@ -71,6 +72,26 @@ export const panel: PanelDef = {
       out.append(h('p', { class: 'rank-foot', html: mine ? `Bạn đang ở hạng <b>${mine.rank}</b>.` : kind === 'level' ? `Bạn đang ở <b>Cấp ${v.level}</b> — tinh tấn thêm để vào bảng nhé.` : `Chuỗi giữ lửa của bạn: <b>${v.streak} ngày</b>. Giữ lửa mỗi ngày để lên bảng.` }));
     }
 
+    function fallbackRank(k: Kind): api.RankRow[] {
+      const v = ctx.progress.view();
+      const map = new Map<string, { name: string; level: number; streak: number }>();
+      for (const b of new BotColony(DEFAULT_BOT_COUNT).leaderboardRows()) map.set(b.name, b);
+      const cur = map.get(ctx.profile.name);
+      map.set(ctx.profile.name, {
+        name: ctx.profile.name,
+        level: Math.max(cur?.level ?? 0, v.level),
+        streak: Math.max(cur?.streak ?? 0, v.streak),
+      });
+      const list = [...map.values()].sort((a, b) =>
+        k === 'streak' ? b.streak - a.streak || b.level - a.level : b.level - a.level || b.streak - a.streak,
+      );
+      return list.slice(0, 50).map((x, i) => {
+        let t = TIERS[0];
+        for (const tier of TIERS) if (x.level >= tier.minLevel) t = tier;
+        return { rank: i + 1, name: x.name, level: x.level, tier: t.id, tierName: t.name, streak: x.streak };
+      });
+    }
+
     async function load(force = false): Promise<void> {
       const my = ++seq;
       paintTabs();
@@ -79,7 +100,9 @@ export const panel: PanelDef = {
       const r = await api.rank(kind);
       if (!alive || my !== seq) return;
       if (!r.ok) {
-        out.replaceChildren(emptyState({ icon: 'wifi', title: 'Chưa tải được bảng xếp hạng', text: r.error, action: { label: 'Thử lại', onClick: () => void load(true) } }));
+        const rows = fallbackRank(kind);
+        cache.set(kind, rows);
+        render(rows);
         return;
       }
       cache.set(kind, r.data.rows ?? []);

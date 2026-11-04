@@ -13,6 +13,8 @@ import { ACCESSORIES } from '../content/wardrobe';
 import { CUSHION_COUNT, cushionSlot, LOTUS_POND, RELEASE_POND, WELL, type Vec2 } from '../world/layout';
 import { findPath, nearestFree } from '../world/nav';
 
+export const DEFAULT_BOT_COUNT = 20;
+
 export interface BotHooks {
   onSay?: (botId: string, phraseId: string) => void;
   onLantern?: (botId: string, colorHex: string) => void;
@@ -133,20 +135,15 @@ export class BotColony {
       const colorIndex = Math.floor(this.rng() * 5);
 
       const unlockedAcc = ACCESSORIES.filter((a) => a.minLevel <= level);
-      const accessories: string[] = [];
+      let accessory: string | undefined;
       if (unlockedAcc.length > 0 && this.rng() < 0.68) {
-        const pick1 = unlockedAcc[Math.floor(this.rng() * unlockedAcc.length)];
-        accessories.push(pick1.id);
-        const diffKind = unlockedAcc.filter((a) => a.kind !== pick1.kind);
-        if (diffKind.length > 0 && this.rng() < 0.35) {
-          accessories.push(diffKind[Math.floor(this.rng() * diffKind.length)].id);
-        }
+        accessory = unlockedAcc[Math.floor(this.rng() * unlockedAcc.length)].id;
       }
 
       const id = `b07${(i + 1).toString(16).padStart(5, '0')}`;
       const bot: BotActor = {
         id,
-        profile: { name, gender, outfit, colorIndex, ...(accessories.length ? { accessories } : {}) },
+        profile: { name, gender, outfit, colorIndex, ...(accessory ? { accessory } : {}) },
         level,
         streak,
         x: 0,

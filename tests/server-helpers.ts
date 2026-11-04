@@ -12,7 +12,7 @@ export async function tmpDir(): Promise<string> {
 
 export async function startTest(over: Partial<ServerOptions> = {}): Promise<RunningServer & { dir: string }> {
   const dir = over.dataDir ?? (await tmpDir());
-  const s = await startServer({ port: 0, host: '127.0.0.1', dataDir: dir, distDir: path.join(dir, 'no-dist'), rankTtlMs: 0, ...over });
+  const s = await startServer({ port: 0, host: '127.0.0.1', dataDir: dir, distDir: path.join(dir, 'no-dist'), rankTtlMs: 0, botCount: 0, ...over });
   return Object.assign(s, { dir });
 }
 

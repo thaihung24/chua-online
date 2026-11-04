@@ -252,6 +252,9 @@ export interface AppContext {
   openPanel(id: PanelId, params?: Record<string, unknown>): Promise<void>;
   closePanel(): void;
   isLoggedIn(): boolean;
+  /** Chế độ tịnh tâm một mình (tạm ẩn người chơi khác và Phật tử ảo). */
+  isSolo?(): boolean;
+  setSolo?(solo: boolean): void;
   /** Thời điểm (ms) hương/hoa/nến còn cháy. */
   offerings(): { incenseUntil: number; flowersUntil: number; candleUntil: number };
 }
@@ -263,6 +266,7 @@ export interface AppEvents extends Record<string, unknown> {
   levelUp: { level: number; tier: TierDef };
   offerings: { incenseUntil: number; flowersUntil: number; candleUntil: number };
   auth: { loggedIn: boolean; email?: string };
+  solo: { solo: boolean };
 }
 
 /** Mỗi panel ở src/ui/panels/<id>.ts export `panel`. */

@@ -16,6 +16,7 @@ import { createShell } from '@/ui/shell';
 import { loadPanel } from '@/ui/panels/registry';
 import { phraseText } from '@/content/phrases';
 import { LANTERN_COLORS } from '@/content/lantern';
+import { BotColony, DEFAULT_BOT_COUNT } from '@/core/bots';
 import { createNullWorld } from '@/app/null-world';
 import { DURATIONS, loadOfferings, minutesLeft, saveOfferings, type Offerings } from '@/app/offerings';
 
@@ -31,7 +32,35 @@ async function boot(): Promise<void> {
   let offerings: Offerings = loadOfferings();
   let world: World = createWorld();
   let loggedIn = false;
+  let soloMode = false;
+  let localBots: BotColony | null = null;
+  let localBotTimer = 0;
   let shellRef: ReturnType<typeof createShell> | null = null;
+
+  const stopLocalBots = (): void => {
+    if (localBotTimer) { window.clearInterval(localBotTimer); localBotTimer = 0; }
+    localBots = null;
+  };
+
+  const startLocalBots = (): void => {
+    if (soloMode || net.isOnline() || localBotTimer) return;
+    let lanternSeq = 0;
+    localBots = new BotColony(DEFAULT_BOT_COUNT, {
+      onLantern: (_botId, color) => {
+        world.addLantern({ id: `lb-${++lanternSeq}`, color, mine: false, pond: 'lotus' });
+      },
+    });
+    lastPlayers = localBots.toRemotePlayers(phraseText);
+    world.setRemotes(lastPlayers);
+    shellRef?.hud.setRoom({ id: 'main-1', label: 'Chùa Liên Hoa', online: localBots.size + 1, capacity: 10_000, kind: 'public' });
+    localBotTimer = window.setInterval(() => {
+      if (!localBots || soloMode || net.isOnline()) { stopLocalBots(); return; }
+      if (localBots.step(0.2, Date.now())) {
+        lastPlayers = localBots.toRemotePlayers(phraseText);
+        world.setRemotes(lastPlayers);
+      }
+    }, 200);
+  };
 
   const ctx: AppContext = {
     get profile() { return profile; },
@@ -54,6 +83,21 @@ async function boot(): Promise<void> {
     openPanel: (id: PanelId, params) => shellRef?.host.open(id, params) ?? Promise.resolve(),
     closePanel: () => shellRef?.host.close(),
     isLoggedIn: () => loggedIn,
+    isSolo: () => soloMode,
+    setSolo(solo: boolean) {
+      if (soloMode === solo) return;
+      soloMode = solo;
+      if (solo) {
+        stopLocalBots();
+        net.disconnect();
+        lastPlayers = [];
+        world.setRemotes([]);
+        shellRef?.hud.setOnline(1);
+      } else {
+        net.connect(profile, progress.view().level);
+      }
+      bus.emit('solo', { solo });
+    },
     offerings: () => offerings,
   };
 
@@ -103,6 +147,14 @@ async function boot(): Promise<void> {
     document.body.classList.add('is-fallback');
     await world.mount(container, profile);
   }
+  const origSay = world.say.bind(world);
+  world.say = (text: string) => {
+    origSay(text);
+    if (localBots) {
+      const p = world.getPlayer();
+      localBots.notifyHumanGesture(p.x, p.z);
+    }
+  };
   world.setProfile(profile, progress.view().level);
   world.setQuality(quality);
   world.setTimeOfDay(tod);
@@ -116,8 +168,8 @@ async function boot(): Promise<void> {
   await syncTempleMusic(ctx);
   audio.setAmbient(true);
 
-  wireWorld(ctx, shell, () => offerings, (o) => { offerings = o; });
-  wireNet(ctx);
+  wireWorld(ctx, shell, () => offerings, (o) => { offerings = o; }, (x, z) => localBots?.notifyHumanGesture(x, z));
+  wireNet(ctx, { startLocalBots, stopLocalBots, isLocalActive: () => localBotTimer !== 0 });
   wireProgress(ctx, shell);
   wireAccount(ctx, (v) => { loggedIn = v; });
 
@@ -149,7 +201,13 @@ async function boot(): Promise<void> {
 }
 
 /** Nối sự kiện thế giới: ghi tiến độ, lễ vật, âm thanh, mạng. */
-function wireWorld(ctx: AppContext, shell: ReturnType<typeof createShell>, getO: () => Offerings, setO: (o: Offerings) => void): void {
+function wireWorld(
+  ctx: AppContext,
+  shell: ReturnType<typeof createShell>,
+  getO: () => Offerings,
+  setO: (o: Offerings) => void,
+  onHumanGesture?: (x: number, z: number) => void,
+): void {
   const { world, audio, progress, net } = ctx;
   const sfx: Partial<Record<ActionId, Parameters<typeof audio.play>[0]>> = {
     incense: 'incense', flowers: 'flower', candle: 'candle', bell: 'bellBig', bow: 'bow',
@@ -257,6 +315,7 @@ function wireWorld(ctx: AppContext, shell: ReturnType<typeof createShell>, getO:
     if (a) {
       const p = world.getPlayer();
       net.sendMove({ x: p.x, z: p.z, ry: p.ry, anim: a });
+      if (a === 'pray' || a === 'bow') onHumanGesture?.(p.x, p.z);
     }
   });
 
@@ -325,17 +384,24 @@ async function syncTempleMusic(ctx: AppContext): Promise<void> {
   } catch { /* bỏ qua */ }
 }
 
-function wireNet(ctx: AppContext): void {
+function wireNet(
+  ctx: AppContext,
+  local: { startLocalBots: () => void; stopLocalBots: () => void; isLocalActive: () => boolean },
+): void {
   const { net, world } = ctx;
   const sayTimers = new Map<string, number>();
   net.on('status', (s) => {
     if (s.state === 'online') {
+      local.stopLocalBots();
       const p = world.getPlayer();
       net.sendMove({ x: p.x, z: p.z, ry: p.ry, anim: world.isSeated() ? 'sit' : 'idle' });
       void syncTempleMusic(ctx);
+    } else if (s.state === 'offline' && !ctx.isSolo?.()) {
+      local.startLocalBots();
     }
   });
   net.on('players', (list) => {
+    if (local.isLocalActive() && !net.isOnline()) return;
     lastPlayers = list;
     world.setRemotes(list);
   });

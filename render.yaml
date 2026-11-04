@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: chua-lien-hoa-api
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: COOKIE_SECURE
+        value: "1"
+      - key: TRUST_PROXY
+        value: "1"
+      - key: BOT_COUNT
+        value: "20"
+      - key: CORS_ORIGIN
+        sync: false
