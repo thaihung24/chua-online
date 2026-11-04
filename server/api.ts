@@ -64,11 +64,16 @@ export function registerApi(app: Express, ctx: ApiCtx): { sweep(): void } {
     fail(res, 429, msg);
   };
 
-  // ── CORS (chỉ khi cấu hình) ──
+  // ── CORS (hỗ trợ `*` hoặc danh sách domain phân cách bằng dấu phẩy khi nối từ Vercel) ──
   if (opts.corsOrigin) {
+    const allowed = opts.corsOrigin.split(',').map((s) => s.trim().replace(/\/+$/, '')).filter(Boolean);
     app.use('/api', (req, res, next) => {
-      res.setHeader('Access-Control-Allow-Origin', opts.corsOrigin);
-      res.setHeader('Access-Control-Allow-Credentials', 'true');
+      const reqOrigin = typeof req.headers.origin === 'string' ? req.headers.origin : '';
+      const allowOrigin = allowed.includes('*')
+        ? (reqOrigin || '*')
+        : (allowed.includes(reqOrigin) ? reqOrigin : allowed[0] ?? '');
+      if (allowOrigin) res.setHeader('Access-Control-Allow-Origin', allowOrigin);
+      if (allowOrigin !== '*') res.setHeader('Access-Control-Allow-Credentials', 'true');
       res.setHeader('Access-Control-Allow-Headers', 'content-type,x-admin-token');
       res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,OPTIONS');
       res.setHeader('Vary', 'Origin');
@@ -139,32 +144,7 @@ export function registerApi(app: Express, ctx: ApiCtx): { sweep(): void } {
   const distMusicDir = path.join(opts.distDir, 'music');
   let musicStartedAt = Date.now();
 
-  function extractYouTubeId(raw: string): string | null {
-    const s = raw.trim();
-    if (/^yt:[A-Za-z0-9_-]{11}$/.test(s)) return s.slice(3);
-    if (/^[A-Za-z0-9_-]{11}$/.test(s)) return s;
-    try {
-      const u = new URL(s);
-      const host = u.hostname.replace(/^www\./, '').toLowerCase();
-      if (host === 'youtu.be') {
-        const id = u.pathname.split('/').filter(Boolean)[0] ?? '';
-        return /^[A-Za-z0-9_-]{11}$/.test(id) ? id : null;
-      }
-      if (host === 'youtube.com' || host === 'm.youtube.com' || host === 'music.youtube.com' || host === 'youtube-nocookie.com') {
-        const v = u.searchParams.get('v');
-        if (v && /^[A-Za-z0-9_-]{11}$/.test(v)) return v;
-        const parts = u.pathname.split('/').filter(Boolean);
-        if ((parts[0] === 'embed' || parts[0] === 'shorts' || parts[0] === 'live') && parts[1] && /^[A-Za-z0-9_-]{11}$/.test(parts[1])) {
-          return parts[1];
-        }
-      }
-    } catch { /* không phải URL đầy đủ */ }
-    return null;
-  }
-
   function normalizeMusicUrl(raw: string): string | null {
-    const yt = extractYouTubeId(raw);
-    if (yt) return `yt:${yt}`;
     if (/^(\/music\/[^\s]+|https:\/\/[^\s]+)$/i.test(raw.trim())) return raw.trim();
     return null;
   }
@@ -179,29 +159,7 @@ export function registerApi(app: Express, ctx: ApiCtx): { sweep(): void } {
     if (overrideTrack) return [overrideTrack];
     const seen = new Set<string>();
     const out: { name: string; url: string }[] = [];
-    // 1. Đọc danh sách link YouTube từ `public/music/youtube.txt` (nếu có)
-    for (const dir of [publicMusicDir, distMusicDir]) {
-      let txt = '';
-      try { txt = await fs.readFile(path.join(dir, 'youtube.txt'), 'utf8'); } catch { continue; }
-      for (const line of txt.split(/\r?\n/)) {
-        const trimmed = line.trim();
-        if (!trimmed || trimmed.startsWith('#')) continue;
-        let name = 'Nhạc chùa (YouTube)';
-        let link = trimmed;
-        if (trimmed.includes('|')) {
-          const idx = trimmed.indexOf('|');
-          name = trimmed.slice(0, idx).trim() || name;
-          link = trimmed.slice(idx + 1).trim();
-        }
-        const yt = extractYouTubeId(link);
-        if (yt && !seen.has(`yt:${yt}`)) {
-          seen.add(`yt:${yt}`);
-          out.push({ name, url: `yt:${yt}` });
-        }
-      }
-      if (out.length > 0) break;
-    }
-    // 2. Đọc các tệp âm thanh trực tiếp (.mp3, .m4a, .ogg, .wav...)
+    // Đọc các tệp âm thanh trực tiếp (.mp3, .m4a, .ogg, .wav...)
     for (const dir of [publicMusicDir, distMusicDir]) {
       let names: string[] = [];
       try { names = await fs.readdir(dir); } catch { continue; }

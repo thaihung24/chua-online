@@ -40,129 +40,19 @@ export function createAudio(): AudioApi {
   let clockSkewMs = 0;
   let musicEl: HTMLAudioElement | null = null;
   let currentUrl = '';
-  let ytFrame: HTMLIFrameElement | null = null;
-  let currentYtId = '';
-  let ytReady = false;
-  let ytPlaying = false;
-  let ytSyncedSeek = false;
-  let ytMsgHooked = false;
   interface PendingLoop { bpm: number; stopped: boolean; stop: (() => void) | null }
   const loops = new Set<PendingLoop>();
-
-  function ytCmd(func: string, args: unknown[] = []): void {
-    if (!ytFrame?.contentWindow) return;
-    try {
-      ytFrame.contentWindow.postMessage(JSON.stringify({ event: 'command', func, args }), 'https://www.youtube.com');
-    } catch { /* bỏ qua */ }
-  }
-
-  function hookYtMessages(): void {
-    if (ytMsgHooked || typeof window === 'undefined') return;
-    ytMsgHooked = true;
-    window.addEventListener('message', (ev: MessageEvent) => {
-      if (ev.origin !== 'https://www.youtube.com' && ev.origin !== 'https://www.youtube-nocookie.com') return;
-      if (typeof ev.data !== 'string') return;
-      let data: { event?: string; info?: { playerState?: number; duration?: number } };
-      try { data = JSON.parse(ev.data); } catch { return; }
-      if (data.event === 'onReady' || data.event === 'initialDelivery') {
-        ytReady = true;
-        const shouldPlay = unlocked && wantAmbient && cfg.master && cfg.ambient && tracks.length > 0 && tracks[trackIdx % tracks.length]?.url.startsWith('yt:');
-        if (shouldPlay) {
-          ytCmd('unMute');
-          ytCmd('setVolume', [Math.round(cfg.ambientVolume * 100)]);
-          ytCmd('playVideo');
-        } else {
-          ytCmd('pauseVideo');
-        }
-      } else if (data.event === 'infoDelivery' && data.info) {
-        if (typeof data.info.playerState === 'number') {
-          ytPlaying = data.info.playerState === 1 || data.info.playerState === 3;
-          if (data.info.playerState === 0 && tracks.length > 0) {
-            if (tracks.length === 1) {
-              ytCmd('seekTo', [0, true]);
-              ytCmd('playVideo');
-            } else {
-              trackIdx = (trackIdx + 1) % tracks.length;
-              currentYtId = '';
-              currentUrl = '';
-              syncMusic();
-            }
-          }
-        }
-        if (!ytSyncedSeek && typeof data.info.duration === 'number' && data.info.duration > 5 && musicStartedAt > 0) {
-          ytSyncedSeek = true;
-          if (tracks.length === 1) {
-            const elapsedSec = Math.max(0, (Date.now() + clockSkewMs - musicStartedAt) / 1000);
-            const targetSec = Math.floor(elapsedSec % data.info.duration);
-            if (targetSec > 3) ytCmd('seekTo', [targetSec, true]);
-          }
-        }
-      }
-    });
-  }
-
-  function destroyYt(): void {
-    if (ytFrame) {
-      try { ytFrame.remove(); } catch { /* bỏ qua */ }
-      ytFrame = null;
-    }
-    currentYtId = '';
-    ytReady = false;
-    ytPlaying = false;
-    ytSyncedSeek = false;
-  }
 
   function syncMusic(): void {
     const shouldPlay = unlocked && wantAmbient && cfg.master && cfg.ambient && tracks.length > 0;
     if (!shouldPlay) {
       if (musicEl && !musicEl.paused) musicEl.pause();
-      if (ytFrame && ytReady) { ytCmd('pauseVideo'); ytPlaying = false; }
-      if (tracks.length === 0 && ytFrame) destroyYt();
       return;
     }
     const item = tracks[trackIdx % tracks.length];
-    if (!item) return;
+    if (!item || item.url.startsWith('yt:')) return;
 
-    // ── Nhạc từ YouTube (yt:<videoId>) ──
-    if (item.url.startsWith('yt:')) {
-      if (musicEl && !musicEl.paused) musicEl.pause();
-      if (typeof document === 'undefined') return;
-      hookYtMessages();
-      const vid = item.url.slice(3);
-      if (!ytFrame || currentYtId !== vid) {
-        destroyYt();
-        currentYtId = vid;
-        const f = document.createElement('iframe');
-        f.allow = 'autoplay; encrypted-media';
-        f.referrerPolicy = 'strict-origin-when-cross-origin';
-        f.tabIndex = -1;
-        f.setAttribute('aria-hidden', 'true');
-        f.style.cssText = 'position:fixed;right:0;bottom:0;width:2px;height:2px;opacity:0.01;pointer-events:none;border:0;z-index:0;';
-        const origin = typeof location !== 'undefined' ? encodeURIComponent(location.origin) : '';
-        f.src = `https://www.youtube.com/embed/${encodeURIComponent(vid)}?enablejsapi=1&autoplay=1&playsinline=1&controls=0&disablekb=1&fs=0&rel=0${origin ? `&origin=${origin}` : ''}`;
-        const handshake = () => {
-          if (ytFrame !== f || !f.contentWindow) return;
-          try {
-            f.contentWindow.postMessage(JSON.stringify({ event: 'listening', id: 1, channel: 'widget' }), 'https://www.youtube.com');
-          } catch { /* bỏ qua */ }
-        };
-        f.addEventListener('load', () => {
-          handshake();
-          setTimeout(() => { if (!ytReady) handshake(); }, 500);
-          setTimeout(() => { if (!ytReady) handshake(); }, 1500);
-        });
-        ytFrame = f;
-        document.body.appendChild(f);
-      } else if (ytReady) {
-        ytCmd('unMute');
-        ytCmd('setVolume', [Math.round(cfg.ambientVolume * 100)]);
-        if (!ytPlaying) ytCmd('playVideo');
-      }
-      return;
-    }
-
-    // ── Nhạc tệp trực tiếp (.mp3/.ogg/.wav...) ──
-    if (ytFrame) destroyYt();
+    // ── Nhạc tệp âm thanh thuần (.mp3/.ogg/.wav..., không mở video trên điện thoại) ──
     if (typeof Audio === 'undefined') return;
     if (!musicEl) {
       musicEl = new Audio();
@@ -306,8 +196,9 @@ export function createAudio(): AudioApi {
       apply();
     },
     setMusicTracks(next: MusicTrack[], startedAt = 0, serverNow = 0): void {
-      const same = next.length === tracks.length && next.every((t, i) => t.url === tracks[i]?.url);
-      tracks = next.slice();
+      const clean = next.filter((t) => !t.url.startsWith('yt:'));
+      const same = clean.length === tracks.length && clean.every((t, i) => t.url === tracks[i]?.url);
+      tracks = clean;
       if (startedAt > 0) musicStartedAt = startedAt;
       if (serverNow > 0) clockSkewMs = serverNow - Date.now();
       if (!same) {

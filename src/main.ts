@@ -346,24 +346,6 @@ function wireWorld(
 
 let lastPlayers: RemotePlayer[] = [];
 
-function parseYouTubeTxt(txt: string): { name: string; url: string }[] {
-  const out: { name: string; url: string }[] = [];
-  for (const line of txt.split(/\r?\n/)) {
-    const s = line.trim();
-    if (!s || s.startsWith('#')) continue;
-    let name = 'Nhạc chùa (YouTube)';
-    let link = s;
-    if (s.includes('|')) {
-      const i = s.indexOf('|');
-      name = s.slice(0, i).trim() || name;
-      link = s.slice(i + 1).trim();
-    }
-    const m = link.match(/(?:v=|youtu\.be\/|embed\/|shorts\/|^)([A-Za-z0-9_-]{11})(?:[?&/]|$)/);
-    if (m?.[1]) out.push({ name, url: `yt:${m[1]}` });
-  }
-  return out;
-}
-
 async function syncTempleMusic(ctx: AppContext): Promise<void> {
   try {
     const r = await fetch(api.apiUrl('/api/music'), { credentials: api.API_ORIGIN ? 'include' : 'same-origin' });
@@ -371,17 +353,9 @@ async function syncTempleMusic(ctx: AppContext): Promise<void> {
       const d = (await r.json()) as { tracks?: { name: string; url: string }[]; startedAt?: number; serverNow?: number };
       if (Array.isArray(d.tracks)) {
         ctx.audio.setMusicTracks?.(d.tracks, d.startedAt, d.serverNow);
-        return;
       }
     }
-  } catch { /* rơi về tệp tĩnh bên dưới (khi deploy thuần tĩnh trên Vercel) */ }
-  try {
-    const r = await fetch('/music/youtube.txt', { cache: 'no-store' });
-    if (r.ok) {
-      const tracks = parseYouTubeTxt(await r.text());
-      if (tracks.length > 0) ctx.audio.setMusicTracks?.(tracks, 0, Date.now());
-    }
-  } catch { /* bỏ qua */ }
+  } catch { /* bỏ qua — dùng âm thanh thiền tự nhiên mặc định của chùa */ }
 }
 
 function wireNet(
