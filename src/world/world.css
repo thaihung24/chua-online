@@ -1,0 +1,59 @@
+/* Giao diện lớp phủ của thế giới 3D: nhãn tên, bong bóng lời, joystick ảo, vòng đích. (W2) */
+.w2-root { position: relative; width: 100%; height: 100%; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; background: #0c0805; }
+.w2-root canvas { display: block; width: 100%; height: 100%; touch-action: none; outline: none; }
+
+.w2-layer { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 2; }
+.w2-tag { position: absolute; left: 0; top: 0; display: flex; flex-direction: column; align-items: center; gap: 7px; will-change: transform; pointer-events: none; --tier: #8a6a4a; --tier-accent: #c9a77c; }
+
+.w2-pill {
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+  padding: 3px 9px 3px 4px; border-radius: 999px;
+  font: 600 12.5px/1.2 var(--font-sans, system-ui, sans-serif); letter-spacing: 0.01em; color: var(--glass-ink, #f8f1e4);
+  background: var(--glass-fill, rgba(30, 18, 10, 0.56));
+  border: 1px solid color-mix(in srgb, var(--tier) 68%, rgba(255, 240, 215, 0.35));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 12px color-mix(in srgb, var(--tier) 30%, transparent), inset 0 1px 0 rgba(255, 244, 224, 0.12);
+  -webkit-backdrop-filter: blur(8px) saturate(1.2); backdrop-filter: blur(8px) saturate(1.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.w2-tag:not(.w2-mine) .w2-pill { padding-left: 10px; }
+.w2-me {
+  display: inline-grid; place-items: center; height: 18px; min-width: 18px; padding: 0 6px; border-radius: 999px;
+  font-size: 10.5px; font-weight: 700; color: #0f2a20; background: linear-gradient(145deg, #8fe0bd, #5fb59a);
+  box-shadow: 0 0 8px rgba(95, 181, 154, 0.55);
+}
+.w2-name { max-width: 150px; overflow: hidden; text-overflow: ellipsis; }
+.w2-lv {
+  padding: 1px 7px; border-radius: 999px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em;
+  color: color-mix(in srgb, var(--tier-accent) 85%, #fff); background: color-mix(in srgb, var(--tier) 38%, rgba(20, 12, 6, 0.55));
+  border: 1px solid color-mix(in srgb, var(--tier) 55%, transparent);
+}
+
+.w2-say {
+  display: none; position: relative; max-width: 190px; padding: 6px 12px; border-radius: 14px;
+  font: 600 13px/1.3 var(--font-sans, system-ui, sans-serif); text-align: center; color: #3b2514;
+  background: rgba(255, 249, 236, 0.96); border: 1px solid rgba(224, 178, 92, 0.7);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  transform-origin: 50% 100%;
+}
+.w2-say::after {
+  content: ''; position: absolute; left: 50%; bottom: -6px; width: 10px; height: 10px; margin-left: -5px;
+  background: inherit; border-right: 1px solid rgba(224, 178, 92, 0.7); border-bottom: 1px solid rgba(224, 178, 92, 0.7);
+  transform: rotate(45deg); border-radius: 0 0 3px 0;
+}
+.w2-say.on { display: block; animation: w2-pop 0.28s cubic-bezier(0.22, 0.9, 0.3, 1.2) both; }
+@keyframes w2-pop { from { opacity: 0; transform: translateY(6px) scale(0.85); } to { opacity: 1; transform: none; } }
+
+/* Joystick ảo (chạm giữ nửa trái màn hình) */
+.w2-stick { position: absolute; width: 112px; height: 112px; margin: -56px 0 0 -56px; border-radius: 50%; pointer-events: none; z-index: 3; opacity: 0; transition: opacity 0.18s ease; left: 0; top: 0; will-change: transform;
+  background: radial-gradient(circle at 50% 40%, rgba(255, 244, 224, 0.14), rgba(30, 18, 10, 0.42) 70%);
+  border: 1.5px solid rgba(255, 232, 190, 0.45); box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35), inset 0 0 18px rgba(255, 220, 160, 0.14);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.w2-stick.on { opacity: 1; }
+.w2-knob { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; will-change: transform;
+  background: radial-gradient(circle at 38% 30%, #fff1cf, #e0b25c 62%, #b88a3a); box-shadow: 0 3px 10px rgba(0, 0, 0, 0.45), 0 0 14px rgba(224, 178, 92, 0.5); }
+
+@media (prefers-reduced-motion: reduce) {
+  .w2-say.on { animation: none; }
+  .w2-stick { transition: none; }
+}

@@ -1,0 +1,15 @@
+import { defineConfig } from 'vite';
+import { fileURLToPath } from 'node:url';
+
+export default defineConfig({
+  resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
+  server: {
+    host: true,
+    port: 5173,
+    proxy: {
+      '/api': { target: 'http://127.0.0.1:8787', changeOrigin: true },
+      '/ws': { target: 'ws://127.0.0.1:8787', ws: true },
+    },
+  },
+  build: { target: 'es2022', chunkSizeWarningLimit: 900 },
+});

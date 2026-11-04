@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Đang ngoại tuyến — Chùa Liên Hoa</title>
+    <meta name="theme-color" content="#140d08" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #140d08;
+        --surface: #221810;
+        --border: rgba(236, 200, 140, 0.18);
+        --text: #f5ead9;
+        --muted: #b9a68e;
+        --gold: #e0b25c;
+        --gold-strong: #f3c973;
+      }
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        min-height: 100vh;
+        background: radial-gradient(90% 70% at 50% 25%, #342012 0%, #1b120b 58%, #140d08 100%);
+        color: var(--text);
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+      main {
+        max-width: 440px;
+        width: 100%;
+        text-align: center;
+        background: rgba(34, 24, 16, 0.82);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 36px 28px;
+        box-shadow: 0 14px 44px rgba(0, 0, 0, 0.52);
+      }
+      .lotus { width: 84px; height: 84px; margin: 0 auto 16px; display: block; }
+      h1 {
+        font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: var(--gold-strong);
+        margin: 0 0 12px;
+      }
+      p {
+        margin: 0 0 16px;
+        line-height: 1.65;
+        color: var(--muted);
+        font-size: 0.98rem;
+      }
+      .quote {
+        font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+        font-style: italic;
+        color: var(--text);
+        padding: 12px 16px;
+        border-radius: 12px;
+        background: rgba(224, 178, 92, 0.08);
+        border: 1px solid rgba(224, 178, 92, 0.16);
+        margin-bottom: 24px;
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 10px 20px;
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: opacity 0.2s ease;
+      }
+      .btn--gold {
+        background: linear-gradient(180deg, #f3c973, #d29d42);
+        color: #1c1108;
+      }
+      .btn--ghost {
+        border: 1px solid var(--border);
+        color: var(--text);
+        background: rgba(255, 244, 224, 0.04);
+      }
+      .btn:hover { opacity: 0.9; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img src="/favicon.svg" alt="" class="lotus" width="84" height="84" />
+      <h1>Tạm ngắt kết nối mạng</h1>
+      <p>Thiết bị của bạn hiện chưa kết nối Internet nên chưa thể mở sân chùa trực tuyến.</p>
+      <p class="quote">“Hít vào tâm tĩnh lặng, thở ra miệng mỉm cười — bình an có mặt ngay trong hơi thở này.”</p>
+      <div class="actions">
+        <a class="btn btn--gold" href="/">Mở lại Chùa Liên Hoa</a>
+        <a class="btn btn--ghost" href="/kinh/">Xem trang Kinh văn</a>
+      </div>
+    </main>
+  </body>
+</html>

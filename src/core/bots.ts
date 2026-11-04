@@ -1,0 +1,479 @@
+/**
+ * Hệ thống 20 Phật tử ảo (Bot) sinh động như người thật:
+ * - Pháp danh Việt Nam, giới tính, trang phục, màu sắc, pháp khí và cấp bậc sen đa dạng.
+ * - Tự tìm đường A* (`findPath`) quanh vật cản trên toàn khuôn viên chùa (không đi xuyên tường/hồ).
+ * - Thực hiện đầy đủ hoạt động: lễ Phật ở Chánh điện, thắp hương Lư đồng, cầu nguyện Quan Âm & Cây Bồ Đề,
+ *   ngồi thiền/tụng kinh trên bồ đoàn (chừa tối thiểu 5/8 bồ đoàn trống cho người thật), quét lá sân gạch,
+ *   lần tràng hạt, ngắm Giếng ngọc, thả đèn hoa đăng ở Ao sen và gửi lời chào hoan hỷ, đáp lễ khi người thật chắp tay.
+ */
+import { OUTFITS, type Gender, type OutfitId, type Profile, type RemotePlayer } from './contracts';
+import { randomName } from './profile';
+import { PHRASES } from '../content/phrases';
+import { ACCESSORIES } from '../content/wardrobe';
+import { CUSHION_COUNT, cushionSlot, LOTUS_POND, RELEASE_POND, WELL, type Vec2 } from '../world/layout';
+import { findPath, nearestFree } from '../world/nav';
+
+export interface BotHooks {
+  onSay?: (botId: string, phraseId: string) => void;
+  onLantern?: (botId: string, colorHex: string) => void;
+}
+
+type GoalKind =
+  | 'altar'
+  | 'burner'
+  | 'candles'
+  | 'que'
+  | 'bell'
+  | 'lotusPond'
+  | 'releasePond'
+  | 'bodhiTree'
+  | 'quanam'
+  | 'well'
+  | 'cushion'
+  | 'sweepYard'
+  | 'stroll';
+
+interface BotActor {
+  id: string;
+  profile: Profile;
+  level: number;
+  streak: number;
+  x: number;
+  z: number;
+  ry: number;
+  anim: RemotePlayer['anim'];
+  speed: number;
+  path: Vec2[];
+  goalKind: GoalKind;
+  goalFace: number;
+  goalAnim: RemotePlayer['anim'];
+  dwellLeft: number;
+  cushionIdx: number | null;
+  say: string | null;
+  sayUntil: number;
+  nextSayAt: number;
+  pendingReplyAt: number;
+  pendingReplyPhrase: string | null;
+  frag: string | null;
+}
+
+const LANTERN_HEX = ['#f3c25a', '#f28ca8', '#f7e3a4', '#8fe0bd', '#ff9f68'];
+const GREET_PHRASES = [
+  'chao-adidaphat', 'chao-namo', 'chao-binhan', 'chao-anlac', 'chao-moi-vui', 'chao-ngay-lanh',
+  'tuyhy-tuyhy', 'tuyhy-sadhu', 'nguyen-anlac', 'nguyen-gia-dinh', 'nguyen-hoa-binh',
+  'camon-phat', 'camon-ngay-nay', 'ru-niem-phat', 'ru-ngoi-thien', 'ru-thap-huong', 'ru-tha-den',
+].filter((id) => PHRASES.some((p) => p.id === id));
+
+const REPLY_PHRASES = [
+  'chao-adidaphat', 'chao-namo', 'chao-binhan', 'chao-moi-vui', 'tuyhy-tuyhy', 'tuyhy-lanh',
+].filter((id) => PHRASES.some((p) => p.id === id));
+
+const r2 = (n: number): number => Math.round(n * 100) / 100;
+
+function wrapPi(a: number): number {
+  let x = a;
+  while (x > Math.PI) x -= Math.PI * 2;
+  while (x < -Math.PI) x += Math.PI * 2;
+  return x;
+}
+
+function faceToward(from: Vec2, lookAt: Vec2): number {
+  return Math.atan2(-(lookAt.x - from.x), -(lookAt.z - from.z));
+}
+
+function mulberry32(seed: number): () => number {
+  let t = seed >>> 0;
+  return () => {
+    t = (t + 0x6d2b79f5) >>> 0;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+export class BotColony {
+  private bots: BotActor[] = [];
+  private rng: () => number;
+  private occupiedCushions = new Set<number>();
+  private globalNextSayAt = 0;
+  private globalNextLanternAt = 0;
+
+  constructor(count: number, private hooks: BotHooks = {}, seed = 20261104) {
+    this.rng = mulberry32(seed);
+    const usedNames = new Set<string>();
+    const outfits = OUTFITS.map((o) => o.id) as OutfitId[];
+    const now = Date.now();
+    this.globalNextSayAt = now + 4500;
+    this.globalNextLanternAt = now + 9000;
+
+    for (let i = 0; i < count; i++) {
+      const gender: Gender = i % 2 === 0 ? 'female' : 'male';
+      let name = '';
+      for (let tries = 0; tries < 40; tries++) {
+        const cand = randomName(gender, this.rng);
+        if (!usedNames.has(cand)) { name = cand; break; }
+      }
+      if (!name) name = `${gender === 'female' ? 'Diệu' : 'Minh'} Tâm`;
+      usedNames.add(name);
+
+      // Phân bố cấp độ tự nhiên từ Cấp 1 (Hạt sen) tới Cấp 52 (Sen ngàn cánh)
+      const tierRoll = this.rng();
+      const level = tierRoll < 0.35
+        ? 1 + Math.floor(this.rng() * 5)
+        : tierRoll < 0.72
+          ? 6 + Math.floor(this.rng() * 11)
+          : tierRoll < 0.92
+            ? 17 + Math.floor(this.rng() * 15)
+            : 32 + Math.floor(this.rng() * 21);
+      const streak = Math.max(1, Math.min(level * 2 + Math.floor(this.rng() * 7), 108));
+
+      const outfit = gender === 'female'
+        ? (['ao-dai', 'trang-lam', 'ba-ba', 'trang-xam'] as OutfitId[])[Math.floor(this.rng() * 4)]
+        : outfits[Math.floor(this.rng() * outfits.length)];
+      const colorIndex = Math.floor(this.rng() * 5);
+
+      const unlockedAcc = ACCESSORIES.filter((a) => a.minLevel <= level);
+      const accessories: string[] = [];
+      if (unlockedAcc.length > 0 && this.rng() < 0.68) {
+        const pick1 = unlockedAcc[Math.floor(this.rng() * unlockedAcc.length)];
+        accessories.push(pick1.id);
+        const diffKind = unlockedAcc.filter((a) => a.kind !== pick1.kind);
+        if (diffKind.length > 0 && this.rng() < 0.35) {
+          accessories.push(diffKind[Math.floor(this.rng() * diffKind.length)].id);
+        }
+      }
+
+      const id = `b07${(i + 1).toString(16).padStart(5, '0')}`;
+      const bot: BotActor = {
+        id,
+        profile: { name, gender, outfit, colorIndex, ...(accessories.length ? { accessories } : {}) },
+        level,
+        streak,
+        x: 0,
+        z: 24,
+        ry: 0,
+        anim: 'idle',
+        speed: 2.35 + this.rng() * 0.75,
+        path: [],
+        goalKind: 'stroll',
+        goalFace: 0,
+        goalAnim: 'idle',
+        dwellLeft: 1 + this.rng() * 8,
+        cushionIdx: null,
+        say: null,
+        sayUntil: 0,
+        nextSayAt: now + 8000 + Math.floor(this.rng() * 45_000),
+        pendingReplyAt: 0,
+        pendingReplyPhrase: null,
+        frag: null,
+      };
+
+      // Đặt sẵn rải đều khắp khuôn viên lúc khởi tạo để cảnh chùa tự nhiên ngay giây đầu tiên
+      const startTarget = this.pickTarget(bot, i);
+      bot.x = startTarget.pos.x;
+      bot.z = startTarget.pos.z;
+      bot.ry = startTarget.face;
+      bot.goalKind = startTarget.kind;
+      bot.goalFace = startTarget.face;
+      bot.goalAnim = startTarget.anim;
+      bot.anim = startTarget.anim;
+      bot.dwellLeft = 2 + this.rng() * startTarget.dwell;
+      if (startTarget.cushionIdx !== null) {
+        bot.cushionIdx = startTarget.cushionIdx;
+        this.occupiedCushions.add(startTarget.cushionIdx);
+      }
+      // Cho khoảng 40% bot bắt đầu đi dạo ngay từ đầu thay vì đứng yên cả 20 người
+      if (i % 5 >= 2 && bot.cushionIdx === null) {
+        this.assignNextGoal(bot);
+      }
+      this.bots.push(bot);
+    }
+  }
+
+  get size(): number {
+    return this.bots.length;
+  }
+
+  private randRange(min: number, max: number): number {
+    return min + this.rng() * (max - min);
+  }
+
+  private pickTarget(bot: BotActor, seedIdx?: number): {
+    kind: GoalKind;
+    pos: Vec2;
+    face: number;
+    anim: RemotePlayer['anim'];
+    dwell: number;
+    cushionIdx: number | null;
+  } {
+    const kinds: GoalKind[] = [
+      'altar', 'altar', 'burner', 'burner', 'candles', 'que',
+      'bell', 'lotusPond', 'lotusPond', 'releasePond',
+      'bodhiTree', 'bodhiTree', 'quanam', 'quanam', 'well',
+      'cushion', 'sweepYard', 'stroll', 'stroll', 'stroll',
+    ];
+    let kind = seedIdx !== undefined ? kinds[seedIdx % kinds.length] : kinds[Math.floor(this.rng() * kinds.length)];
+    if (kind === bot.goalKind && seedIdx === undefined) {
+      kind = kinds[Math.floor(this.rng() * kinds.length)];
+    }
+
+    // Tối đa 3 bot ngồi thiền cùng lúc để luôn còn >= 5 bồ đoàn trống cho người thật
+    if (kind === 'cushion') {
+      if (this.occupiedCushions.size >= 3) {
+        kind = 'stroll';
+      } else {
+        const freeSlots: number[] = [];
+        for (let s = 0; s < CUSHION_COUNT; s++) if (!this.occupiedCushions.has(s)) freeSlots.push(s);
+        if (freeSlots.length > 0) {
+          const slot = freeSlots[Math.floor(this.rng() * freeSlots.length)];
+          const cs = cushionSlot(slot);
+          const seatAnims: RemotePlayer['anim'][] = ['meditate', 'sit', 'chant'];
+          return {
+            kind: 'cushion',
+            pos: cs.pos,
+            face: cs.face,
+            anim: seatAnims[Math.floor(this.rng() * seatAnims.length)],
+            dwell: this.randRange(18, 38),
+            cushionIdx: slot,
+          };
+        }
+        kind = 'stroll';
+      }
+    }
+
+    switch (kind) {
+      case 'altar': {
+        const pos = nearestFree(this.randRange(-2.6, 2.6), this.randRange(-15.5, -13.8));
+        return { kind, pos, face: faceToward(pos, { x: 0, z: -20 }), anim: this.rng() < 0.55 ? 'bow' : 'pray', dwell: this.randRange(6, 12), cushionIdx: null };
+      }
+      case 'burner': {
+        const pos = nearestFree(this.randRange(-2.0, 2.0), this.randRange(-9.2, -7.8));
+        return { kind, pos, face: faceToward(pos, { x: 0, z: -11 }), anim: 'pray', dwell: this.randRange(5, 9), cushionIdx: null };
+      }
+      case 'candles': {
+        const pos = nearestFree(this.randRange(2.7, 4.3), this.randRange(-15.6, -14.5));
+        return { kind, pos, face: faceToward(pos, { x: 3.5, z: -17.3 }), anim: 'pray', dwell: this.randRange(5, 8), cushionIdx: null };
+      }
+      case 'que': {
+        const pos = nearestFree(this.randRange(-4.8, -3.4), this.randRange(-14.9, -13.8));
+        return { kind, pos, face: faceToward(pos, { x: -4.15, z: -16.0 }), anim: 'pray', dwell: this.randRange(5, 9), cushionIdx: null };
+      }
+      case 'bell': {
+        const pos = nearestFree(this.randRange(11.4, 12.8), this.randRange(-9.4, -6.6));
+        return { kind, pos, face: faceToward(pos, { x: 15.2, z: -8 }), anim: 'pray', dwell: this.randRange(5, 9), cushionIdx: null };
+      }
+      case 'lotusPond': {
+        const pos = nearestFree(this.randRange(-10.8, -9.2), this.randRange(11.2, 16.8));
+        return { kind, pos, face: faceToward(pos, { x: LOTUS_POND.cx, z: LOTUS_POND.cz }), anim: 'pray', dwell: this.randRange(6, 12), cushionIdx: null };
+      }
+      case 'releasePond': {
+        const pos = nearestFree(this.randRange(10.4, 11.9), this.randRange(11.2, 16.8));
+        return { kind, pos, face: faceToward(pos, { x: RELEASE_POND.cx, z: RELEASE_POND.cz }), anim: this.rng() < 0.6 ? 'pray' : 'idle', dwell: this.randRange(5, 10), cushionIdx: null };
+      }
+      case 'bodhiTree': {
+        const pos = nearestFree(this.randRange(-19.6, -17.6), this.randRange(-6.2, -2.2));
+        return { kind, pos, face: faceToward(pos, { x: -21.8, z: -5.0 }), anim: 'pray', dwell: this.randRange(6, 11), cushionIdx: null };
+      }
+      case 'quanam': {
+        const pos = nearestFree(this.randRange(26.2, 29.8), this.randRange(-13.5, -11.5));
+        return { kind, pos, face: faceToward(pos, { x: 28.5, z: -16.8 }), anim: this.rng() < 0.45 ? 'bow' : 'pray', dwell: this.randRange(6, 12), cushionIdx: null };
+      }
+      case 'well': {
+        const pos = nearestFree(this.randRange(-26.8, -24.5), this.randRange(-22.5, -20.5));
+        return { kind, pos, face: faceToward(pos, { x: WELL.x, z: WELL.z }), anim: 'pray', dwell: this.randRange(5, 9), cushionIdx: null };
+      }
+      case 'sweepYard': {
+        const pos = nearestFree(this.randRange(-6.5, 6.5), this.randRange(8, 24));
+        return { kind, pos, face: this.randRange(-Math.PI, Math.PI), anim: 'sweep', dwell: this.randRange(8, 15), cushionIdx: null };
+      }
+      case 'stroll':
+      default: {
+        const pos = nearestFree(this.randRange(-14, 14), this.randRange(-6, 28));
+        const anim: RemotePlayer['anim'] = this.rng() < 0.35 ? 'beads' : 'idle';
+        return { kind: 'stroll', pos, face: this.randRange(-Math.PI, Math.PI), anim, dwell: this.randRange(3, 7), cushionIdx: null };
+      }
+    }
+  }
+
+  private assignNextGoal(b: BotActor): void {
+    if (b.cushionIdx !== null) {
+      this.occupiedCushions.delete(b.cushionIdx);
+      b.cushionIdx = null;
+    }
+    const target = this.pickTarget(b);
+    if (target.cushionIdx !== null) {
+      b.cushionIdx = target.cushionIdx;
+      this.occupiedCushions.add(target.cushionIdx);
+    }
+    b.goalKind = target.kind;
+    b.goalFace = target.face;
+    b.goalAnim = target.anim;
+    b.dwellLeft = target.dwell;
+    const p = findPath(b.x, b.z, target.pos.x, target.pos.z);
+    if (p && p.length > 0) {
+      b.path = p;
+      b.anim = 'walk';
+    } else {
+      b.path = [];
+      b.anim = target.anim;
+      b.ry = target.face;
+    }
+    b.frag = null;
+  }
+
+  /** Gọi khi một người chơi thật chắp tay hoặc gửi lời chào ở `(hx, hz)` — bot đứng gần có thể hoan hỷ đáp lễ. */
+  notifyHumanGesture(hx: number, hz: number, now = Date.now()): void {
+    let best: BotActor | null = null;
+    let bestDist = 6.5;
+    for (const b of this.bots) {
+      if (b.say || b.pendingReplyAt > 0) continue;
+      const d = Math.hypot(b.x - hx, b.z - hz);
+      if (d < bestDist) {
+        bestDist = d;
+        best = b;
+      }
+    }
+    if (!best || REPLY_PHRASES.length === 0 || this.rng() > 0.72) return;
+    best.pendingReplyAt = now + 900 + Math.floor(this.rng() * 1300);
+    best.pendingReplyPhrase = REPLY_PHRASES[Math.floor(this.rng() * REPLY_PHRASES.length)];
+    if (best.path.length === 0 && best.cushionIdx === null) {
+      best.ry = faceToward({ x: best.x, z: best.z }, { x: hx, z: hz });
+      best.anim = 'pray';
+      best.dwellLeft = Math.max(best.dwellLeft, 3.5);
+      best.frag = null;
+    }
+  }
+
+  /** Cập nhật vị trí/hành động của toàn bộ 20 bot. Trả `true` nếu có thay đổi cần phát snapshot. */
+  step(dt: number, now = Date.now()): boolean {
+    let changed = false;
+
+    for (const b of this.bots) {
+      // Hết thời gian hiện bong bóng lời chào
+      if (b.say && now >= b.sayUntil) {
+        b.say = null;
+        b.frag = null;
+        changed = true;
+      }
+
+      // Đáp lễ người thật đứng gần
+      if (b.pendingReplyAt > 0 && now >= b.pendingReplyAt) {
+        const phrase = b.pendingReplyPhrase;
+        b.pendingReplyAt = 0;
+        b.pendingReplyPhrase = null;
+        if (phrase && !b.say) {
+          this.triggerSay(b, phrase, now);
+          changed = true;
+        }
+      }
+
+      // Di chuyển dọc đường A*
+      if (b.path.length > 0) {
+        let budget = b.speed * dt;
+        const ox = b.x, oz = b.z, ory = b.ry;
+        while (budget > 0 && b.path.length > 0) {
+          const wp = b.path[0];
+          const dx = wp.x - b.x;
+          const dz = wp.z - b.z;
+          const dist = Math.hypot(dx, dz);
+          if (dist > 0.02) {
+            const wantRy = Math.atan2(-dx, -dz);
+            b.ry = wrapPi(b.ry + wrapPi(wantRy - b.ry) * Math.min(1, dt * 9));
+          }
+          if (dist <= budget) {
+            b.x = wp.x;
+            b.z = wp.z;
+            budget -= dist;
+            b.path.shift();
+          } else {
+            b.x += (dx / dist) * budget;
+            b.z += (dz / dist) * budget;
+            budget = 0;
+          }
+        }
+        if (b.path.length === 0) {
+          b.ry = b.goalFace;
+          b.anim = b.goalAnim;
+          // Nếu vừa đi tới Ao sen và đến lượt thả đèn hoa đăng
+          if (b.goalKind === 'lotusPond' && now >= this.globalNextLanternAt) {
+            this.globalNextLanternAt = now + 22_000 + Math.floor(this.rng() * 25_000);
+            const hex = LANTERN_HEX[Math.floor(this.rng() * LANTERN_HEX.length)];
+            this.hooks.onLantern?.(b.id, hex);
+          }
+          b.frag = null;
+          changed = true;
+        } else {
+          if (b.anim !== 'walk') b.anim = 'walk';
+          if (r2(ox) !== r2(b.x) || r2(oz) !== r2(b.z) || r2(ory) !== r2(b.ry)) {
+            b.frag = null;
+            changed = true;
+          }
+        }
+      } else {
+        // Đang dừng thực hiện hành động tại điểm đến
+        b.dwellLeft -= dt;
+        if (!b.say && now >= b.nextSayAt && now >= this.globalNextSayAt && GREET_PHRASES.length > 0) {
+          const phrase = GREET_PHRASES[Math.floor(this.rng() * GREET_PHRASES.length)];
+          this.triggerSay(b, phrase, now);
+          b.nextSayAt = now + 35_000 + Math.floor(this.rng() * 55_000);
+          this.globalNextSayAt = now + 7500 + Math.floor(this.rng() * 9000);
+          changed = true;
+        }
+        if (b.dwellLeft <= 0) {
+          this.assignNextGoal(b);
+          changed = true;
+        }
+      }
+    }
+
+    return changed;
+  }
+
+  private triggerSay(b: BotActor, phraseId: string, now: number): void {
+    b.say = phraseId;
+    b.sayUntil = now + 4500;
+    b.frag = null;
+    this.hooks.onSay?.(b.id, phraseId);
+  }
+
+  /** Danh sách JSON fragment dựng sẵn cho máy chủ WebSocket (tối ưu 0 cấp phát thừa). */
+  fragments(): string[] {
+    const out: string[] = [];
+    for (const b of this.bots) {
+      if (b.frag === null) {
+        const o: Record<string, unknown> = {
+          id: b.id,
+          profile: b.profile,
+          level: b.level,
+          x: r2(b.x),
+          z: r2(b.z),
+          ry: r2(b.ry),
+          anim: b.anim,
+        };
+        if (b.say) o.say = b.say;
+        b.frag = JSON.stringify(o);
+      }
+      out.push(b.frag);
+    }
+    return out;
+  }
+
+  /** Danh sách `RemotePlayer` trực tiếp cho chế độ chạy tĩnh trên client (vd Vercel không server). */
+  toRemotePlayers(resolveSayText?: (phraseId: string) => string | undefined): RemotePlayer[] {
+    return this.bots.map((b) => ({
+      id: b.id,
+      profile: b.profile,
+      level: b.level,
+      x: r2(b.x),
+      z: r2(b.z),
+      ry: r2(b.ry),
+      anim: b.anim,
+      ...(b.say ? { say: resolveSayText ? (resolveSayText(b.say) ?? b.say) : b.say } : {}),
+    }));
+  }
+
+  /** Dữ liệu góp mặt trên Bảng xếp hạng (Top cấp & Top chuỗi). */
+  leaderboardRows(): { name: string; level: number; streak: number }[] {
+    return this.bots.map((b) => ({ name: b.profile.name, level: b.level, streak: b.streak }));
+  }
+}

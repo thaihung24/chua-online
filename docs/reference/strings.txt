@@ -1,0 +1,2454 @@
+=== account-B3fmTrbD.js (89)
+Đã đăng nhập. Chùa sẽ tự lưu nhân vật của bạn.
+Đã nhận tiến trình từ máy khác
+Tải lại
+Không kết nối được. Kiểm tra mạng rồi thử lại.
+Email chưa đúng dạng. Bạn kiểm tra lại nhé.
+Bạn vừa xin mã nhiều lần, đợi ít phút rồi thử lại.
+Mã không đúng hoặc đã hết hạn.
+Chưa gửi được email lúc này. Thử đăng nhập bằng Google hoặc thử lại sau.
+Chưa xác minh được trình duyệt, bạn thử lại nhé.
+Chưa xác minh được trình duyệt. Hãy tắt trình chặn quảng cáo hoặc mở trang bằng Chrome / Safari rồi thử lại nhé.
+Bạn đã huỷ đăng nhập Google.
+Đăng nhập Google không thành công, thử lại nhé.
+Không đăng nhập Google được ở trình duyệt này. Hãy dùng mã gửi qua email, hoặc mở trang bằng Chrome / Safari.
+Phiên đăng nhập đã hết. Bạn đăng nhập lại nhé.
+Máy chủ đang bận. Thử lại sau nhé.
+Chưa xoá được tài khoản. Thử lại sau nhé.
+Trình duyệt này không cho lưu dữ liệu tạm nên chưa đăng nhập Google được.
+captcha: quá hạn
+Trình duyệt
+Chưa đồng bộ được lúc này. Thử lại sau nhé.
+Bản lưu trên mạng tạo bởi phiên bản mới hơn. Hãy cập nhật ứng dụng rồi thử lại.
+Có máy khác đang lưu cùng lúc. Thử lại sau nhé.
+Bản lưu quá lớn nên chưa đưa lên mạng được.
+Không ghi được dữ liệu lên thiết bị (bộ nhớ đầy hoặc bị chặn).
+Tài khoản này đã lưu một nhân vật khác.
+Lưu nhân vật
+Đăng nhập để giữ nhân vật, trang phục, cấp, nhiệm vụ và chuỗi giữ lửa khi đổi máy. Không bắt buộc.
+Đăng nhập để giữ nhân vật, cấp, nhiệm vụ và chuỗi giữ lửa trên mọi máy, hoặc lấy lại nhân vật đã lưu ở máy khác. Không bắt buộc.
+Chùa gửi mã 6 số tới email của bạn, không cần mật khẩu.
+Khi đăng nhập, bạn đồng ý với <a href="/dieu-khoan-su-dung/" target="_blank" rel="noopener">Điều khoản</a> và <a href="/chinh-sach-quyen-rieng-tu/" target="_blank" rel="noopener">Chính sách quyền riêng tư</a>.
+Google không cho đăng nhập trong trình duyệt này. Bạn dùng mã gửi qua email, hoặc mở chuasen.com bằng Chrome hay Safari nhé.
+Bạn nhập đủ 6 số nhé.
+Không thấy thư? Bạn xem cả mục thư rác nhé. Mã dùng được trong 10 phút.
+Đã có lỗi xảy ra. Bạn thử lại nhé.
+Chưa mở được phần lưu nhân vật. Bạn kiểm tra mạng rồi thử lại nhé.
+Đã đăng xuất. Nhân vật vẫn còn trên máy này.
+Đã xoá bản lưu trên mạng. Nhân vật trên máy này vẫn còn.
+Đã đồng bộ.
+Xoá tài khoản?
+Xoá bản lưu trên mạng. Nhân vật trên máy này vẫn còn.
+Đã nhận tiến trình từ máy khác.
+Tải lại để thấy tiến trình mới
+Máy này và tài khoản có hai nhân vật khác nhau
+Bạn muốn giữ nhân vật nào? Công phu tu tập từ cả hai bên đều được giữ lại.
+Nhân vật trên máy này
+Nhân vật đã lưu
+Bấm "Vào chùa" để tải lại trang và thấy nhân vật, trang phục, Hành trình đã lưu.
+nâu
+xám
+vàng
+Chưa lưu lên mạng lần nào
+Đã lưu lúc ${o}
+Đã lưu hôm qua lúc ${o}
+Đã lưu ngày ${Sr(n.getDate())}/${Sr(n.getMonth() + 1)} lúc ${o}
+Đăng nhập bằng Google
+Đăng nhập bằng mã gửi qua email
+Áo ${t}
+Cấp ${e.level}
+<div class="account-dlg__card" data-ref="card" aria-busy="false"> <header class="account-dlg__head"> <h2 id="account-title" class="account-dlg__title" tabindex="-1" data-ref="title"></h2> <button type="button" class="account-dlg__close" data-ref="close" aria-label="Đóng">${v(
+Lõi tài khoản chưa sẵn sàng
+Gửi lại mã sau ${k} giây
+Gửi lại mã
+<p class="account-dlg__lead" role="status">Đang mở…</p>
+<p class="account-dlg__lead" role="alert" data-ref="msg"></p> <div class="account-dlg__actions"><button type="button" class="btn" data-ref="done">Đóng</button></div>
+)} <div class="account-dlg__or" aria-hidden="true"><span>hoặc</span></div>
+} <form class="account-dlg__form" novalidate data-ref="form"> <label class="account-dlg__label" for="account-email">Email</label> <input id="account-email" class="account-dlg__input" data-ref="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="ban@example.com" aria-describedby="account-email-hint" /> <p id="account-email-hint" class="account-dlg__hint" data-ref="hint"></p> <button type="submit" class="btn btn--gold btn--block" data-ref="send">Gửi mã</button> </form> <p class="account-dlg__hint account-dlg__terms">${Qn}</p>
+Đang chuyển sang Google…
+Đang gửi…
+<form class="account-dlg__form" novalidate data-ref="form"> <h3 class="account-dlg__heading">Nhập mã 6 số</h3> <p class="account-dlg__lead" data-ref="sentTo"></p> <label class="account-dlg__label" for="account-code">Mã 6 số</label> <input id="account-code" class="account-dlg__input account-dlg__code" data-ref="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" enterkeyhint="done" autocapitalize="off" spellcheck="false" aria-describedby="account-code-hint" /> <p id="account-code-hint" class="account-dlg__hint" data-ref="hint"></p> <button type="submit" class="btn btn--gold btn--block" data-ref="verify">Xác nhận</button> <div class="account-dlg__row"> <button type="button" class="btn btn--ghost btn--sm" data-ref="resend"></button> <button type="button" class="btn btn--ghost btn--sm" data-ref="change">Đổi email</button> </div> </form>
+Mã 6 số đã gửi tới ${s(E)}.
+Đang kiểm tra…
+Đã gửi lại mã. Bạn xem hộp thư nhé.
+Đang đồng bộ nhân vật của bạn…
+Đang đồng bộ…
+<h3 class="account-dlg__heading" tabindex="-1" data-ref="heading">Chưa đồng bộ được</h3> <p class="account-dlg__lead" role="alert" data-ref="msg"></p> <div class="account-dlg__actions"> <button type="button" class="btn btn--gold" data-ref="retry">Thử lại</button> <button type="button" class="btn btn--ghost" data-ref="later">Để sau</button> </div>
+<h4 class="account-dlg__char-label" id="account-char-${e}" data-ref="label"></h4> <p class="account-dlg__char-name"><span class="account-dlg__dot" aria-hidden="true" data-ref="dot"></span><span data-ref="name"></span></p> <p class="account-dlg__char-meta" data-ref="meta"></p> <button type="button" class="btn btn--block" id="account-pick-${e}" aria-labelledby="account-pick-${e} account-char-${e}" data-ref="pick">Giữ nhân vật này</button>
+, { size: 44 })} <h3 class="account-dlg__heading" tabindex="-1" data-ref="heading"></h3> <p class="account-dlg__lead" data-ref="lead"></p> <button type="button" class="btn btn--gold" data-ref="enter">Vào chùa</button> </div>
+Đã lấy lại tiến trình của bạn
+Đã lấy lại nhân vật ${e}
+, { size: 22 })}</span> <div class="account-dlg__who-text"> <h3 class="account-dlg__heading" tabindex="-1" data-ref="heading">Đã đăng nhập</h3> <p class="account-dlg__email" data-ref="email"></p> <p class="account-dlg__hint" data-ref="method"></p> </div> </div> <p class="account-dlg__saved" data-ref="saved"></p> ${ e.pulled ?
+} <div class="account-dlg__actions"> <button type="button" class="btn" data-ref="sync">Đồng bộ ngay</button> <button type="button" class="btn btn--ghost" data-ref="signout">Đăng xuất</button> </div> <button type="button" class="account-dlg__quiet" data-ref="delete">Xoá tài khoản</button>
+Đang đăng xuất…
+<h3 class="account-dlg__heading" tabindex="-1" data-ref="heading"></h3> <p class="account-dlg__lead" data-ref="text"></p> <div class="account-dlg__actions"> <button type="button" class="btn btn--ghost" data-ref="keep">Giữ lại</button> <button type="button" class="btn account-dlg__danger" data-ref="confirm">Xoá tài khoản</button> </div>
+Đang xoá…
+Không nạp được lõi tài khoản
+<label class="onb__label" for="onb-mail">Email</label> <input id="onb-mail" class="onb__input" data-ref="field" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" enterkeyhint="send" placeholder="ban@example.com" aria-describedby="onb-mail-hint onb-mail-err" /> <p class="onb__hint" id="onb-mail-hint" data-ref="hint"></p> <p class="onb__error" id="onb-mail-err" role="alert" data-ref="err"></p> <button type="submit" class="btn btn--gold btn--block" data-ref="send">Gửi mã</button>
+<h2 class="onb__mail-title" tabindex="-1" data-ref="title">Nhập mã 6 số</h2> <p class="onb__hint" data-ref="sentTo"></p> <label class="sr-only" for="onb-code">Mã 6 số</label> <input id="onb-code" class="onb__input onb__code" data-ref="field" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" enterkeyhint="done" autocapitalize="off" spellcheck="false" aria-describedby="onb-code-hint onb-code-err" /> <p class="onb__hint" id="onb-code-hint" data-ref="hint"></p> <p class="onb__hint" role="status" data-ref="info"></p> <p class="onb__error" id="onb-code-err" role="alert" data-ref="err"></p> <button type="submit" class="btn btn--gold btn--block" data-ref="verify">Xác nhận</button> <div class="onb__mail-row"> <button type="button" class="btn btn--ghost btn--sm" data-ref="resend"></button> <button type="button" class="btn btn--ghost btn--sm" data-ref="change">Đổi email</button> </div>
+Mã 6 số đã gửi tới ${s(o)}.
+Gửi lại mã sau ${l} giây
+
+=== analytics-DZFCkC1C.js (0)
+
+
+=== app-z_oU8L_u.js (192)
+[net] lỗi trong hàm lắng nghe
+Cấp hoặc chuỗi giữ lửa trên máy bạn vượt mức có thể đạt từ ngày Chùa Sen mở cửa (31/10/2026), nên mọi người không thấy. Xin đừng sửa dữ liệu: cố tình gian lận có thể bị chặn vào chùa.
+Chưa kết nối được máy chủ — bạn đang ở chế độ một mình.
+Không chạy được lời nhắc đăng nhập
+hôm nay đã giữ
+hôm nay chưa giữ
+bắt đầu giữ lửa
+Chuỗi giữ lửa ${e} ngày${n && r !==
+, bậc ${n}
+🙏 Chắp tay
+A Di Đà Phật
+Tùy hỷ
+Chúc bình an
+đang niệm Phật
+đang tụng kinh
+đang thiền
+${v} (KOL Chùa Sen)
+Không tải được căn phòng môi trường PMREM, bỏ qua
+Không dựng được môi trường PMREM, bỏ qua
+Không biên dịch trước được shader, sẽ biên dịch khi vẽ
+avatar: không gộp được hình học
+avatar: chưa nạp bộ dựng trang phục
+Không tải được lớp mạng nhiều người
+Đang đi
+Dừng
+Lạy Phật
+Dừng lạy
+Tràng hạt
+Tụng kinh
+Thiền
+Quét lá
+Cất chổi
+Quét lá đa
+Xếp hạng
+Bảng xếp hạng
+Một mình trong chùa
+Thêm (có lời nhắc hôm nay)
+Thêm (có mục mới)
+Đăng ký kênh YouTube ${T.name} — kênh học AI, người làm Chùa Sen
+Toàn màn hình
+Thoát toàn màn hình
+Góp ý · Báo lỗi
+Âm thanh
+Âm thanh (đang tắt)
+Nhạc nền
+Giọng niệm Phật & nhạc nền
+Âm lượng nhạc nền
+Mõ & chuông
+Chưa mở được chương trình KOL. Bạn kiểm tra mạng rồi thử lại nhé.
+KOL Chùa Sen
+Chương trình KOL Chùa Sen: làm video, nhận danh hiệu ${v}
+Chưa mở được menu. Bạn kiểm tra mạng rồi thử lại nhé.
+Đang vào phòng…
+${e.roomLabel} · ${e.online} người
+${e.online} người trong chùa
+Một mình
+Đang vào…
+Trực tuyến
+<button type="button" class="hud-sound__row" role="switch" aria-checked="true" aria-label="${t}" data-ref="${e}">${j(n)}<span class="hud-sound__label">${t}</span><span class="hud-sound__state" aria-hidden="true">Bật</span></button>
+<div class="hud__joystick" data-ref="joystick"></div> <div class="hud__top"> <div class="hud-glass hud-room" data-glass="room"> <button type="button" class="hud-room__pill" data-ref="room" data-mode="offline" aria-haspopup="dialog" aria-label="Chọn phòng. ${Pl}"> ${j(
+)} <span class="hud-room__temple">Chùa Sen</span> <span class="hud-room__sep" aria-hidden="true"></span> <span class="hud-room__dot" aria-hidden="true"></span> <span class="hud-room__label" data-ref="roomLabel">Một mình</span> ${j(
+)} </button> </div> <div class="hud-glass hud-tools" data-glass="tools" role="group" aria-label="Công cụ"> <button type="button" class="hud-people" data-ref="people" aria-label="1 người trong chùa" title="Người trong chùa">${j(
+)}</button> <button type="button" class="hud-round hud-fullscreen" data-ref="fullscreen" aria-label="${Bl}" title="${Bl}" hidden>${ru(!1)}</button> <button type="button" class="hud-round" data-ref="settings" aria-label="Cài đặt" title="Cài đặt">${j(
+)}</button> </div> <div class="hud__listen" data-ref="listenWrap"> <div class="hud-level" data-ref="levelWrap" hidden> <button type="button" class="hud-glass hud-level__btn" data-ref="level" aria-label="Hành trình"> <svg class="hud-level__ring" viewBox="0 0 40 40" aria-hidden="true"><circle data-ref="levelArc" cx="20" cy="20" r="18.5" pathLength="1"/></svg> <span class="hud-level__emblem" data-ref="levelEmblem" aria-hidden="true"></span> <span class="hud-level__num" data-ref="levelNum" aria-hidden="true"></span> </button> <span class="hud-level__dot" data-ref="levelDot" aria-hidden="true" hidden></span> </div> <button type="button" class="hud-glass hud-streak" data-ref="streak" aria-label="Chuỗi giữ lửa" hidden><span class="flame-box" data-ref="streakFlame">${oi}</span><b data-ref="streakNum" aria-hidden="true"></b></button> <div class="hud-yt" data-ref="yt" hidden> <button type="button" class="hud-glass hud-round" data-ref="ytBtn" aria-label="Kênh YouTube ${T.name}" title="Kênh YouTube ${T.name}" aria-expanded="false" aria-controls="${t}">${j(
+)}${fu}<span class="hud-creator__cta">Đăng ký kênh</span></a></div> </div> <button type="button" class="hud-glass hud-kol" data-ref="kolPill" aria-label="${Zl}" title="${Zl}">${j(
+)}<span>${Xl}</span></button> <button type="button" class="hud-glass hud-listen" data-glass="listen" data-ref="listen" aria-pressed="false" hidden> <span class="hud-eq" aria-hidden="true"><i></i><i></i><i></i></span> <span class="hud-listen__label" data-ref="listenLabel">Nghe niệm Phật</span> </button> </div> <div class="hud__notice" data-ref="notice"></div> </div> <div class="hud__feedback"> <button type="button" class="hud-glass hud-feedback" data-ref="feedbackTab" aria-label="${Hl}">${j(
+)}<span class="hud-feedback__text">${Hl}</span></button> </div> <div class="hud__context"> <button type="button" class="hud-context" data-ref="context" aria-keyshortcuts="F Enter" hidden> <span class="hud-context__label" data-ref="contextLabel"></span> <kbd class="hud-context__key" aria-hidden="true">F</kbd> </button> </div> <div class="hud__dock"> <div class="hud-glass hud-bar" data-glass="bar" role="group" aria-label="Công phu"> <div class="hud-bar__seat" data-ref="seat" hidden> ${[Al, jl].map((e) => cu(e,
+)} </div> <div class="hud-bar__main"> <button type="button" class="hud-bar__btn" data-ref="pray" aria-label="Chắp tay">${j(
+)}<span class="hud-btn__label">Chắp tay</span></button> ${cu(Ol,
+)}<span class="hud-btn__label">Thêm</span>${lu(
+)}</button> </div> <div class="hud-pop hud-pop--more" id="${e}" role="menu" aria-label="Thêm" data-ref="moreMenu" hidden></div> </div> </div> <div class="hud-creator" data-ref="creator" hidden> <div class="hud-glass hud-creator__card" data-ref="creatorCard"> ${uu(
+)}${fu}<span class="hud-creator__cta">Đăng ký</span></a> <button type="button" class="hud-creator__close" data-ref="creatorClose" aria-label="Thu gọn thẻ kênh YouTube" title="Thu gọn">${j(
+)}</button> </div> <button type="button" class="hud-glass hud-round" data-ref="creatorIcon" aria-label="Hiện thẻ kênh YouTube ${T.name}" title="Kênh YouTube ${T.name}" hidden>${j(
+HUD: thiếu phần tử ${e}
+Không mở được hộp thoại chọn phòng
+Không mở được bảng chương trình KOL
+Hành trình: Cấp ${e.level}, ${Ce[e.tier - 1]?.name}, còn ${e.remaining} tinh tấn tới cấp sau
+Bật
+Tắt
+${e} người đang ở ${P.roomLabel ??
+Bạn đang một mình trong chùa
+Không tải được menu Thêm
+Chọn phòng. ${iu(e)}
+Nghe niệm Phật
+Đang phát: ${t}
+Chưa mở được, bạn thử lại nhé
+Không mở được hộp thoại chọn giọng niệm Phật
+Cần bên trái để đi, vuốt bên phải để nhìn quanh, chạm để đi tới
+Chạm để đi tới, vuốt để nhìn quanh, chạm bồ đoàn để ngồi
+Giữ chuột hoặc W A S D để đi, kéo chuột để nhìn quanh, Q E để xoay
+Di chuột để nhìn quanh · W A S D để đi · Esc để thoát
+Tôi
+${af(n)}<b>Cấp ${e.level}</b>
+avatar: khoá trang phục sai bộ phận: ${t}
+avatar: khoá trang phục hỏng: ${t}
+Hương của bạn còn cháy ${Dr(e)} phút, khi tàn bạn thắp nén mới nhé.
+Mạng đang bận, hương chỉ hiện trên máy bạn.
+Đang đến hồ bán nguyệt
+Đang đến suối
+Đang đến bồ đoàn
+Đang đến chuông
+Đang đến bàn thờ
+Đang đến lư hương
+Đang đến ao sen
+Đang đến giá chổi
+Đang đến bến phóng sinh
+Đang đến cây bồ đề
+Lỗi khi tới nơi
+Không tải được đèn hoa đăng
+Không tải được nến
+Không tải được nén hương
+Không nối được phòng mới
+Bạn có thể lạy Phật ngay tại chỗ đang đứng.
+Chỗ này vừa có người ngồi.
+Chỗ này đã có người ngồi.
+Các bồ đoàn đều đã có người ngồi.${ph}
+Chưa tìm được lối tới chỗ này.
+Chưa giữ được chỗ này, bạn thử lại nhé.
+Chỗ vừa giữ đã hết hạn, mình chọn chỗ khác cho bạn nhé.
+Chưa giữ được chỗ ngồi nào.${ph}
+Mạng của bạn đã giữ nhiều chỗ ngồi lúc chùa đông.${ph}
+Không tải được bong bóng lời chào
+Chưa mở được câu nói. Bạn kiểm tra mạng rồi thử lại nhé.
+Lỗi khi xử lý sự kiện quét lá
+attribute vec4 aSeed; attribute float aKind; uniform float uTime; uniform float uNight; uniform float uMotion; uniform float uBlink; uniform float uScale; uniform float uMaxSize; varying vec4 vColor; void main() { float t = uTime * uMotion; vec3 p = position; float size = 0.04; vec3 col = vec3( 1.0 ); float alpha = 0.0; float additive = 1.0; if ( aKind < 0.5 ) { // Bụi: trôi chậm quanh chỗ gốc, lấp lánh khi lọt vào vệt sáng. p += vec3( sin( t * 0.11 + aSeed.x * 6.2831 ) * 0.55, sin( t * 0.08 + aSeed.y * 6.2831 ) * 0.3, cos( t * 0.09 + aSeed.z * 6.2831 ) * 0.55 ); size = 0.03 + 0.025 * aSeed.w; col = mix( vec3( 1.0, 0.9, 0.7 ), vec3( 1.0, 0.7, 0.4 ), uNight ); alpha = mix( 0.5, 0.2, uNight ) * ( 0.55 + 0.45 * sin( t * 0.6 + aSeed.w * 40.0 ) ); } else if ( aKind < 1.5 ) { // Đom đóm: bay vòng lệch pha, nhấp nháy xanh vàng; chỉ lúc tối. p += vec3( sin( t * 0.31 + aSeed.x * 6.2831 ) * 1.3, sin( t * 0.47 + aSeed.y * 6.2831 ) * 0.45, cos( t * 0.27 + aSeed.z * 6.2831 ) * 1.3 ); float blink = pow( max( 0.0, sin( t * ( 0.8 + aSeed.w * 0.7 ) + aSeed.x * 40.0 ) ), 4.0 ); blink = mix( 0.7, blink, uBlink ); size = 0.2; col = vec3( 0.78, 1.0, 0.36 ); alpha = uNight * uNight * ( 0.12 + 0.88 * blink ); } else { // Cánh hoa: rơi từ độ cao gốc xuống đất rồi sinh lại, gió đẩy sang +x. float life = 16.0 + aSeed.w * 10.0; float u = fract( t / life + aSeed.x ); p.y = position.y * ( 1.0 - u ) + 0.05; p.x += u * life * 0.32 + sin( t * 0.7 + aSeed.y * 6.2831 ) * 0.7; p.z += sin( t * 0.5 + aSeed.z * 6.2831 ) * 0.9; size = 0.065; col = mix( vec3( 0.96, 0.66, 0.74 ), vec3( 1.0, 0.92, 0.9 ), aSeed.z ); // Hạt sinh từ tán bồ đề (cao hơn 4,6 m) là lá: xanh vàng, to hơn cánh hoa. float leaf = step( 4.6, position.y ); size = mix( size, 0.1, leaf ); col = mix( col, vec3( 0.6, 0.74, 0.28 ), leaf ); additive = 0.0; alpha = smoothstep( 0.0, 0.08, u ) * ( 1.0 - smoothstep( 0.84, 1.0, u ) ) * mix( 0.9, 0.45, uNight ); } vec4 mv = modelViewMatrix * vec4( p, 1.0 ); gl_Position = projectionMatrix * mv; float depth = max( -mv.z, 0.05 ); gl_PointSize = clamp( size * uScale / depth, 1.0, uMaxSize ); alpha *= ( 1.0 - smoothstep( 16.0, 34.0, depth ) ) * smoothstep( 0.35, 1.3, depth ); // Premultiplied: alpha kênh = 0 -> cộng sáng thuần (đom đóm, bụi); > 0 -> phủ lên (cánh hoa). vColor = vec4( col * alpha, alpha * ( 1.0 - additive ) ); // Hạt gần như trong suốt thì đẩy ra ngoài khung hình để khỏi tốn pixel. if ( alpha < 0.002 ) gl_Position = vec4( 2.0, 2.0, 2.0, 1.0 ); }
+TỪ BI HỶ XẢ
+PHẬT
+PHÁP
+BIÊN
+QUẢNG
+ĐẠI
+Không tải được hoạ tiết vẽ, giữ màu phẳng
+metresPerTile phải dương
+#ifdef USE_MAP vec3 surfTexel = texture2D( map, vMapUv ).rgb; float surfLuma = max( dot( surfTexel, vec3( 0.2126, 0.7152, 0.0722 ) ), 0.002 ); vec3 surfHue = clamp( ( surfTexel / surfLuma ) / uSurfHue, 0.25, 4.0 ); surfHue = mix( vec3( 1.0 ), surfHue, uSurfA.y ); float surfTone = max( 0.002, uSurfA.w + ( surfLuma - uSurfA.w ) * uSurfA.x ); // Lưới phẳng theo thế giới (sân, lối đi): lấy mẫu lần hai ở ~0,137 lần tỉ lệ để độ chói đổi chậm theo // vùng (±12%), phá chu kỳ lặp 3 m nhìn thấy như các khối sáng tối chữ nhật. float surfMacro = 1.0; if ( uSurfWorld > 0.5 ) { float macroLuma = dot( texture2D( map, vMapUv * 0.137 + vec2( 0.31, 0.57 ) ).rgb, vec3( 0.2126, 0.7152, 0.0722 ) ); surfMacro = 1.0 + MACRO_STRENGTH * ( clamp( macroLuma / uSurfA.w, 0.4, 1.6 ) - 1.0 ); } diffuseColor.rgb *= surfHue * ( surfTone / uSurfA.w ) * uSurfA.z * surfMacro; #endif
+Thắp hương
+Thỉnh chuông
+Chưa lấy được chổi. Bạn thử lại nhé.
+Không tải được phần quét lá
+Ngồi xuống
+không gộp được toà sen vào lưới tượng
+? o.add(new rt(0.4, 0.3, 4), J.ridge, { x: f, y: 2.19, z: p, ry: Math.PI / 4 }) : R_(o, f, 2.04, p, 0.62, d, J.ridge)); } } function hw(e) { let t = Xt, n = 0.25; (mw(e, t.x0 - n, -6.05, 22.75, 23.25), mw(e, 6.05, t.x1 + n, 22.75, 23.25), mw(e, t.x0 - n, t.x1 + n, t.z0 - n, t.z0 + n)); let r = -2 - Qt / 2, i = -2 + Qt / 2; for (let a of [t.x0, t.x1]) (mw(e, a - n, a + n, t.z0 + n, r, 1), mw(e, a - n, a + n, i, 22.75, -1)); } function gw(e, t) { let n = gn((e.A - t) / (e.A - e.Rx), 0, 1); return e.baseY + e.H * n ** +(e.power ?? 1.7); } var _w = 0.64, vw = 0.2, yw = 0.45; function bw(e, t, n, r, i, a, o) { let s = []; for (let c = 0; c <= o; c++) { let l = ((i + ((a - i) * c) / o) * Math.PI) / 180; s.push([e + n * Math.cos(l), t + r * Math.sin(l)]); } return s; } var xw = { C: [bw(0.34, 0.5, 0.32, 0.5, 42, 318, 8)], H: [ [ [0, 0], [0, 1], ], [ [_w, 0], [_w, 1], ], [ [0, 0.5], [_w, 0.5], ], ], Ù: [ [[0, 1], [0, 0.32], ...bw(0.32, 0.32, 0.32, 0.32, 180, 360, 5).slice(1), [_w, 1]], [ [0.12, 1.24], [0.34, 1.08], ], ], A: [ [ [0, 0], [0.32, 1], [_w, 0], ], [ [0.12, 0.34], [0.52, 0.34], ], ], S: [ [ [0.62, 0.84], [0.48, 0.97], [0.3, 1], [0.12, 0.93], [0.04, 0.76], [0.14, 0.6], [0.32, 0.5], [0.5, 0.4], [0.6, 0.24], [0.5, 0.07], [0.3, 0], [0.12, 0.05], [0, 0.18], ], ], E: [ [ [0.6, 1], [0, 1], [0, 0], [0.6, 0], ], [ [0, 0.5], [0.5, 0.5], ], ], N: [ [ [0, 0], [0, 1], [_w, 0], [_w, 1], ], ], }; function Sw(e) { return e.length <= 5 ? e : e.filter((t, n) => n % 2 == 0 || n === e.length - 1); } function Cw(e, t, n = !1) { let r = [], i = [], a = 0; for (let o of e) { if (o ===
+CHÙA SEN
+uniform vec3 uLand; uniform float uMist; varying vec3 vColor; varying float vMist; varying vec3 vWorld; #include <common> #include <dithering_pars_fragment> ${Mt} void main() { // Sương tan vào đúng màu bầu trời phía sau núi (cùng hàm với vòm trời), nên không lộ đường cắt. vec3 haze = skyGradient(normalize(vWorld - cameraPosition)); float m = clamp(vMist * uMist, 0.0, 1.0); gl_FragColor = vec4(mix(vColor * uLand, haze, m), 1.0); #include <tonemapping_fragment> #include <colorspace_fragment> #include <dithering_fragment> }
+Thả đèn hoa đăng
+Không nạp được khuôn viên mở rộng
+Không nạp được tượng chánh điện
+Không nạp được loa chùa báo KOL
+Không tải được âm nền
+Lỗi trong hàm lắng nghe niệm Phật
+Không tải được radio niệm Phật
+Không tải được nhạc nền
+Tiếng mõ niệm Phật (tổng hợp)
+Đã tạm dừng Nghe niệm Phật để nghe pháp thoại.
+Lỗi trong hàm lắng nghe âm thanh
+Đã bật âm thanh
+Chưa tải được bản ghi, đang phát tiếng mõ tổng hợp
+Thiết bị này chưa phát được âm thanh
+Đang công phu chung: mọi người cùng niệm Phật
+Đã lưu trang phục.
+Chưa mở được bảng Trang phục. Bạn thử lại nhé.
+Đèn vừa thả còn đang trôi. Bạn chờ một chút rồi thả tiếp nhé.
+Đang mở khuôn viên…
+Chưa mở được khuôn viên. Bạn thử tải lại trang nhé.
+Lỗi khi gỡ cảnh chùa
+Chưa mở được Thiền hành. Bạn kiểm tra mạng rồi thử lại nhé.
+Không tải được avatar người cùng phòng
+Cách mở
+Đã thắp hương. Nguyện tâm được thanh tịnh.
+Hoa vẫn đang tươi trên bàn thờ.
+Đã dâng hoa cúng dường.
+Nến vẫn đang cháy trên bàn thờ.
+Đã thắp nến. Nguyện ánh sáng trí tuệ soi đường.
+Không mở được hộp thoại
+Chưa mở được thẻ khoe thành tích. Bạn thử lại nhé.
+Bạn đang ngồi rồi. Bấm Đứng dậy khi muốn đi.
+Không đổi được nhân vật
+Không nạp được hào quang KOL
+Không mở được bảng Trang phục
+Đã tắt âm thanh
+Đứng dậy
+Không nạp được hiệu ứng nở sen
+Bạn đã tới bàn thờ. Dâng hoa nhé?
+Bạn đã tới bàn thờ. Thắp nến nhé?
+Dâng hoa
+Thắp nến
+Để sau
+Chùa đã đóng
+Không khởi động được Bảng xếp hạng
+Không mở được Bảng xếp hạng
+Chưa mở được bảng xếp hạng. Bạn kiểm tra mạng rồi thử lại nhé.
+Không nạp được Hành trình
+Không kết nối được mạng
+
+=== campus-Bf1kiHG1.js (15)
+Xin quẻ
+Lễ Quan Âm
+Thả đèn hoa đăng
+Phóng sinh
+← Vườn bồ đề · Sân thiền
+Quan Âm · Giếng ngọc →
+Chánh điện ↑
+← Vườn bồ đề
+Sân thiền →
+← Quan Âm
+Giếng ngọc →
+CHÙA SEN
+#include <color_fragment> { // Mặt nước: vệt sáng trôi xuôi dòng (cuộn theo độ dài cung), lệch pha theo bề ngang để không thành sọc thẳng; // sát mép nước cạn và tối hơn. float s = vFlow.x - uFlowTime; float lat = vFlow.y; float a = sin(s * 2.3 + lat * 1.7 + sin(vFlow.x * 0.6) * 1.8) * 0.5 + 0.5; float b = sin(s * 4.1 - lat * 2.6 + 1.9) * 0.5 + 0.5; float streak = smoothstep(0.8, 1.0, a) * 0.6 + smoothstep(0.86, 1.0, b) * 0.4; float edge = smoothstep(0.55, 1.0, abs(lat)); vec3 water = diffuseColor.rgb * (1.0 - 0.34 * edge) + vec3(0.1, 0.13, 0.13) * streak * (1.0 - edge); // Bờ sỏi ướt: ô sỏi theo (độ dài cung, bề ngang), mỗi ô một sắc, khe giữa các ô là đất sẫm. vec2 cell = vec2(vFlow.x * 5.0, abs(lat) * 4.0); vec2 id = floor(cell + vec2(0.0, floor(vFlow.x * 5.0) * 0.5)); float tone = fract(sin(dot(id, vec2(12.9898, 78.233))) * 43758.5453); vec2 f = fract(cell + vec2(0.0, floor(vFlow.x * 5.0) * 0.5)); float grout = smoothstep(0.0, 0.18, min(min(f.x, 1.0 - f.x), min(f.y, 1.0 - f.y))); vec3 pebble = mix(uBankA, uBankB, tone) * (0.45 + 0.55 * grout); bankMix = smoothstep(0.97, 1.06, abs(lat)); diffuseColor.rgb = mix(water, pebble, bankMix); }
+Cây bồ đề
+Không nạp được tượng khuôn viên, dùng tượng dựng thủ tục
+
+=== dialog-DwXghOMX.js (0)
+
+
+=== envmap-vxaP9lms.js (0)
+
+
+=== feedback-DXIikpVD.js (63)
+Đề xuất tính năng
+Báo lỗi
+Chưa mượt, khó dùng
+Góp ý khác
+Tự động
+Mượt
+Cân bằng
+Đẹp
+${i} (đang chạy: ${r})
+Dữ liệu góp ý không hợp lệ.
+Bạn chọn loại góp ý giúp chùa nhé.
+Bạn chưa viết nội dung góp ý.
+Bạn viết thêm vài chữ để chùa hiểu rõ hơn nhé.
+Nội dung dài quá ${u.messageMax} ký tự, bạn rút gọn giúp chùa nhé.
+Thông tin liên hệ không hợp lệ.
+Thông tin liên hệ dài quá, bạn ghi ngắn lại nhé.
+Góp ý & báo lỗi
+Chùa Sen còn mới, mỗi góp ý của bạn giúp chùa tốt hơn. Đội ngũ chùa đọc từng tin bạn gửi.
+Chỉ đội ngũ Chùa Sen đọc góp ý của bạn. Bạn đừng ghi mật khẩu, số tài khoản hay thông tin riêng tư nhé.
+A Di Đà Phật. Cảm ơn bạn đã góp ý!
+Đội ngũ chùa sẽ đọc góp ý của bạn.
+Nếu cần, chùa sẽ hồi âm bạn qua thông tin liên hệ bạn để lại.
+Bạn gửi hơi nhanh, nghỉ chút rồi thử lại sau ít phút nhé.
+Chưa gửi được. Nội dung vẫn được giữ lại, bạn thử lại sau nhé.
+Nội dung dài quá, bạn rút gọn giúp chùa nhé.
+Chùa chưa nhận được góp ý này. Bạn kiểm tra lại nội dung nhé.
+Bạn muốn chùa có thêm điều gì? Ví dụ: thêm một bài kinh, một chế độ thiền, một góc mới trong khuôn viên…
+Lỗi xảy ra ở đâu? Trước đó bạn đã làm gì, và bạn mong chùa phản hồi thế nào?
+Phần nào đang chưa mượt: giật, chậm, khó bấm hay khó hiểu? Bạn đang dùng điện thoại hay máy tính?
+Bạn muốn nhắn gì với chùa, cứ viết ở đây.
+Phiên bản
+Cảnh
+Trình duyệt
+Ngôn ngữ · múi giờ
+Khung nhìn
+Màn hình
+Thiết bị
+điện thoại
+không phải điện thoại
+cảm ứng
+chuột và bàn phím
+${e.mem} GB bộ nhớ
+${e.cores} nhân
+Đồ hoạ
+tiết kiệm pin
+độ nét ${i(e.pr)}${e.prMax === void 0 ?
+đã hạ 30 khung/giây
+Khung hình
+xử lý ${i(e.wkP95)} ms
+chậm ${e.slowPct}% thời gian
+${e.drawn} người đang hiện
+${e.calls} lần vẽ
+Mạng
+đang có mạng
+ngoại tuyến
+ứng dụng đã cài
+Lỗi gần nhất
+<form class="feedback-dlg__card" novalidate data-ref="form"> <header class="feedback-dlg__head"> <h2 id="feedback-title" class="feedback-dlg__title" tabindex="-1" data-ref="title"></h2> <button type="button" class="feedback-dlg__close" data-ref="close" aria-label="Đóng">${n(
+)}</button> </header> <div class="feedback-dlg__body" data-ref="body"> <fieldset class="feedback-dlg__fields" data-ref="fields"> <div class="feedback-dlg__stack"> <p id="feedback-intro" class="feedback-dlg__intro">${N}</p> <fieldset class="feedback-dlg__kinds"> <legend class="feedback-dlg__label">Bạn muốn gửi gì cho chùa?</legend> <div class="feedback-dlg__chips" data-ref="chips">${e}</div> </fieldset> <div class="feedback-dlg__field"> <label class="feedback-dlg__label" for="feedback-message">Nội dung góp ý</label> <textarea id="feedback-message" class="feedback-dlg__text" data-ref="message" rows="5" maxlength="${u.messageMax}" autocomplete="off" aria-describedby="feedback-count"></textarea> <p id="feedback-count" class="feedback-dlg__count" data-ref="count"></p> </div> <div class="feedback-dlg__field"> <label class="feedback-dlg__label" for="feedback-contact">Email hoặc Zalo <span class="feedback-dlg__optional">(không bắt buộc)</span></label> <input id="feedback-contact" class="feedback-dlg__input" data-ref="contact" type="text" maxlength="${u.contactMax}" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ban@example.com hoặc số Zalo" aria-describedby="feedback-contact-hint" /> <p id="feedback-contact-hint" class="feedback-dlg__hint">Để chùa hồi âm khi cần.</p> </div> <label class="feedback-dlg__check"> <input type="checkbox" checked data-ref="withMeta" /> <span>Gửi kèm thông tin thiết bị để sửa lỗi nhanh hơn</span> </label> <details class="feedback-dlg__meta" data-ref="metaBox"> <summary class="feedback-dlg__meta-sum">Xem thông tin sẽ gửi</summary> <dl class="feedback-dlg__meta-list" data-ref="metaList"></dl> </details> <div class="feedback-dlg__trap" aria-hidden="true"> <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" data-ref="trap" /></label> </div> <p class="feedback-dlg__privacy">${P}</p> </div> </fieldset> </div> <footer class="feedback-dlg__foot" data-ref="foot"> <p class="feedback-dlg__error" role="alert" data-ref="error"></p> <div class="feedback-dlg__actions"> <button type="button" class="btn btn--ghost" data-ref="cancel">Đóng</button> <button type="submit" class="btn btn--gold" data-ref="send">Gửi góp ý</button> </div> </footer> </form>
+Không có thông tin nào.
+Đang gửi…
+Gửi góp ý
+, { size: 44 })}<h3 class="feedback-dlg__done-title" tabindex="-1" data-ref="doneTitle"></h3><p class="feedback-dlg__done-text" data-ref="doneText"></p><button type="button" class="btn btn--gold" data-ref="doneClose">Đóng</button>
+
+=== footwear-3vJrIkjy.js (2)
+footwear: không có chỗ dép ${e}
+Ơ, hình như bạn vừa đi nhầm dép 😄
+
+=== friends-AJd_o965.js (75)
+Phiên đăng nhập đã hết. Bạn đăng nhập lại nhé.
+Lời mời không đúng. Bạn xin người mời gửi lại link nhé.
+Lời mời này đã được dùng. Bạn xin người mời gửi link mới nhé.
+Lời mời đã hết hạn hoặc đã bị huỷ (link chỉ sống 24 giờ). Bạn xin người mời gửi link mới nhé.
+Đây là lời mời của chính bạn. Gửi link này cho người bạn muốn kết bạn đạo nhé.
+Bạn đã có đủ 50 bạn đạo. Bỏ bớt một người để thêm người mới.
+Người mời đã có đủ 50 bạn đạo.
+Bạn đã thử quá nhiều lần. Đợi khoảng một giờ rồi thử lại nhé.
+Đang có quá nhiều yêu cầu. Bạn thử lại sau ít phút nhé.
+Không có mạng. Bạn kiểm tra kết nối rồi thử lại nhé.
+Chưa kết nối được Bạn đạo. Bạn thử lại sau nhé.
+Có người mời bạn làm bạn đạo ở Chùa Sen. Đăng nhập để nhận lời mời: bạn đạo thấy nhau đang ở phòng nào để đến cùng tu tập. Không có nhắn tin.
+Bạn đạo thấy tên, cấp, ngọn lửa và phòng đang ở của nhau (tắt phần phòng trong Cài đặt). Không có nhắn tin. Bỏ bạn lúc nào cũng được, người kia không được báo.
+<div class="friends-invite__card"> <header class="friends-invite__head"> <h2 id="friends-invite-title" class="friends-invite__title">Lời mời kết bạn đạo</h2> <button type="button" class="friends-invite__close" data-ref="close" aria-label="Đóng">${o(
+Đăng nhập
+Để sau
+Phiên đăng nhập đã hết. Bạn đăng nhập lại để nhận lời mời nhé.
+Đóng
+Thử lại
+Đang nhận lời…
+Bạn và ${t} đã là bạn đạo.
+Mở nút phòng › Bạn đạo (hoặc Thêm › Thêm nữa › Bạn đạo) để xem bạn đang ở đâu.
+Đang xem lời mời…
+Một người bạn
+Bạn và ${n} đã là bạn đạo rồi.
+· Cấp ${t.value.level}
+· giữ lửa ${t.value.streak} ngày
+${n}${r}${i} mời bạn làm bạn đạo.
+Nhận lời
+Bạn đạo
+Chỉ bạn đạo mới thấy nhau. Kết bạn bằng link mời dùng một lần. Không có nhắn tin.
+Bạn đạo giúp bạn thấy người quen đang ở phòng nào để đến cùng tu tập. Cần đăng nhập để giữ danh sách khi đổi máy. Không có nhắn tin; chỉ bạn đạo mới thấy bạn.
+Chưa có bạn đạo nào. Bấm “Thêm bạn đạo” để tạo link mời rồi gửi cho người quen.
+Link mời không hiện trên màn hình (để khi phát trực tiếp không ai chụp được). Bấm “Chép link” hoặc “Chia sẻ” rồi gửi cho người bạn muốn kết bạn đạo. Link dùng được một lần, hết hạn sau 24 giờ.
+Không tìm thấy bạn đạo này nữa (danh sách vừa đổi). Đã tải lại danh sách, bạn thử lại nhé.
+Đã chép link mời.
+Chưa chép được link. Bạn thử “Chia sẻ”, hoặc bấm “Thêm bạn đạo” lại để tạo link mới.
+Huỷ mọi link đang mở
+Không có link nào đang mở.
+Đã huỷ ${e} link đang mở. Ai cầm link cũ cũng không dùng được nữa.
+Mới
+Mới kết bạn đạo: ${e.slice(0, 3).join(
+và ${e.length - 3} người nữa
+}. Không nhận ra ai thì bấm “Bỏ bạn” ở dòng đó, và “${ce}” nếu link bị lộ.
+Cùng phòng với bạn
+Phòng ${e} đang đầy. Bạn thử lại sau ít phút nhé.
+Đang vào chùa
+Đang ở Phòng ${e.room}
+Vắng mặt
+)}<span>Chọn phòng</span></button> <h2 id="friends-title" class="rooms__title">${M}</h2> <button type="button" class="rooms__close" data-ref="close" aria-label="Đóng">${o(
+)}</button> </header> <p class="rooms__hint">${N}</p> <div class="friends__guest" data-ref="guest" hidden> <p data-ref="guestText"></p> <button type="button" class="btn" data-ref="login">Đăng nhập</button> </div> <p class="friends__notice" data-ref="notice" role="status" hidden></p> <ul class="friends__list" data-ref="list" aria-labelledby="friends-title"></ul> <div class="friends__invite" data-ref="inviteBox" hidden> <p class="friends__invite-text">${ae}</p> <div class="friends__invite-actions"> <button type="button" class="rooms__btn" data-ref="copy">${o(
+)}<span>Chép link</span></button> <button type="button" class="rooms__btn" data-ref="share" hidden>${o(
+)}<span>Chia sẻ</span></button> </div> </div> <button type="button" class="friends__remove friends__revoke" data-ref="revoke">${ce}</button> <footer class="rooms__foot" data-ref="foot"> <p class="rooms__status" role="status" aria-live="polite" data-ref="status"></p> <button type="button" class="rooms__refresh" data-ref="add">${o(
+)}<span>Thêm bạn đạo</span></button> </footer> <details class="friends__paste" data-ref="paste"> <summary>Có link mời từ người khác?</summary> <div class="friends__paste-row"> <input class="friends__link" data-ref="pasteInput" type="text" inputmode="url" autocomplete="off" aria-label="Dán link mời" placeholder="Dán link mời vào đây" /> <button type="button" class="rooms__btn" data-ref="pasteGo">Mở lời mời</button> </div> </details>
+Bỏ bạn đạo ${R(e)}? Người ấy không được báo.
+Thôi
+Đến chỗ bạn
+Đến chỗ ${R(e)} ở Phòng ${n}
+Bỏ bạn
+Bỏ bạn đạo ${R(e)}
+Phiên đăng nhập đã hết. Bạn đăng nhập lại để xem bạn đạo nhé.
+Bạn đã có đủ ${e.max} bạn đạo.
+Đang tải bạn đạo…
+Đang xem Phòng ${e}…
+Đã bỏ bạn đạo ${R(e)}.
+Đang tạo link mời…
+Lời mời kết bạn đạo · Chùa Sen
+Mời bạn làm bạn đạo ở Chùa Sen để thấy nhau đang ở phòng nào và cùng tu tập.
+Đang huỷ link…
+Link mời chưa đúng. Bạn dán nguyên link nhận được nhé.
+Cho bạn đạo thấy mình đang ở phòng nào
+Tắt thì bạn đạo chỉ thấy bạn đang vào chùa hay vắng mặt. Người không phải bạn đạo không bao giờ thấy.
+Chưa tải được cài đặt Bạn đạo. Bạn mở lại Cài đặt sau nhé.
+Chưa lưu được. Bạn thử lại nhé.
+)}Bạn đạo</h3> <div class="set-card"> <div class="set-item"> <label class="set-switch"> <span class="set-switch__text">${V}</span> <input class="set-switch__input" type="checkbox" role="switch" aria-describedby="set-share-hint" data-ref="shareRoom" disabled /> <span class="set-switch__track" aria-hidden="true"></span> </label> <p class="set-hint" id="set-share-hint" data-ref="shareHint">${H}</p> </div> </div>
+
+=== gfx-CfJZxk8t.js (19)
+Đồ hoạ
+Tiết kiệm pin
+Tối đa 30 khung hình mỗi giây, máy mát và đỡ hao pin hơn.
+Tải lại trang để áp dụng hết.
+Tải lại ngay
+Tự động
+Mượt
+Ưu tiên tốc độ: không bóng nắng, không khử răng cưa, ít người hiện cùng lúc hơn. Hợp với điện thoại yếu.
+Cân bằng
+Có bóng nắng và ánh kim, độ nét vừa phải.
+Đẹp
+Nét nhất, nhiều người hiện ra nhất. Máy yếu có thể nóng và hao pin.
+Chùa tự chọn theo máy của bạn (đang dùng: ${d[e]}).
+)}${a}</h3> <div class="set-card"> <div class="set-item"> <p class="set-item__label" aria-hidden="true">Chất lượng hình ảnh</p> <fieldset class="set-seg set-seg--4" aria-describedby="set-gfx-hint"> <legend class="set-seg__legend">Chất lượng hình ảnh</legend> ${u.map((e) =>
+Máy đang hơi chậm. Thử đồ hoạ Mượt cho nhẹ máy nhé?
+Dùng Mượt
+Để sau
+Đã chọn Mượt. Tải lại trang để nhẹ hẳn?
+Tải lại
+
+=== idle-DOIyU4tA.js (10)
+chỉ số tượng không hợp lệ
+tệp tượng quá ngắn
+không phải tệp tượng CSM2
+đầu tệp tượng không hợp lệ
+tệp tượng bị cụt
+chỉ số tượng không khớp số đỉnh
+tệp tượng thừa dữ liệu
+không đọc được dữ liệu tượng
+tải tượng lỗi ${n.status}: ${e}
+không gộp được tượng ${n}
+
+=== index-e_Bx6V48.js (379)
+Chùa Sen
+Chùa online 3D miễn phí: đi chùa, tụng kinh
+Chùa Sen là chùa online 3D miễn phí: đi chùa, lễ Phật, thắp hương, tụng kinh cùng mọi người ngay trên điện thoại, không cần đăng ký, không cần cài đặt.
+Kênh học AI · Người làm Chùa Sen
+Lỗi trong hàm lắng nghe mở khoá âm thanh
+Lỗi trong hàm lắng nghe tiếng phát
+Tu tập
+Dâng lễ
+Khám phá
+Lan tỏa
+Thêm nữa
+Chắp tay
+Lạy Phật
+Quét lá đa
+Tràng hạt
+Câu nói
+Tụng kinh
+Thiền
+Ngồi xuống
+Thắp hương
+Đi dạo
+Khoe thành tích
+Chương trình KOL
+Fanpage Chùa Sen
+Dâng hoa
+Thỉnh chuông
+Thắp nến
+Thả đèn hoa đăng
+Treo nguyện
+Hôm nay
+Pháp thoại
+Trang phục
+Thiền hành
+Xin quẻ
+Phóng sinh
+Hái lộc
+Lên cấp ${t.minLevel} để mở: ${e.map((e) => e.label).join(
+Lên cấp ${t.minLevel} để mở ${t.label}.
+Tâm
+Diệu
+Thiện
+Quảng
+Huệ
+Chơn
+Nhật
+Tịnh
+Nguyên
+Phước
+Trí
+Giác
+Liên
+Bảo
+Viên
+Pháp
+Chân
+Như
+Khánh
+Tuệ
+Đức
+Khải
+Hạnh
+Định
+Thông
+Phúc
+Đạo
+Lạc
+Hải
+Tín
+Nhẫn
+Ngọc
+Hương
+Hiền
+Nguyệt
+Thảo
+Nhàn
+Châu
+Nhiên
+Phương
+; } var tn = Object.entries({ Gió: [
+Nhẹ
+Mát
+Trắng
+Hồng
+Dịu
+Sáng
+Tròn
+], Mây: [
+Lặng
+Vững
+], Trúc: [
+Biếc
+Nhài
+Lài
+Trắng ngà
+Đen
+Lam chàm
+Xanh lá mạ
+Hồng phấn
+Tím Huế
+Xanh ngọc
+Hồng sen
+Lam sẫm
+Lam ngọc
+Xám tro
+Vàng kim
+Ngọc bích
+Xanh hồ sen
+Tím hoa cà
+Áo tràng xám
+Xám bạc
+Xám khói
+Xám lam
+Xám đá
+Xám đậm
+Lam nhạt
+Áo tràng lam
+Thiên thanh
+Lam đậm
+Áo bà ba
+Đen huyền
+Xanh cốm
+Áo dài
+Đỏ son
+Lục bảo
+Áo tứ thân
+Mận chín
+Chàm
+Cánh sen
+Tím than
+Đỏ thắm
+Hồng đào
+Xanh hồ thuỷ
+Áo dài thêu sen
+Hồng sen đậm
+Xanh lá sen
+Áo tràng viền vàng
+Vàng nhạt
+Vàng đồng
+Bạn đạo
+Áo dài KOL Chùa Sen
+Nón lá
+Chuỗi hạt cổ tay
+Chuỗi hạt đeo cổ
+Khăn vấn
+Túi vải
+Quạt giấy
+Hoa sen cài áo
+Chuỗi hạt gỗ trầm
+Hoa sen cài áo vàng
+Khăn choàng lụa vàng
+Tà dài
+Dáng suông
+Sứ giả Chùa Sen
+)).replace(/[đð]/g,
+Nam mô A Di Đà Phật
+cặc
+cặk
+kặc
+lồn
+lìn
+lồz
+buồi
+dái
+địt
+đéo
+đếch
+cứt
+đù má
+đần
+khốn
+thằng chó
+chó đẻ
+chó má
+óc lợn
+óc bò
+não chó
+bố đời
+bố láo
+bố thiên hạ
+ông nội mày
+phế vật
+cặn bã
+chịch
+nứng
+điếm
+con phò
+làm tình
+thủ dâm
+hiếp dâm
+khiêu dâm
+dâm đãng
+dâm dục
+dâm tặc
+bú cu
+gái gọi
+khủng bố
+phát xít
+khựa
+kèo
+lô đề
+bắn cá
+cá độ
+đánh bài
+kiếm tiền
+vay tiền
+bay lắc
+quản trị
+hệ thống
+ban quản lý
+trụ trì
+chủ chùa
+Tên này chưa phù hợp với nội quy Chùa Sen (không tục tĩu, xúc phạm, quảng cáo hay giả danh ban quản trị). Bạn đặt tên khác nhé.
+Tên này có từ ngữ chưa lịch sự nên chưa phù hợp với nội quy Chùa Sen. Bạn đặt tên khác nhé.
+Tên này có thể làm người khác buồn lòng nên chưa phù hợp với nội quy Chùa Sen. Bạn đặt tên khác nhé.
+Tên không được chứa quảng cáo, đường dẫn, số điện thoại hay chất cấm. Bạn đặt tên khác nhé.
+Tên này dễ nhầm với ban quản trị Chùa Sen. Bạn đặt tên khác nhé.
+Tên cần có chữ cái và không lặp một ký tự quá nhiều lần. Bạn đặt tên khác nhé.
+), ); } function ki(e) { return e.replace(/[đð]/g,
+Chưa mở được hộp góp ý. Bạn kiểm tra mạng rồi thử lại nhé.
+Không mở được hộp thoại góp ý
+Chưa mở được phần lưu nhân vật. Bạn kiểm tra mạng rồi thử lại nhé.
+Không mở được hộp thoại tài khoản
+Đã có lỗi xảy ra. Bạn thử lại nhé.
+Không nạp được lõi tài khoản
+Tiếp tục với Google
+Tên lịch sự, không tục tĩu, không quảng cáo.
+Tràng xám
+Tràng lam
+Bà ba
+Đăng nhập để giữ nhân vật, cấp, nhiệm vụ và chuỗi giữ lửa khi đổi máy.
+Không bắt buộc. Đã có nhân vật ở máy khác? Đăng nhập là lấy lại được.
+Không cần đăng ký. Nhân vật lưu trên máy này; muốn giữ khi đổi máy thì đăng nhập.
+Nhân vật lưu trên máy này và cùng tài khoản của bạn.
+Chào mừng đến Chùa Sen
+Đăng nhập để giữ nhân vật, cấp, nhiệm vụ và chuỗi giữ lửa trên mọi máy.
+Đăng nhập bằng email
+Vào chùa không cần đăng nhập
+Miễn phí · chỉ dùng để giữ nhân vật
+Khi đăng nhập, bạn đồng ý với <a href="/dieu-khoan-su-dung/" target="_blank" rel="noopener">Điều khoản</a> và <a href="/chinh-sach-quyen-rieng-tu/" target="_blank" rel="noopener">Chính sách quyền riêng tư</a>.
+Đang đăng nhập…
+Chùa đang kiểm tra tài khoản của bạn, chờ một chút nhé.
+Đang mở…
+Chọn nhân vật để vào chùa.
+Đã đăng nhập. Chọn nhân vật để vào chùa.
+<div class="onb__save" role="group" aria-labelledby="onb-save-lead"> <p class="onb__save-lead" id="onb-save-lead">${La}</p> <p class="onb__save-hint" id="onb-save-hint" data-ref="saveHint">${Ra}</p> <button type="button" class="btn btn--sm onb__save-btn" data-ref="login" aria-describedby="onb-save-hint"><span>Đăng nhập</span><small>Google hoặc email</small></button> </div>
+Đổi pháp danh
+Đổi nhân vật
+Vào chùa
+Đặt một pháp danh khác để vào phòng chung cùng mọi người.
+Thay đổi diện mạo của bạn trong chùa.
+Chọn nhanh một nhân vật rồi bước vào sân chùa.
+<button type="button" class="btn btn--ghost btn--lg" data-ref="cancel">Hủy</button> <button type="submit" class="btn btn--gold btn--lg onb__submit">Lưu</button>
+<button type="submit" class="btn btn--gold btn--lg onb__submit">Vào chùa</button>
+}> <header class="onb__head"> <h1 class="onb__title" id="onb-title">${o}</h1> <p class="onb__lead" id="onb-lead">${s}</p> </header> <div class="onb__preview" aria-hidden="true"> ${Pa} <p class="onb__plate" data-ref="plate"></p> </div> <div class="onb__fields"> <div class="onb__field"> <label class="onb__label" for="onb-name">Pháp danh</label> <div class="onb__name-row"> <input id="onb-name" class="onb__input" type="text" maxlength="24" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="${a ?
+}" aria-describedby="onb-name-hint onb-name-error" data-ref="name" /> <button type="button" class="icon-btn onb__dice" data-ref="dice" aria-label="Gợi ý pháp danh khác" title="Gợi ý pháp danh khác">${Fa}</button> </div> <p class="onb__hint" id="onb-name-hint">${Da}</p> <p class="onb__error" id="onb-name-error" aria-live="polite" data-ref="nameError"></p> </div> <div class="onb__field" role="group" aria-labelledby="onb-gender-label"> <span class="onb__label" id="onb-gender-label">Giới tính</span> <div class="onb__chips">${c}</div> </div> <div class="onb__field" role="group" aria-labelledby="onb-style-label"> <div class="onb__label-row"> <span class="onb__label" id="onb-style-label">Kiểu áo</span> ${t ?
+} </div> <div class="onb__chips onb__styles" data-ref="styles"></div> <div class="onb__chips onb__cuts" role="group" aria-label="Dáng áo dài" data-ref="cuts">${l}</div> </div> <div class="onb__field" role="group" aria-labelledby="onb-robe-label"> <span class="onb__label" id="onb-robe-label">Màu áo<span class="onb__color-name" data-ref="colorName"></span></span> <div class="onb__swatches" data-ref="swatches"></div> </div> </div> <div class="onb__actions">${u}</div> ${oo(a, n)} <p class="sr-only" role="status" aria-live="polite" data-ref="live"></p> </form>
+Gợi ý pháp danh: ${se()}
+Không nạp được ô đăng nhập bằng email
+<div class="panel-backdrop" data-ref="backdrop"></div> <section class="panel" role="dialog" aria-modal="true" aria-label="Công phu" tabindex="-1" data-ref="panel" inert> <header class="panel__head" data-ref="head"> <span class="panel__grip" aria-hidden="true"></span> <button type="button" class="panel__back" data-ref="back" aria-label="Quay lại chùa">${B(
+)}<span>Quay lại chùa</span></button> </header> <div class="panel__body" data-ref="body"></div> </section>
+Panel: thiếu phần tử ${t}
+Panel: cleanup của view bị lỗi
+Panel: không dựng được view "${e.id}"
+Không mở được phần này. Bạn thử lại nhé.
+Trình duyệt này không cho lưu dữ liệu trên thiết bị.
+Đây không phải tệp sao lưu của Chùa Sen.
+Tệp sao lưu bị hỏng hoặc không đọc được.
+Tệp sao lưu quá lớn.
+Tệp sao lưu này tạo bởi phiên bản mới hơn. Hãy cập nhật ứng dụng rồi thử lại.
+Chưa tải được phần ghép dữ liệu. Hãy kiểm tra kết nối rồi thử lại.
+Tệp sao lưu không có dữ liệu nào.
+Không ghi được dữ liệu lên thiết bị (bộ nhớ đầy hoặc bị chặn).
+Không xóa được dữ liệu trên thiết bị này.
+Nam mô A Di Đà Phật (niệm Phật)
+Kỳ Duyên hát niệm Phật, ghi âm bởi SieuAmThanh (Bình Hòa, An Giang) · Freesound
+Niệm kinh A Di Đà
+Duyên tụng kinh A Di Đà, ghi âm bởi SieuAmThanh (An Giang) · Freesound
+Niệm Phật ngày Rằm
+Duyên niệm Phật ngày Rằm, ghi âm bởi SieuAmThanh (An Giang) · Freesound
+Tiếng ngân tụng ở chùa Bái Đính
+Vị tăng hát trong chùa Bái Đính (Ninh Bình), ghi âm bởi delfieldrecordings · Freesound
+Đàn tranh độc tấu
+neolein (đàn tranh, thang ngũ cung) · Freesound
+Núi đá vôi
+neolein (đàn tranh trên nền nhạc núi rừng) · Freesound
+nemaavla (đàn phím, chuông, tiếng ngân) · Freesound
+Ngồi thiền
+SieuAmThanh (nhạc màn "Vương quốc hoa sen", GarageBand) · Freesound
+Gió, nước, gỗ
+CVLTIV8R (đàn dây kiểu Á Đông, gió và nước) · Freesound
+${t}, đã giản lược lưới và đổi chất liệu
+Texture gỗ sẫm
+Texture ván sàn gỗ
+Texture ngói đất nung
+Texture ngói rêu phong
+Texture gạch đất nung
+Texture đá xanh lát sân
+Texture vôi trát
+Texture đất và rêu
+Texture vải thô
+Tượng Phật ngồi toà sen (mẫu "Buddha")
+Tượng Quan Âm (mẫu "Guan Yin Bodhisattva")
+Tượng Địa Tạng (mẫu "diZangPuSa_v2022")
+Tượng Quan Âm đứng ở vườn Đông (mẫu "Guanyin")
+Chùa, bảo tháp, tượng dự phòng khi chưa tải được tượng mẫu, tranh sơn mài, nhân vật, âm nền và nhạc nền tổng hợp
+Chùa Sen (dựng bằng mã, nguyên bản)
+Nguyên bản
+Đang mở trong ứng dụng khác (Zalo, Facebook…). Mở chuasen.com bằng Safari (iPhone) hoặc Chrome (Android) để cài lên màn hình chính.
+Chép đường dẫn
+Đã chép
+Chưa chép được. Bạn gõ chuasen.com vào Safari hoặc Chrome nhé.
+Tự động
+Ban ngày
+Ban đêm
+Hiện đủ mọi tính năng
+Tắt thì các mục trong menu Thêm mở dần khi bạn lên cấp.
+Khôi phục sẽ thay thế toàn bộ dữ liệu công phu hiện có trên thiết bị này bằng nội dung của tệp. Tiếp tục?
+Xóa toàn bộ số liệu công phu trên thiết bị này? Không thể hoàn tác.
+Xóa các lời nguyện đã lưu trên máy này? Lời nguyện chưa từng gửi đi đâu nên sẽ không khôi phục được.
+<div class="settings__panel"> <header class="settings__head"> <h2 id="set-title" class="settings__title">Cài đặt</h2> <button type="button" class="icon-btn settings__close" aria-label="Đóng" data-ref="close">${B(
+Tài khoản
+<p class="set-hint">Đăng nhập để giữ nhân vật, cấp, nhiệm vụ và chuỗi giữ lửa khi đổi máy. Không bắt buộc.</p>
+Quản lý tài khoản
+Lưu nhân vật · Đăng nhập
+Âm thanh
+Bật âm thanh
+Hiển thị và điều khiển
+)} </fieldset> <p class="set-hint">Tự động theo giờ Việt Nam: sáng từ 06:00, tối từ 18:00.</p> </div> ${q(
+Cần điều khiển trên màn hình
+Đảo chiều kéo (kiểu Street View)
+Rung khi bấm
+)} <details class="set-fold"> <summary>Cách điều khiển</summary> <ul class="set-howto"> <li><strong>Cảm ứng:</strong> cần điều khiển bên trái để đi, vuốt bên phải để nhìn quanh, chạm xuống nền để đi tới, chụm hai ngón để thu phóng.</li> <li><strong>Máy tính:</strong> bấm xuống nền để đi tới, giữ chuột để đi theo con trỏ, kéo chuột (trái hoặc phải) để nhìn quanh, lăn chuột để thu phóng. Phím W A S D để đi, Q E để xoay, F hoặc Enter để tương tác.</li> <li><strong>Toàn màn hình (máy tính):</strong> di chuột để nhìn quanh, W A S D để đi, bấm để đi tới hoặc tương tác với chỗ chấm giữa màn hình, Esc để thoát.</li> <li>Chạm vào bồ đoàn, tượng Phật, lư hương hay chuông: nhân vật tự đi tới đó.</li> </ul> </details> ${e.onChangeCharacter || e.onOutfit ?
+<button type="button" class="btn btn--sm" data-ref="outfit">Trang phục</button>
+<button type="button" class="btn btn--sm" data-ref="character">Đổi nhân vật</button>
+Giao lưu
+Hiện câu nói của người khác
+Tắt thì không thấy bong bóng lời chào, câu nói và lời mời của người khác. Câu của bạn vẫn hiện với mọi người.
+Hành trình
+Hiện tinh tấn và cấp độ
+Tắt thì ẩn nút cấp, số tinh tấn và thẻ chúc mừng. Chùa vẫn ghi nhận ngầm, bật lại là thấy đủ.
+Cho người trong chùa thấy cấp của tôi
+Một biểu tượng sen nhỏ cạnh tên bạn, kèm danh hiệu đang mang nếu có. Không có chữ nào bạn tự viết được gửi đi.
+Cho người trong chùa thấy chuỗi giữ lửa của tôi
+Ngọn lửa nhỏ và số ngày cạnh tên bạn trong danh sách "Người trong chùa". Tắt thì không gửi cho ai; ngọn lửa của bạn trên màn hình vẫn còn.
+Hiện danh hiệu của người khác
+Cài ứng dụng
+Dữ liệu
+)}Nguồn và giấy phép</summary> <p class="set-hint">Âm thanh, texture và tượng mẫu 3D dưới đây dùng giấy phép tự do (CC0, CC BY). Chân thành cảm ơn các tác giả.</p> <ul class="set-credits">${$o.map(as).join(
+)}</ul> </details> </div> </section> <p class="set-foot">Dữ liệu công phu lưu trên thiết bị của bạn; chỉ khi bạn đăng nhập mới được lưu thêm lên mạng (xoá được cùng tài khoản). Lời nguyện và cài đặt riêng không bao giờ rời máy. Trang ghi số liệu sử dụng ẩn danh (lượt truy cập, vào phòng, các mốc tu tập) qua Cloudflare Web Analytics, PostHog và DataFast — chỉ dùng cookie đếm lượt truy cập ẩn danh (DataFast), không quảng cáo, không quay màn hình, không ghi tên vào số liệu.</p> <div class="set-foot-actions"> <button type="button" class="btn btn--ghost" data-ref="feedback">${B(
+)}<span>Góp ý · Báo lỗi</span></button> </div> </div> </div>
+Không dựng được bàn trộn âm thanh
+Không dựng được mục Đồ hoạ
+Đã đăng nhập
+Đã lưu
+<p class="set-hint">Mở Chùa Sen như một ứng dụng, dùng được cả khi không có mạng.</p> <button type="button" class="btn btn--gold" data-ref="install-btn">Cài lên màn hình chính</button>
+<p class="set-hint">Bấm <strong>Chia sẻ</strong> ${B(
+, { size: 18 })} → <strong>Thêm vào MH chính</strong></p>
+Đã cài lên màn hình chính
+Đã tải tệp sao lưu: ${Ho()}
+Đã khôi phục. Đang tải lại…
+Đã xóa dữ liệu. Đang tải lại…
+Đã xóa các lời nguyện đã lưu.
+Panel: không dựng được view "${e}"
+Niệm Phật
+Thiếu phần tử #${e} trong index.html
+Trình duyệt đã cho 3D trở lại.
+<strong>Thiết bị/trình duyệt chưa hỗ trợ 3D.</strong> Bạn vẫn có thể tu tập ngay bên dưới — mọi công phu vẫn được ghi lại.
+<strong>Trình duyệt đang tạm tắt 3D.</strong> Thường do card đồ hoạ vừa gặp sự cố. Chùa đang tự thử lại và sẽ mở cảnh 3D ngay khi được. Chờ lâu thì hãy tắt hẳn trình duyệt (đóng mọi cửa sổ) rồi mở lại, và bật tăng tốc phần cứng trong cài đặt trình duyệt. Trong lúc chờ, bạn vẫn tu tập được bên dưới.
+<strong>Cảnh chùa 3D chưa mở được.</strong> Có thể mạng đang chập chờn hoặc thiết bị đang quá tải. Bạn thử lại nhé, hoặc tu tập ngay bên dưới.
+<div class="fallback__tools"> <button class="icon-btn" type="button" data-act="settings" aria-label="Cài đặt" title="Cài đặt">${B(
+)}</button> <button class="icon-btn" type="button" data-act="sound" aria-label="Âm thanh" title="Âm thanh" aria-pressed="true"></button> </div> <div class="fallback__inner"> <div data-slot="lotus"></div> <h1 class="fallback__title">Chùa Sen</h1> <p class="fallback__msg">${Zs[e]}</p> <nav class="fallback__actions" aria-label="Công phu"> ${Us.map((e) =>
+<button type="button" class="btn btn--gold fallback__retry" data-act="retry">Thử lại</button>
+, { size: 18 })}<span>Báo lỗi cho chùa</span></button> </div>
+Đã bật âm thanh
+Đã tắt âm thanh
+Phật tử
+Đang dựng chánh điện…
+Thắp nến, quét sân chùa…
+Không dựng được cảnh chùa 3D
+
+=== kinhvan-DArOLTV3.js (4)
+Như thị ngã văn:(Nhất thời, Phật tại Xá Vệ quốc,(Kỳ Thọ Cấp Cô Độc viên,(dữ đại Tỳ Kheo tăng,(thiên nhị bá ngũ thập nhơn câu,(giai thị đại A La Hán,(chúng sở tri thức.(Trưởng lão Xá Lợi Phất,(Ma Ha Mục Kiền Liên,(Ma Ha Ca Diếp, Ma Ha Ca Chiên Diên,(Ma Ha Câu Hy La,(Li Bà Đa, Châu Lợi Bàn Đà Dà, Nan Đà,(A Nan Đà, La Hầu La,(Kiều Phạm Ba Đề, Tân Đầu Lô Phả La Đọa,(Ca Lưu Đà Di, Ma Ha Kiếp Tân Na,(Bạc Câu La, A Nâu Lâu Đà,(như thị đẳng chư đại đệ tử,(tinh chư Bồ Tát Ma Ha Tát,(Văn Thù Sư Lợi Pháp Vương Tử,(A Dật Đa Bồ Tát,(Càn Đà Ha Đề Bồ Tát,(Thường Tinh Tấn Bồ Tát,(dữ như thị đẳng chư đại Bồ Tát,(cập Thích Đề Hoàn Nhơn đẳng,(vô lượng chư thiên, đại chúng câu.(Nhĩ thời, Phật cáo trưởng lão Xá Lợi Phất:(Tùng thị tây phương quá thập vạn ức Phật độ,(hữu thế giới danh viết Cực Lạc.(Kỳ độ hữu Phật, hiệu A Di Đà,(kim hiện tại thuyết pháp.(Xá Lợi Phất!(Bỉ độ hà cố danh vi Cực Lạc?(Kỳ quốc chúng sanh vô hữu chúng khổ,(đản thọ chư lạc, cố danh Cực Lạc.(Hựu Xá Lợi Phất!(Cực Lạc quốc độ, thất trùng lan thuẫn,(thất trùng la võng, thất trùng hàng thọ,(giai thị tứ bảo, châu táp vi nhiễu,(thị cố bỉ quốc danh vi Cực Lạc.(Hựu Xá Lợi Phất!(Cực Lạc quốc độ, hữu thất bảo trì,(bát công đức thủy, sung mãn kỳ trung,(trì để thuần dĩ kim sa bố địa.(Tứ biên giai đạo, kim, ngân, lưu ly,(pha lê hiệp thành, thượng hữu, lâu các,(diệc dĩ kim, ngân, lưu ly, pha lê, xa cừ, xích châu,(mã não nhi nghiêm sức chi.(Trì trung liên hoa, đại như xa luân,(thanh sắc thanh quang, huỳnh sắc huỳnh quang,(xích sắc xích quang, bạch sắc bạch quang,(vi diệu hương khiết.(Xá Lợi Phất!(Cực Lạc quốc độ thành tựu như thị công đức trang nghiêm.(Hựu Xá Lợi Phất!(Bỉ Phật quốc độ, thường tác thiên nhạc,(huỳnh kim vi địa, trú dạ lục thời,(vũ thiên mạn đà la hoa.(Kỳ độ chúng sanh, thường dĩ thanh đán,(các dĩ y kích thạnh chúng diệu hoa,(cúng dường tha phương thập vạn ức Phật,(tức dĩ thực thời, hoàn đáo bổn quốc,(phạn thực kinh hành.(Xá Lợi Phất!(Cực Lạc quốc độ thành tựu như thị công đức trang nghiêm.(Phục thứ Xá Lợi Phất!(Bỉ quốc thường hữu chủng chủng kỳ diệu,(tạp sắc chi điểu, bạch hạc, khổng tước, anh võ, xá lợi,(ca lăng tần già, cộng mạng chi điểu.(Thị chư chúng điểu, trú dạ lục thời,(xuất hòa nhã âm, kỳ âm diễn xướng:(Ngũ căn, ngũ lực, thất bồ đề phần,(bát thánh đạo phần, như thị đẳng pháp.(Kỳ độ chúng sanh văn thị âm dĩ,(giai tất niệm Phật, niệm Pháp, niệm Tăng.(Xá Lợi Phất!(Nhữ vật vị thử điểu,(thiệt thị tội báo sở sanh.(Sở dĩ giả hà?(Bỉ Phật quốc độ vô tam ác đạo.(Xá Lợi Phất!(Kỳ Phật quốc độ thượng vô ác đạo chi danh,(hà huống hữu thiệt?(Thị chư chúng điểu,(giai thị A Di Đà Phật dục linh pháp âm tuyên lưu biến,(hóa sở tác.(Xá Lợi Phất!(Bỉ Phật quốc độ vi phong xuy động,(chư bảo hàng thọ, cập bảo la võng,(xuất vi diệu âm,(thí như bá thiên chủng nhạc đồng thời cu tác,(văn thị âm giả, tự nhiên giai sanh:(Niệm Phật, niệm Pháp, niệm Tăng chi tâm.(Xá Lợi Phất!(Kỳ Phật quốc độ, thành tựu như thị công đức trang nghiêm.(Xá Lợi Phất!(Ư nhữ ý vân hà?(Bỉ Phật hà cố hiệu A Di Đà?(Xá Lợi Phất!(Bỉ Phật quang minh vô lượng,(chiếu thập phương quốc, vô sở chướng ngại,(thị cố hiệu vi A Di Đà.(Hựu Xá Lợi Phất!(Bỉ Phật thọ mạng, cập kỳ nhơn dân,(vô lượng vô biên a tăng kỳ kiếp,(cố danh A Di Đà.(Xá Lợi Phất!(A Di Đà Phật thành Phật dĩ lai,(ư kim thập kiếp.(Hựu Xá Lợi Phất!(Bỉ Phật hữu vô lượng vô biên Thanh Văn đệ tử,(giai A La Hán, phi thị toán số chi sở năng tri,(chư Bồ Tát, chúng diệc phục như thị.(Xá Lợi Phất!(Bỉ Phật quốc độ thành tựu như thị công đức trang nghiêm.(Hựu Xá Lợi Phất!(Cực Lạc quốc độ chúng sanh sanh giả,(giai thị a bệ bạt trí.(Kỳ trung đa hữu nhất sanh bổ xứ,(kỳ số thậm đa, phi thị toán số,(sở năng tri chi,(đản khả dĩ vô lượng vô biên a tăng kỳ thuyết.(Xá Lợi Phất!(Chúng sanh văn giả, ưng đương phát nguyện,(nguyện sanh bỉ quốc.(Sở dĩ giả hà?(Đắc dữ như thị chư thượng thiện nhơn câu hội nhất xứ.(Xá Lợi Phất!(Bất khả dĩ thiểu thiện căn phước đức nhơn duyên,(đắc sanh bỉ quốc.(Xá Lợi Phất!(Nhược hữu thiện nam tử,(thiện nữ nhơn, văn thuyết A Di Đà Phật,(chấp trì danh hiệu, nhược nhất nhựt,(nhược nhị nhựt, nhược tam nhựt,(nhược tứ nhựt, nhược ngũ nhựt,(nhược lục nhựt, nhược thất nhựt,(nhất tâm bất loạn.(Kỳ nhơn lâm mạng chung thời,(A Di Đà Phật dữ chư thánh chúng,(hiện tại kỳ tiền.(Thị nhơn chung thời, tâm bất điên đảo,(tức đắc vãng sanh A Di Đà Phật Cực Lạc quốc độ.(Xá Lợi Phất!(Ngã kiến thị lợi, cố thuyết thử ngôn.(Nhược hữu chúng sanh văn thị thuyết giả,(ưng đương phát nguyện, sanh bỉ quốc độ.(Xá Lợi Phất!(Như ngã kim giả,(tán thán A Di Đà Phật bất khả tư nghị công đức,(chi lợi.(Đông phương diệc hữu A Súc Bệ Phật,(Tu Di Tướng Phật, Đại Tu Di Phật,(Tu Di Quang Phật, Diệu Âm Phật,(như thị đẳng hằng hà sa số chư Phật,(các ư kỳ quốc, xuất quảng trường thiệt tướng,(biến phú tam thiên đại thiên thế giới,(thuyết thành thiệt ngôn:(Nhữ đẳng chúng sanh,(đương tín thị xưng tán bất khả tư nghị công(đức nhất thiết chư Phật sở hộ niệm kinh.(Xá Lợi Phất!(Nam phương thế giới hữu Nhựt Nguyệt Đăng Phật,(Danh Văn Quang Phật, Đại Diệm Kiên Phật,(Tu Di Đăng Phật, Vô Lượng Tinh Tấn Phật,(như thị đẳng hằng hà sa số chư Phật,(các ư kỳ quốc, xuất quảng trường thiệt tướng,(biến phú tam thiên đại thiên thế giới,(thuyết thành thiệt ngôn:(Nhữ đẳng chúng sanh, đương tín thị,(xưng tán bất khả tư nghị công đức nhất thiết chư Phật sở hộ niệm kinh.(Xá Lợi Phất!(Tây phương thế giới hữu Vô Lượng Thọ Phật,(Vô Lượng Tướng Phật, Vô Lượng Tràng Phật,(Đại Quang Phật, Đại Minh Phật,(Bảo Tướng Phật, Tịnh Quang Phật,(như thị đẳng hằng hà sa số chư Phật,(các ư kỳ quốc, xuất quảng trường thiệt tướng,(biến phú tam thiên đại thiên thế giới,(thuyết thành thiệt ngôn:(Nhữ đẳng chúng sanh, đương tín thị,(xưng tán bất khả tư nghị công đức nhất thiết chư Phật sở hộ niệm kinh.(Xá Lợi Phất!(Bắc phương thế giới, hữu Diệm Kiên Phật,(Tối Thắng Âm Phật, Nan Trở Phật,(Nhựt Sanh Phật, Võng Minh Phật,(như thị đẳng hằng hà sa số chư Phật,(các ư kỳ quốc, xuất quảng trường thiệt tướng,(biến phú tam thiên đại thiên thế giới,(thuyết thành thiệt ngôn:(Nhữ đẳng chúng sanh, đương tín thị,(xưng tán bất khả tư nghị công đức nhất thiết chư Phật sở hộ niệm kinh.(Xá Lợi Phất!(Hạ phương thế giới, hữu Sư Tử Phật,(Danh Văn Phật, Danh Quang Phật,(Đạt Ma Phật, Pháp Tràng Phật,(Trì Pháp Phật, như thị đẳng hằng hà sa số chư Phật,(các ư kỳ quốc, xuất quảng trường thiệt tướng,(biến phú tam thiên đại thiên thế giới,(thuyết thành thiệt ngôn:(Nhữ đẳng chúng sanh, đương tín thị,(xưng tán bất khả tư nghị công đức nhất thiết chư Phật sở hộ niệm kinh.(Xá Lợi Phất!(Thượng phương thế giới, hữu Phạm Âm Phật,(Tú Vương Phật, Hương Thượng Phật,(Hương Quang Phật, Đại Diệm Kiên Phật,(Tạp Sắc Bảo Hoa Nghiêm Thân Phật,(Ta La Thọ Vương Phật,(Bảo Hoa Đức Phật, Kiến Nhất Thiết Nghĩa Phật,(Như Tu Di Sơn Phật,(như thị đẳng hằng hà sa số chư Phật,(các ư kỳ quốc, xuất quảng trường thiệt tướng,(biến phú tam thiên đại thiên thế giới,(thuyết thành thiệt ngôn:(Nhữ đẳng chúng sanh, đương tín thị,(xưng tán bất khả tư nghị công đức nhất thiết chư Phật sở hộ niệm kinh.(Xá Lợi Phất!(Ư nhữ ý vân hà?(Hà cố danh vi:(Nhất thiết chư Phật sở hộ niệm kinh?(Xá Lợi Phất!(Nhược hữu thiện nam tử,(thiện nữ nhơn, văn thị kinh thọ trì giả,(cập văn chư Phật danh giả,(thị chư thiện nam tử,(thiện nữ nhơn,(giai vi nhất thiết chư Phật chi sở hộ niệm,(giai đắc bất thối chuyển ư A nậu đa la tam miệu tam bồ đề.(Thị cố Xá Lợi Phất!(Nhữ đẳng giai đương tín thọ ngã ngữ,(cập chư Phật sở thuyết.(Xá Lợi Phất!(Nhược hữu nhơn dĩ phát nguyện,(kim phát nguyện, đương phát nguyện,(dục sanh A Di Đà Phật quốc giả,(thị chư nhơn đẳng,(giai đắc bất thối chuyển ư A nậu đa la tam miệu tam bồ đề,(ư bỉ quốc độ nhược dĩ sanh,(nhược kim sanh, nhược đương sanh.(Thị cố Xá Lợi Phất!(Chư thiện nam tử, thiện nữ nhơn,(nhược hữu tín giả, ưng đương phát nguyện sanh bỉ quốc độ.(Xá Lợi Phất!(Như ngã kim giả,(xưng tán chư Phật bất khả tư nghị công đức,(bỉ chư Phật đẳng,(diệc xưng tán ngã bất khả tư nghị công đức,(nhi tác thị ngôn:(Thích Ca Mâu Ni Phật năng vi thậm nan hy hữu chi sự,(năng ư Ta Bà quốc độ ngũ trược ác thế, kiếp trược,(kiến trược, phiền não trược,(chúng sanh trược, mạng trược trung,(đắc A nậu đa la tam miệu tam bồ đề,(vị chư chúng sanh,(thuyết thị nhất thiết thế gian nan tín chi pháp.(Xá Lợi Phất!(Đương tri ngã ư ngũ trược ác thế,(hành thử nan sự,(đắc A nậu đa la tam miệu tam bồ đề,(vị nhất thiết thế gian thuyết thử nan tín chi pháp,(thị vi thậm nan!(Phật thuyết thử kinh dĩ,(Xá Lợi Phất cập chư Tỳ Kheo,(nhất thiết thế gian, thiên, nhơn,(A Tu La đẳng, văn Phật sở thuyết,(hoan hỷ tín thọ, tác lễ nhi khứ.
+Vi Phật đệ tử, thường ư trú dạ,(chí tâm tụng niệm, Bát Đại Nhân Giác:(Đệ nhất giác ngộ:(Thế gian vô thường, quốc độ nguy thúy,(tứ đại khổ không, ngũ ấm vô ngã,(sanh diệt biến dị, hư ngụy vô chủ,(tâm thị ác nguyên, hình vi tội tẩu.(Như thị quán sát, tiệm ly sanh tử.(Đệ nhị giác tri:(Đa dục vi khổ, sanh tử bì lao,(tùng tham dục khởi, thiểu dục vô vi,(thân tâm tự tại.(Đệ tam giác tri:(Tâm vô yểm túc, duy đắc đa cầu,(tăng trưởng tội ác, Bồ Tát bất nhĩ,(thường niệm tri túc, an bần thủ đạo,(duy tuệ thị nghiệp.(Đệ tứ giác tri:(Giải đãi trụy lạc, thường hành tinh tấn,(phá phiền não ác, tồi phục tứ ma,(xuất ấm giới ngục.(Đệ ngũ giác ngộ:(Ngu si sanh tử.(Bồ Tát thường niệm, quảng học đa văn,(tăng trưởng trí tuệ, thành tựu biện tài,(giáo hóa nhất thiết, tất dĩ đại lạc.(Đệ lục giác tri:(Bần khổ đa oán, hoạnh kết ác duyên.(Bồ Tát bố thí, đẳng niệm oán thân,(bất niệm cựu ác, bất tắng ác nhân.(Đệ thất giác ngộ:(Ngũ dục quá hoạn.(Tuy vi tục nhân, bất nhiễm thế lạc,(thường niệm tam y, ngõa bát pháp khí,(chí nguyện xuất gia, thủ đạo thanh bạch,(phạm hạnh cao viễn, từ bi nhất thiết.(Đệ bát giác tri:(Sanh tử xí nhiên, khổ não vô lượng.(Phát đại thừa tâm, phổ tế nhất thiết,(nguyện đại chúng sanh, thọ vô lượng khổ,(linh chư chúng sanh, tất cánh đại lạc.(Như thử bát sự, nãi thị chư Phật,(Bồ Tát đại nhân chi sở giác ngộ.(Tinh tấn hành đạo, từ bi tu tuệ,(thừa pháp thân thuyền, chí Niết Bàn ngạn,(phục hoàn sanh tử, độ thoát chúng sanh.(Dĩ tiền bát sự, khai đạo nhất thiết,(linh chư chúng sanh, giác sanh tử khổ,(xả ly ngũ dục, tu tâm thánh đạo.(Nhược Phật đệ tử, tụng thử bát sự,(ư niệm niệm trung, diệt vô lượng tội,(tiến thú Bồ Đề, tốc đăng chánh giác,(vĩnh đoạn sanh tử, thường trụ khoái lạc.
+Nhĩ thời, Vô Tận Ý Bồ Tát tức tùng tọa khởi,(thiên đản hữu kiên, hiệp chưởng hướng Phật nhi tác thị ngôn:(Thế Tôn!(Quán Thế Âm Bồ Tát dĩ hà nhân duyên danh Quán Thế Âm?(Phật cáo Vô Tận Ý Bồ Tát:(Thiện nam tử!(Nhược hữu vô lượng bá thiên vạn ức chúng sanh thọ chư khổ não,(văn thị Quán Thế Âm Bồ Tát,(nhất tâm xưng danh,(Quán Thế Âm Bồ Tát tức thời quán kỳ âm thanh,(giai đắc giải thoát.(Nhược hữu trì thị Quán Thế Âm Bồ Tát danh giả,(thiết nhập đại hỏa, hỏa bất năng thiêu,(do thị Bồ Tát oai thần lực cố.(Nhược vi đại thủy sở phiêu,(xưng kỳ danh hiệu, tức đắc thiển xứ.(Nhược hữu bá thiên vạn ức chúng sanh,(vị cầu kim, ngân, lưu ly, xa cừ, mã não, san hô,(hổ phách, trân châu đẳng bảo,(nhập ư đại hải.(Giả sử hắc phong xuy kỳ thuyền phưởng,(phiêu đọa La Sát quỷ quốc,(kỳ trung nhược hữu, nãi chí nhất nhân,(xưng Quán Thế Âm Bồ Tát danh giả,(thị chư nhân đẳng giai đắc giải thoát La Sát chi nạn.(Dĩ thị nhân duyên, danh Quán Thế Âm.(Nhược phục hữu nhân, lâm đương bị hại,(xưng Quán Thế Âm Bồ Tát danh giả,(bỉ sở chấp đao trượng,(tầm đoạn đoạn hoại, nhi đắc giải thoát.(Nhược tam thiên đại thiên quốc độ,(mãn trung Dạ Xoa, La Sát,(dục lai não nhân,(văn kỳ xưng Quán Thế Âm Bồ Tát danh giả,(thị chư ác quỷ, thượng bất năng dĩ ác nhãn thị chi,(huống phục gia hại.(Thiết phục hữu nhân, nhược hữu tội,(nhược vô tội, nữu giới, già tỏa,(kiểm hệ kỳ thân, xưng Quán Thế Âm Bồ Tát danh giả,(giai tất đoạn hoại, tức đắc giải thoát.(Nhược tam thiên đại thiên quốc độ,(mãn trung oán tặc, hữu nhất thương chủ,(tương chư thương nhân, tê trì trọng bảo kinh quá hiểm lộ.(Kỳ trung nhất nhân, tác thị xướng ngôn:(Chư thiện nam tử!(Vật đắc khủng bố!(Nhữ đẳng ưng đương nhất tâm xưng Quán Thế Âm Bồ Tát danh hiệu.(Thị Bồ Tát năng dĩ vô úy thí ư chúng sanh.(Nhữ đẳng nhược xưng danh giả,(ư thử oán tặc, đương đắc giải thoát.(Chúng thương nhân văn, câu phát thanh ngôn:(Nam mô Quán Thế Âm Bồ Tát.(Xưng kỳ danh cố, tức đắc giải thoát.(Vô Tận Ý!(Quán Thế Âm Bồ Tát Ma Ha Tát,(oai thần chi lực, nguy nguy như thị.(Nhược hữu chúng sanh, đa ư dâm dục,(thường niệm cung kính Quán Thế Âm Bồ Tát,(tiện đắc ly dục.(Nhược đa sân nhuế,(thường niệm cung kính Quán Thế Âm Bồ Tát,(tiện đắc ly sân.(Nhược đa ngu si,(thường niệm cung kính Quán Thế Âm Bồ Tát,(tiện đắc ly si.(Vô Tận Ý!(Quán Thế Âm Bồ Tát,(hữu như thị đẳng đại oai thần lực,(đa sở nhiêu ích.(Thị cố chúng sanh, thường ưng tâm niệm.(Nhược hữu nữ nhân, thiết dục cầu nam,(lễ bái cúng dường Quán Thế Âm Bồ Tát,(tiện sanh phước đức trí huệ chi nam,(thiết dục cầu nữ, tiện sanh đoan chánh hữu tướng chi nữ.(Túc thực đức bổn, chúng nhân ái kính.(Vô Tận Ý!(Quán Thế Âm Bồ Tát hữu như thị lực.(Nhược hữu chúng sanh cung kính lễ bái Quán Thế Âm Bồ Tát,(phước bất đường quyên.(Thị cố chúng sanh giai ưng thọ trì Quán Thế Âm Bồ Tát danh hiệu.(Vô Tận Ý!(Nhược hữu nhân thọ trì lục thập nhị ức hằng hà sa Bồ Tát danh tự,(phục tận hình cúng dường ẩm thực, y phục, ngọa cụ,(y dược.(Ư nhữ ý vân hà?(Thị thiện nam tử, thiện nữ nhân,(công đức đa phủ?(Vô Tận Ý ngôn:(Thậm đa, Thế Tôn!(Phật ngôn:(Nhược phục hữu nhân,(thọ trì Quán Thế Âm Bồ Tát danh hiệu,(nãi chí nhất thời lễ bái, cúng dường.(Thị nhị nhân phước, chánh đẳng vô dị,(ư bá thiên vạn ức kiếp,(bất khả cùng tận.(Vô Tận Ý!(Thọ trì Quán Thế Âm Bồ Tát danh hiệu,(đắc như thị vô lượng vô biên phước đức chi lợi.(Vô Tận Ý Bồ Tát bạch Phật ngôn:(Thế Tôn!(Quán Thế Âm Bồ Tát vân hà du thử Ta Bà thế giới?(Vân hà nhi vị chúng sanh thuyết pháp?(Phương tiện chi lực, kỳ sự vân hà?(Phật cáo Vô Tận Ý Bồ Tát:(Thiện nam tử!(Nhược hữu quốc độ chúng sanh ưng dĩ Phật thân đắc độ giả,(Quán Thế Âm Bồ Tát tức hiện Phật thân nhi vị thuyết pháp,(ưng dĩ Bích Chi Phật thân đắc độ giả,(tức hiện Bích Chi Phật thân nhi vị thuyết pháp,(ưng dĩ Thanh Văn thân đắc độ giả,(tức hiện Thanh Văn thân nhi vị thuyết pháp,(ưng dĩ Phạm Vương thân đắc độ giả,(tức hiện Phạm Vương thân nhi vị thuyết pháp,(ưng dĩ Đế Thích thân đắc độ giả,(tức hiện Đế Thích thân nhi vị thuyết pháp,(ưng dĩ Tự Tại Thiên thân đắc độ giả,(tức hiện Tự Tại Thiên thân nhi vị thuyết pháp,(ưng dĩ Đại Tự Tại Thiên thân đắc độ giả,(tức hiện Đại Tự Tại Thiên thân nhi vị thuyết pháp,(ưng dĩ Thiên Đại Tướng Quân thân đắc độ giả,(tức hiện Thiên Đại Tướng Quân thân nhi vị thuyết pháp,(ưng dĩ Tỳ Sa Môn thân đắc độ giả,(tức hiện Tỳ Sa Môn thân nhi vị thuyết pháp,(ưng dĩ tiểu vương thân đắc độ giả,(tức hiện tiểu vương thân nhi vị thuyết pháp,(ưng dĩ trưởng giả thân đắc độ giả,(tức hiện trưởng giả thân nhi vị thuyết pháp,(ưng dĩ cư sĩ thân đắc độ giả,(tức hiện cư sĩ thân nhi vị thuyết pháp,(ưng dĩ tể quan thân đắc độ giả,(tức hiện tể quan thân nhi vị thuyết pháp,(ưng dĩ Bà La Môn thân đắc độ giả,(tức hiện Bà La Môn thân nhi vị thuyết pháp,(ưng dĩ Tỳ Kheo, Tỳ Kheo Ni,(Ưu Bà Tắc, Ưu Bà Di thân đắc độ giả,(tức hiện Tỳ Kheo, Tỳ Kheo Ni,(Ưu Bà Tắc, Ưu Bà Di thân nhi vị thuyết pháp,(ưng dĩ trưởng giả, cư sĩ, tể quan,(Bà La Môn, phụ nữ thân đắc độ giả,(tức hiện phụ nữ thân nhi vị thuyết pháp,(ưng dĩ đồng nam, đồng nữ thân đắc độ giả,(tức hiện đồng nam, đồng nữ thân nhi vị thuyết pháp,(ưng dĩ thiên, long, Dạ Xoa,(Càn Thát Bà, A Tu La,(Ca Lầu La, Khẩn Na La,(Ma Hầu La Già, nhân,(phi nhân đẳng thân đắc độ giả,(tức giai hiện chi nhi vị thuyết pháp,(ưng dĩ Chấp Kim Cang Thần đắc độ giả,(tức hiện Chấp Kim Cang Thần nhi vị thuyết pháp.(Vô Tận Ý!(Thị Quán Thế Âm Bồ Tát thành tựu như thị công đức,(dĩ chủng chủng hình, du chư quốc độ,(độ thoát chúng sanh.(Thị cố nhữ đẳng,(ưng đương nhất tâm cúng dường Quán Thế Âm Bồ Tát.(Thị Quán Thế Âm Bồ Tát Ma Ha Tát,(ư bố úy cấp nạn chi trung,(năng thí vô úy,(thị cố thử Ta Bà thế giới giai hiệu chi vi Thí Vô Úy Giả.(Vô Tận Ý Bồ Tát bạch Phật ngôn:(Thế Tôn!(Ngã kim đương cúng dường Quán Thế Âm Bồ Tát.(Tức giải cảnh chúng bảo châu, anh lạc,(giá trị bá thiên lượng kim,(nhi dĩ dữ chi, tác thị ngôn:(Nhân giả!(Thọ thử pháp thí trân bảo anh lạc.(Thời Quán Thế Âm Bồ Tát bất khẳng thọ chi.(Vô Tận Ý phục bạch Quán Thế Âm Bồ Tát ngôn:(Nhân giả!(Mẫn ngã đẳng cố, thọ thử anh lạc.(Nhĩ thời Phật cáo Quán Thế Âm Bồ Tát:(Đương mẫn thử Vô Tận Ý Bồ Tát cập tứ chúng, thiên,(long, Dạ Xoa, Càn Thát Bà,(A Tu La, Ca Lầu La,(Khẩn Na La, Ma Hầu La Già, nhân,(phi nhân đẳng cố, thọ thị anh lạc.(Tức thời Quán Thế Âm Bồ Tát mẫn chư tứ chúng,(cập ư thiên, long, nhân,(phi nhân đẳng, thọ kỳ anh lạc,(phân tác nhị phần, nhất phần phụng Thích Ca Mâu Ni Phật,(nhất phần phụng Đa Bảo Phật tháp.(Vô Tận Ý!(Quán Thế Âm Bồ Tát hữu như thị tự tại thần lực,(du ư Ta Bà thế giới.(Nhĩ thời Vô Tận Ý Bồ Tát dĩ kệ vấn viết:(Thế Tôn diệu tướng cụ, ngã kim trùng vấn bỉ,(Phật tử hà nhân duyên, danh vi Quán Thế Âm?(Cụ túc diệu tướng tôn, kệ đáp Vô Tận Ý:(Nhữ thính Quán Âm hạnh, thiện ứng chư phương sở,(hoằng thệ thâm như hải, lịch kiếp bất tư nghị,(thị đa thiên ức Phật, phát đại thanh tịnh nguyện.(Ngã vị nhữ lược thuyết, văn danh cập kiến thân,(tâm niệm bất không quá, năng diệt chư hữu khổ.(Giả sử hưng hại ý, thôi lạc đại hỏa khanh,(niệm bỉ Quán Âm lực, hỏa khanh biến thành trì.(Hoặc phiêu lưu cự hải, long ngư chư quỷ nạn,(niệm bỉ Quán Âm lực, ba lãng bất năng một.(Hoặc tại Tu Di phong, vi nhân sở thôi đọa,(niệm bỉ Quán Âm lực, như nhật hư không trụ.(Hoặc bị ác nhân trục, đọa lạc Kim Cang sơn,(niệm bỉ Quán Âm lực, bất năng tổn nhất mao.(Hoặc trị oán tặc nhiễu, các chấp đao gia hại,(niệm bỉ Quán Âm lực, hàm tức khởi từ tâm.(Hoặc tao vương nạn khổ, lâm hình dục thọ chung,(niệm bỉ Quán Âm lực, đao tầm đoạn đoạn hoại.(Hoặc tù cấm già tỏa, thủ túc bị nữu giới,(niệm bỉ Quán Âm lực, thích nhiên đắc giải thoát.(Chú trớ chư độc dược, sở dục hại thân giả,(niệm bỉ Quán Âm lực, hoàn trước ư bổn nhân.(Hoặc ngộ ác La Sát, độc long chư quỷ đẳng,(niệm bỉ Quán Âm lực, thời tất bất cảm hại.(Nhược ác thú vi nhiễu, lợi nha trảo khả bố,(niệm bỉ Quán Âm lực, tật tẩu vô biên phương.(Ngoan xà cập phúc yết, khí độc yên hỏa nhiên,(niệm bỉ Quán Âm lực, tầm thanh tự hồi khứ.(Vân lôi cổ xiết điện, giáng bạc chú đại vũ,(niệm bỉ Quán Âm lực, ứng thời đắc tiêu tán.(Chúng sanh bị khổn ách, vô lượng khổ bức thân,(Quán Âm diệu trí lực, năng cứu thế gian khổ.(Cụ túc thần thông lực, quảng tu trí phương tiện,(thập phương chư quốc độ, vô sát bất hiện thân.(Chủng chủng chư ác thú, địa ngục quỷ súc sanh,(sanh lão bệnh tử khổ, dĩ tiệm tất linh diệt.(Chơn quán thanh tịnh quán, quảng đại trí huệ quán,(bi quán cập từ quán, thường nguyện thường chiêm ngưỡng.(Vô cấu thanh tịnh quang, huệ nhật phá chư ám,(năng phục tai phong hỏa, phổ minh chiếu thế gian.(Bi thể giới lôi chấn, từ ý diệu đại vân,(chú cam lồ pháp vũ, diệt trừ phiền não diệm.(Tránh tụng kinh quan xứ, bố úy quân trận trung,(niệm bỉ Quán Âm lực, chúng oán tất thối tán.(Diệu âm Quán Thế Âm, phạm âm hải triều âm,(thắng bỉ thế gian âm, thị cố tu thường niệm,(niệm niệm vật sanh nghi, Quán Thế Âm tịnh thánh,(ư khổ não tử ách, năng vị tác y hỗ,(cụ nhất thiết công đức, từ nhãn thị chúng sanh,(phước tụ hải vô lượng, thị cố ưng đảnh lễ.(Nhĩ thời, Trì Địa Bồ Tát,(tức tùng tòa khởi, tiền bạch Phật ngôn:(Thế Tôn!(Nhược hữu chúng sanh văn thị Quán Thế Âm Bồ Tát phẩm,(tự tại chi nghiệp, Phổ Môn thị hiện,(thần thông lực giả, đương tri thị nhân công đức bất thiểu.(Phật thuyết thị Phổ Môn phẩm thời,(chúng trung bát vạn tứ thiên chúng sanh,(giai phát vô đẳng đẳng A nậu đa la tam miệu tam bồ đề tâm.
+Văn như thị:(Nhất thời Phật tại Xá Vệ quốc,(Kỳ Thọ Cấp Cô Độc viên.(Đại Mục Kiền Liên, thỉ đắc lục thông,(dục độ phụ mẫu, báo nhũ bộ chi ân,(tức dĩ đạo nhãn quán thị thế gian:(Kiến kỳ vong mẫu sanh ngạ quỉ trung,(bất kiến ẩm thực, bì cốt liên lập.(Mục Liên bi ai, tức dĩ bát thạnh phạn,(vãng hướng kỳ mẫu.(Mẫu đắc bát phạn, tiện dĩ tả thủ chướng bát,(hữu thủ sủy thực, thực vị nhập khẩu,(hóa thành hỏa thán, toại bất đắc thực.(Mục Liên đại khiếu, bi hào thế khấp,(trì hoàn bạch Phật, cụ trần như thử.(Phật ngôn:(Nhữ mẫu tội căn thâm kiết,(phi nhữ nhất nhân lực sở nại hà!(Nhữ tuy hiếu thuận, thanh động thiên địa, thiên thần, địa kỳ,(tà ma, ngoại đạo, đạo sĩ,(Tứ Thiên Vương thần, diệc bất năng nại hà!(Đương tu thập phương chúng Tăng oai thần chi lực,(nãi đắc giải thoát.(Ngô kim đương thuyết cứu tế chi pháp,(linh nhất thiết nạn giai ly ưu khổ.(Phật cáo Mục Liên:(Thập phương chúng Tăng, thất nguyệt thập ngũ nhật,(Tăng tự tứ thời, đương vị thất thế phụ mẫu,(cập hiện tại phụ mẫu,(ách nạn trung giả, cụ phạn bách vị, ngũ quả,(cấp quán bồn khí, hương du, đính chúc,(sàng phu ngọa cụ, tận thế cam mỹ,(dĩ trước bồn trung, cúng dường thập phương đại đức chúng Tăng.(Đương thử chi nhật, nhất thiết Thánh chúng,(hoặc tại sơn gian thiền định,(hoặc đắc tứ đạo quả,(hoặc tại thọ hạ kinh hành,(hoặc lục thông tự tại giáo hóa Thanh Văn, Duyên Giác,(hoặc thập địa Bồ Tát đại nhân,(quyền hiện Tỳ Kheo tại đại chúng trung,(giai đồng nhất tâm thọ bát hòa la phạn.(Cụ thanh tịnh giới Thánh chúng chi đạo,(kỳ đức uông dương.(Kỳ hữu cúng dường thử đẳng tự tứ tăng giả,(hiện thế phụ mẫu, lục thân quyến thuộc,(đắc xuất tam đồ chi khổ,(ứng thời giải thoát y thực tự nhiên.(Nhược phụ mẫu hiện tại giả,(phước lạc bách niên, nhược thất thế phụ mẫu sanh thiên,(tự tại hóa sanh, nhập thiên hoa quang.(Thời, Phật sắc thập phương chúng Tăng,(giai tiên vị thí chủ gia chú nguyện,(nguyện thất thế phụ mẫu,(hành thiền định ý, nhiên hậu thọ thực.(Sơ thọ thực thời, tiên an tại Phật tiền,(tháp tự trung Phật tiền,(chúng Tăng chú nguyện cánh tiện tự thọ thực.(Thời Mục Liên Tỳ Kheo cập đại Bồ Tát chúng,(giai đại hoan hỉ, Mục Liên bi đề khấp thanh,(thích nhiên trừ diệt.(Thời Mục Liên mẫu, tức ư thị nhựt,(đắc thoát nhất kiếp ngạ quỉ chi khổ.(Mục Liên phục bạch Phật ngôn:(Đệ tử sở sanh mẫu đắc mông Tam Bảo công đức chi lực,(chúng Tăng oai thần chi lực cố,(nhược vị lai thế, nhất thiết Phật đệ tử,(diệc ưng phụng Vu Lan bồn,(cứu độ hiện tại phụ mẫu,(nãi chí thất thế phụ mẫu khả vi nhĩ phủ?(Phật ngôn:(Đại thiện khoái vấn!(Ngã chánh dục thuyết, nhữ kim phục vấn.(Thiện nam tử!(Nhược Tỳ Kheo, Tỳ Kheo Ni, quốc vương, thái tử, đại thần,(tể tướng, tam công, bách quan, vạn dân,(thứ nhân hành từ hiếu giả,(giai ưng tiên vị sở sanh hiện tại phụ mẫu,(quá khứ thất thế phụ mẫu,(ư thất nguyệt thập ngũ nhật,(Phật hoan hỉ nhật, Tăng tự tứ nhật,(dĩ bách vị phạn thực,(an Vu Lan bồn trung,(thí thập phương tự tứ tăng.(Nguyện sử hiện tại phụ mẫu,(thọ mạng bách niên vô bệnh,(vô nhất thiết khổ não chi hoạn,(nãi chí thất thế phụ mẫu ly ngạ quỉ khổ,(sanh nhân thiên trung, phước lạc vô cực.(Thị Phật đệ tử tu hiếu thuận giả,(ưng niệm niệm trung thường ức phụ mẫu,(nãi chí thất thế phụ mẫu,(niên niên thất nguyệt thập ngũ nhật,(thường dĩ hiếu từ, ức sở sanh phụ mẫu,(vị tác Vu Lan bồn,(thí Phật cập tăng,(dĩ báo phụ mẫu trưởng dưỡng từ ái chi ân,(nhược nhất thiết Phật đệ tử ưng đương phụng trì thị pháp.(Thời Mục Liên Tỳ Kheo,(tứ bối đệ tử hoan hỉ phụng hành.
+
+=== kol-aura-CO2CrSTo.js (2)
+#define TAU 6.28318530718 #define GOLDEN 2.39996323 uniform vec4 uAura[ AURA_MAX ]; uniform float uSeed[ AURA_MAX ]; uniform float uTime; uniform float uScale; uniform float uMaxSize; varying vec3 vColor; void main() { // position = ( ô hào quang, loại đốm: 0 vòng dưới chân / 1 bay lên, thứ tự đốm trong loại ). int slot = int( position.x + 0.5 ); vec4 aura = uAura[ slot ]; float seed = uSeed[ slot ]; float k = position.z; vec3 p; float size; float gain; vec3 col; if ( position.y < 0.5 ) { // Vòng sáng sát mặt đất: các đốm xếp vòng quanh chân, quay rất chậm (40 s một vòng), mỗi đốm thở lệch pha theo // góc vàng nên vòng lấp lánh nhẹ như cánh sen chứ không nhấp nháy đồng loạt. float a = k / RING_COUNT * TAU + uTime * ( TAU / 40.0 ) + seed * TAU; p = vec3( cos( a ) * 0.4, 0.05, sin( a ) * 0.4 ); size = RING_SIZE; gain = 0.5 * ( 0.72 + 0.28 * sin( uTime * ( TAU / 3.2 ) + k * GOLDEN + seed * TAU ) ); col = vec3( 0.953, 0.776, 0.42 ); // #f3c66b } else { // Đốm bay lên: mỗi đốm đi hết vòng đời trong 4,8 s, xoắn ốc hẹp dần quanh thân, tan từ ngang ngực tới ngang đầu. float u = fract( uTime / 4.8 + k / RISE_COUNT + seed ); float a = k * GOLDEN + u * ( 0.8 * TAU ) + uTime * ( TAU / 48.0 ) + seed * TAU; float r = mix( 0.38, 0.2, u ); p = vec3( cos( a ) * r, 0.08 + u, sin( a ) * r ); size = mix( 0.13, 0.07, u ); gain = 0.85 * smoothstep( 0.0, 0.16, u ) * ( 1.0 - smoothstep( 0.55, 0.95, u ) ); col = vec3( 1.0, 0.851, 0.541 ); // #ffd98a } // Lô nằm ở gốc cảnh, vị trí tính thẳng trong toạ độ thế giới. vec4 mv = viewMatrix * vec4( aura.xyz + p, 1.0 ); gl_Position = projectionMatrix * mv; float depth = max( -mv.z, 0.05 ); gl_PointSize = clamp( size * uScale / depth, 1.0, uMaxSize ); gain *= aura.w * smoothstep( 0.3, 1.0, depth ) * ( 1.0 - smoothstep( VIEW_FAR - 12.0, VIEW_FAR, depth ) ); vColor = col * gain; // Đốm gần như tắt thì đẩy ra ngoài khung hình để khỏi tốn pixel. if ( gain < 0.002 ) gl_Position = vec4( 2.0, 2.0, 2.0, 1.0 ); }
+varying vec3 vColor; void main() { vec2 c = gl_PointCoord * 2.0 - 1.0; float d2 = dot( c, c ); // Quầng mềm cộng một lõi sáng nhỏ, tắt hẳn trước mép điểm (không lộ viền vuông). float a = ( 0.7 * exp( -d2 * 4.0 ) + 0.45 * exp( -d2 * 26.0 ) ) * ( 1.0 - smoothstep( 0.6, 1.0, d2 ) ); gl_FragColor = vec4( vColor * a, 1.0 ); }
+
+=== lanterns-DsoFXr0b.js (1)
+attribute float aSize; attribute float aGain; attribute float aPhase; uniform float uScale; uniform float uMaxSize; uniform float uTime; uniform float uNight; uniform float uFlicker; varying float vGain; void main() { vec4 mv = modelViewMatrix * vec4( position, 1.0 ); // Đẩy quầng về phía camera 0,3 m: tâm điểm nằm trong buồng đèn nên nếu không sẽ bị chính thân đèn che. mv.z += 0.3; gl_Position = projectionMatrix * mv; float depth = max( -mv.z, 0.05 ); gl_PointSize = clamp( aSize * uScale / depth, 1.0, uMaxSize ); float flick = 1.0 + uFlicker * ( 0.06 * sin( uTime * 1.3 + aPhase ) + 0.03 * sin( uTime * 3.7 + aPhase * 2.1 ) ); float far = 1.0 - smoothstep( 30.0, 62.0, depth ); float near = smoothstep( 0.6, 2.4, depth ); vGain = aGain * ( 0.06 + 0.94 * uNight ) * flick * far * near; }
+
+=== layout-DpGLadzd.js (0)
+
+
+=== lazy-shared-D8DtrU9N.js (12)
+Người giữ hương
+Bạn tràng hạt
+Người quét lá
+Hành giả tĩnh lặng
+Khách hành hương
+Người con tháng Bảy
+Bạn sen
+Ngọn đèn bền bỉ
+${t} giây
+${r} phút
+${n} giờ
+${n} giờ ${r} phút
+
+=== level-bloom-Br4y8WwV.js (0)
+
+
+=== listen-mhDVCrcu.js (32)
+Công phu chung ở Chùa Sen
+Niệm Phật cùng mọi người ${t.durationMinutes} phút ở Chùa Sen, chùa online: chuasen.com
+Giọng niệm Phật & nhạc nền
+Giọng miền Bắc: Chùa Sen đang xin thu âm cùng một ngôi chùa, sắp có.
+1× Bình thường
+0,9× Chậm
+0,8× Chậm hơn
+<div class="listen-dlg__card"> <header class="listen-dlg__head"> <h2 id="listen-title" class="listen-dlg__title">${I(A)}</h2> <button type="button" class="btn btn--ghost btn--sm" data-ref="close">Đóng</button> </header> <div class="listen-dlg__body"> <section class="listen-dlg__section" aria-labelledby="listen-chant-title"> <h3 id="listen-chant-title" class="listen-dlg__heading">Niệm Phật</h3> <fieldset class="listen-dlg__group"> <legend class="listen-dlg__legend">Cách nghe</legend> ${L(
+Nghe chung (đài chùa)
+Mọi người cùng nghe một đoạn; 05:00 và 18:00 công phu chung
+Nghe riêng
+Giọng, tốc độ và bài của riêng bạn, từ đầu bài
+<div class="listen-dlg__cal" role="group" aria-labelledby="listen-cal-title"> <p id="listen-cal-title" class="listen-dlg__muted">Thêm vào lịch: nhắc công phu chung mỗi ngày (tệp lịch tạo ngay trên máy).</p> <div class="listen-dlg__cal-row"> <button type="button" class="btn btn--sm" data-cal="5">Thêm vào lịch 05:00</button> <button type="button" class="btn btn--sm" data-cal="18">Thêm vào lịch 18:00</button> </div> </div>
+} <fieldset class="listen-dlg__group"> <legend class="listen-dlg__legend">Giọng</legend> ${S.map((e) => L(
+Không lời, không cần tải
+} </fieldset> <fieldset class="listen-dlg__group" data-ref="speedGroup"> <legend class="listen-dlg__legend">Tốc độ</legend> <div class="listen-dlg__row"> ${ee.map((e) => L(
+)} </div> <p class="listen-dlg__muted" data-ref="speedNote">Chậm lại mà giọng vẫn giữ nguyên cao độ.</p> </fieldset> <p class="listen-dlg__status" aria-live="polite" data-ref="status"></p> <fieldset class="listen-dlg__group" data-ref="trackGroup"> <legend class="listen-dlg__legend">Bài</legend> <div data-ref="tracks"></div> </fieldset> <button type="button" class="btn btn--gold listen-dlg__preview" data-ref="preview">Nghe thử</button> </section> <section class="listen-dlg__section" aria-labelledby="listen-music-title"> <h3 id="listen-music-title" class="listen-dlg__heading">Nhạc nền</h3> <fieldset class="listen-dlg__group"> <legend class="sr-only">Nhạc nền</legend> ${L(
+Lần lượt
+Các bản nối nhau, bản đầu ngẫu nhiên
+Nhạc tổng hợp (không cần tải)
+Chùa Sen tự tạo khi phát
+Không nhạc
+Tất cả
+Máy này chưa đổi được tốc độ: đang phát tốc độ gốc tới khi tải lại trang.
+Chậm lại mà giọng vẫn giữ nguyên cao độ.
+Đang chuẩn bị tốc độ…
+Dừng nghe
+Nghe thử
+Tiếng mõ tổng hợp của Chùa Sen, không dùng bản ghi.
+Đang phát
+Bản đầu
+Đài chùa phát lần lượt mọi bản ghi niệm Phật.
+
+=== menu-BQl4ajMT.js (19)
+Sân trước &amp; hồ sen
+Cây bồ đề
+Sân thiền
+Quan Âm
+Giếng ngọc
+Chánh điện
+Về Chùa Sen
+Kênh YouTube của người làm Chùa Sen
+Nội quy
+Quyền riêng tư
+Cài ứng dụng
+Bạn đạo
+Cách lên cấp
+Lên cấp ${e} để mở thêm
+Lạy Phật, thắp hương, tụng kinh, ngồi thiền hay quét lá đa đều được tính tinh tấn để lên cấp.
+)}<span><span class="sr-only">Quay lại: </span>${e}</span></button>
+)}</button> </div> </div> <div class="hud-pop__view" data-view="walk" role="group" aria-label="Đi dạo" hidden> ${j(
+có lời nhắc hôm nay
+có mục mới
+
+=== mindful-4jCESYBr.js (7)
+Thiền hành
+Thôi
+Thôi thiền hành
+${n} · ${Number.isFinite(e) && e > 0 ? Math.floor(e) : 0} phút
+Bạn cất chổi trước đã nhé.
+Thiền hành: đi chậm, chắp tay. Thả Shift để đi thường.
+Mẹo: trên máy tính, giữ Shift khi đi để thiền hành.
+
+=== mixer-DiQvZD4y.js (22)
+Âm lượng tổng
+Chung cho mọi tiếng trong chùa
+Nhạc nền chùa
+Nhạc tịnh tâm: đàn dây, chuông, tiếng ngân
+Bật nhạc nền
+Mõ & chuông
+Mõ gõ đều theo Nhịp mõ, chuông thỉnh mỗi bốn câu; cả mõ và khánh Tụng kinh
+Bật mõ & chuông đều nhịp
+Tiếng niệm đại chúng
+Bật bằng nút "Nghe niệm Phật" trên màn hình; cả giọng "Chỉ tiếng mõ"
+Hiệu ứng (chuông dâng lễ, lần hạt)
+Lễ Phật, dâng lễ, thỉnh chuông, lần hạt, tiếng bấm
+Tự nghỉ khi bạn nghe niệm Phật, nghe pháp thoại, ngồi thiền hay tự gõ mõ.
+<button type="button" class="btn btn--sm set-listen" data-ref="listen">Chọn giọng, tốc độ</button>
+Nhịp mõ
+Một nhịp cho mõ đều nhịp, "Chỉ tiếng mõ" và Tụng kinh
+Không gian
+Gió, chim, tiếng chuông xa; cũng là mức tiếng mõ tổng hợp khi chưa tải được bản niệm Phật
+Mức không gian
+Bật không gian
+<label class="set-switch" data-ref="backgroundRow"> <span class="set-switch__text">Phát khi chuyển tab</span> <input class="set-switch__input" type="checkbox" role="switch" data-ref="background" /> <span class="set-switch__track" aria-hidden="true"></span> </label>
+${t.chantTempo} tiếng/phút
+
+=== music-mix-9H0C50bM.js (4)
+Lỗi trong hàm lắng nghe trạng thái ${e}
+thiền
+pháp thoại
+tụng kinh
+
+=== net-dCuTTtHk.js (19)
+turnstile: script nạp xong nhưng thiếu API
+turnstile: không tải được script
+turnstile: quá hạn
+turnstile: widget báo lỗi
+turnstile: mã hết hạn
+turnstile: widget quá hạn
+turnstile: không dựng được widget
+turnstile: lỗi
+Các phòng đã đầy — bạn đang ở chế độ một mình.
+Mất kết nối máy chủ — bạn đang ở chế độ một mình, sẽ tự vào lại phòng khi kết nối được.
+Phiên bản này đã cũ — hãy tải lại trang để vào chung với mọi người.
+Bạn đang tạm bị chặn khỏi phòng chung vì vi phạm nội quy — bạn vẫn tu tập một mình được.
+Phòng chơi đang tạm nghỉ để giữ chi phí — bạn vẫn tu tập một mình được, sẽ tự mở lại sau.
+Bạn đã tạm rời phòng chung vì lâu không thao tác — chạm vào màn hình hoặc nhấn phím bất kỳ để vào lại.
+Tên này chưa phù hợp với nội quy Chùa Sen — bạn đang ở chế độ một mình. Đổi tên khác để vào phòng chung nhé.
+Chưa kết nối được máy chủ — bạn đang ở chế độ một mình.
+lobby: phản hồi không hợp lệ
+[net] lỗi khi xử lý gói tin
+turnstile: sảnh vẫn đòi thử thách
+
+=== panels-eXTHTxRv.js (217)
+Nam mô A Di Đà Phật
+A Di Đà Phật
+Nam mô Quán Thế Âm Bồ Tát
+Nam mô Bổn Sư Thích Ca Mâu Ni Phật
+<section class="view beads-view"> <header class="view__header"> <h1 class="view__title">Niệm Phật</h1> <p class="view__lead">Mỗi lần chạm là một hạt, một câu niệm. Niệm thầm hay thành tiếng đều được.</p> </header> <div class="beads-stage" role="button" tabindex="0" aria-label="Lần một hạt" aria-describedby="beads-sr-count" > ${F()} <div class="beads-center" aria-hidden="true"> <div class="beads-round"></div> <div class="beads-count"><span class="beads-count__n">0</span><span class="beads-count__of"> / ${_}</span></div> <div class="beads-phrase"></div> </div> </div> <p id="beads-sr-count" class="sr-only"></p> <p class="beads-hint muted">Chạm vào chuỗi hạt, hoặc nhấn phím Cách hay Enter. Đến hạt mẫu thì quay chiều lần tiếp, không lần qua hạt mẫu.</p> <div class="chips beads-phrases" role="group" aria-label="Chọn câu niệm"> ${C.map((e) =>
+)} </div> <div class="stats beads-stats" role="group" aria-label="Công phu hôm nay"> <div class="stat"> <div class="stat__value" data-stat="chants">0</div> <div class="stat__label">câu niệm hôm nay</div> </div> <div class="stat"> <div class="stat__value" data-stat="rounds">0</div> <div class="stat__label">chuỗi tròn hôm nay</div> </div> </div> <div class="row beads-actions"> <button type="button" class="chip beads-mo" aria-pressed="false">Gõ mõ mỗi hạt</button> <button type="button" class="btn btn--ghost btn--sm beads-reset"> ${r(
+, { size: 18 })}<span>Bắt đầu lại</span> </button> </div> <div class="sr-only beads-live" role="status" aria-live="polite"></div> </section>
+Niệm Phật
+beads: thiếu phần tử ${t}
+Tròn chuỗi thứ ${f(T)}
+Chuỗi thứ ${f(T + 1)}
+Hạt thứ ${e} trên ${_}, chuỗi thứ ${T + +!E}.
+Ở hạt mẫu, chuỗi thứ ${T + 1}${T > 0 ?
+Tròn một chuỗi ${_} hạt — A Di Đà Phật
+Chuỗi thứ ${T + 1}: đã niệm ${w} hạt
+Bắt đầu lại chuỗi từ hạt đầu tiên? Số liệu thống kê trong ngày vẫn được giữ nguyên.
+Đã bắt đầu lại chuỗi mới
+Cho người mới
+Đời sống
+Thiền sư Thích Nhất Hạnh
+Làng Mai Official
+Thầy Thích Pháp Hòa
+Truc Lam (Thích Pháp Hòa)
+Sư Ông Làng Mai Hướng Dẫn Ngồi Thiền
+Lời hướng dẫn ngồi thiền và thực tập hơi thở chánh niệm.
+Hơi Thở An Lạc
+Đoạn trích bài giảng Kinh Quán Niệm Hơi Thở, Làng Mai, năm 1998.
+Thiền Đi - Quán Chiếu Cảm Thọ Trong Từng Bước Chân
+Tập thiền đi, để ý cảm thọ trong từng bước chân. Trích pháp thoại năm 2010.
+Căn Bản Tụng Niệm
+Những điều căn bản của việc tụng kinh và niệm Phật.
+Tịnh Độ Di Đà
+Bài giảng về Tịnh độ của Đức Phật A Di Đà, tại Tu viện Trúc Lâm, năm 2021.
+Tiếp Xúc Những Mầu Nhiệm Trong Tịnh Độ Hiện Tiền
+Bài giảng về tiếp xúc với Tịnh độ ngay trong hiện tại. Pháp thoại năm 2003.
+Án Binh Bất Động Khi Giận
+Bài giảng về cách dừng lại, chưa vội nói hay làm gì khi đang giận.
+Quay Về Hải Đảo Tự Thân Để Chăm Sóc Chính Mình
+Thực tập trở về nương tựa nơi chính mình. Trích pháp thoại năm 2005.
+Vu Lan Báo Hiếu
+Bài giảng mùa Vu Lan về đạo hiếu với cha mẹ, năm 2017.
+Phát Triển Tâm Từ
+Bài giảng về cách nuôi lớn tâm từ, tức lòng thương yêu.
+Thời khóa
+Chú
+Kệ & sám nguyện
+Bản này được Chùa Sen đối chiếu từ ${e} nguồn đã công bố, chưa qua chư tăng duyệt lại. Thấy chỗ nào chưa đúng, bạn
+góp ý
+giúp chùa nhé.
+Kệ Khai Kinh
+Vô thượng thậm thâm vi diệu pháp
+Bốn câu kệ mở đầu buổi tụng, giúp tâm lắng lại và phát nguyện hiểu nghĩa kinh.
+Vô thượng thậm thâm vi diệu pháp,
+Bách thiên vạn kiếp nan tao ngộ.
+Ngã kim kiến văn đắc thọ trì,
+Nguyện giải Như Lai chân thật nghĩa.
+Tam Tự Quy
+Tự quy y Phật, Pháp, Tăng
+Ba lời tự quy y Phật, Pháp, Tăng (phẩm Tịnh Hạnh, kinh Hoa Nghiêm), thường tụng khép lại một thời kinh.
+Tự quy y Phật, đương nguyện chúng sanh,
+thể giải đại đạo, phát vô thượng tâm.
+Tự quy y Pháp, đương nguyện chúng sanh,
+thâm nhập kinh tạng, trí huệ như hải.
+Tự quy y Tăng, đương nguyện chúng sanh,
+thống lý đại chúng, nhất thiết vô ngại.
+Kệ Sám Hối
+Ngã tích sở tạo chư ác nghiệp
+Bốn câu kệ sám hối trong phẩm Phổ Hiền Hạnh Nguyện (kinh Hoa Nghiêm): nhận lỗi xưa từ thân, miệng, ý và nguyện làm mới.
+Ngã tích sở tạo chư ác nghiệp,
+Giai do vô thỉ tham sân si,
+Tùng thân ngữ ý chi sở sanh,
+Nhất thiết ngã kim giai sám hối.
+Bát Nhã Ba La Mật Đa Tâm Kinh
+Tâm Kinh · bản Hán-Việt
+Bản kinh ngắn gọn và cô đọng nhất về trí tuệ Bát Nhã, tụng quen thuộc mỗi ngày.
+Quán Tự Tại Bồ Tát,(hành thâm Bát Nhã Ba La Mật Đa thời,(chiếu kiến ngũ uẩn giai không,(độ nhất thiết khổ ách.(Xá Lợi Tử,(sắc bất dị không,(không bất dị sắc,(sắc tức thị không,(không tức thị sắc,(thọ tưởng hành thức,(diệc phục như thị.(Xá Lợi Tử,(thị chư pháp không tướng,(bất sanh bất diệt,(bất cấu bất tịnh,(bất tăng bất giảm.(Thị cố không trung,(vô sắc, vô thọ tưởng hành thức,(vô nhãn nhĩ tỷ thiệt thân ý,(vô sắc thanh hương vị xúc pháp,(vô nhãn giới,(nãi chí vô ý thức giới,(vô vô minh,(diệc vô vô minh tận,(nãi chí vô lão tử,(diệc vô lão tử tận,(vô khổ tập diệt đạo,(vô trí diệc vô đắc.(Dĩ vô sở đắc cố,(Bồ đề tát đỏa,(y Bát Nhã Ba La Mật Đa cố,(tâm vô quái ngại,(vô quái ngại cố,(vô hữu khủng bố,(viễn ly điên đảo mộng tưởng,(cứu cánh Niết Bàn.(Tam thế chư Phật,(y Bát Nhã Ba La Mật Đa cố,(đắc A nậu đa la,(tam miệu tam bồ đề.(Cố tri Bát Nhã Ba La Mật Đa,(thị đại thần chú,(thị đại minh chú,(thị vô thượng chú,(thị vô đẳng đẳng chú,(năng trừ nhất thiết khổ,(chân thật bất hư.(Cố thuyết Bát Nhã Ba La Mật Đa chú,(tức thuyết chú viết:(Yết đế, yết đế,(ba la yết đế,(ba la tăng yết đế,(bồ đề tát bà ha.
+Vãng Sanh Thần Chú
+Bạt nhất thiết nghiệp chướng căn bản đắc sanh Tịnh độ đà-la-ni
+Thần chú hồi hướng cho người đã khuất được sanh về cõi lành, thường tụng ba biến.
+Nam mô A Di Đa Bà Dạ,
+Đa tha già đa dạ,
+Đa điệt dạ tha,
+A di rị đô bà tỳ,
+A di rị đa, tất đam bà tỳ,
+A di rị đa, tỳ ca lan đế,
+A di rị đa, tỳ ca lan đa,
+Già di nị, già già na,
+Chỉ đa ca lệ,
+Ta bà ha.
+Chú Đại Bi
+Thiên thủ thiên nhãn vô ngại đại bi tâm đà-la-ni — 84 câu
+Thần chú 84 câu của Bồ Tát Quán Thế Âm, thường tụng 3, 7, 21 hoặc 84 biến. Mỗi câu một dòng để dễ theo dõi.
+Nam mô hắc ra đát na đa ra dạ da.Nam mô a rị da.Bà lô yết đế thước bát ra da.Bồ đề tát đỏa bà da.Ma ha tát đỏa bà da.Ma ha ca lô ni ca da.Án.Tát bàn ra phạt duệ.Số đát na đát tỏa.Nam mô tất kiết lật đỏa y mông a rị da.Bà lô yết đế thất Phật ra lăng đà bà.Nam mô na ra cẩn trì.Hê rị ma ha bàn đa sa mế.Tát bà a tha đậu du bằng.A thệ dựng.Tát bà tát đa na ma bà tát đa na ma bà già.Ma phạt đạt đậu.Đát điệt tha.Án a bà lô hê.Lô ca đế.Ca ra đế.Di hê rị.Ma ha bồ đề tát đỏa.Tát bà tát bà.Ma ra ma ra.Ma hê ma hê rị đà dựng.Cu lô cu lô yết mông.Độ lô độ lô phạt xà da đế.Ma ha phạt xà da đế.Đà ra đà ra.Địa rị ni.Thất Phật ra da.Giá ra giá ra.Mạ mạ phạt ma ra.Mục đế lệ.Y hê y hê.Thất na thất na.A ra sâm Phật ra xá lợi.Phạt sa phạt sâm.Phật ra xá da.Hô lô hô lô ma ra.Hô lô hô lô hê rị.Ta ra ta ra.Tất rị tất rị.Tô rô tô rô.Bồ đề dạ bồ đề dạ.Bồ đà dạ bồ đà dạ.Di đế rị dạ.Na ra cẩn trì.Địa rị sắc ni na.Ba dạ ma na.Ta bà ha.Tất đà dạ.Ta bà ha.Ma ha tất đà dạ.Ta bà ha.Tất đà du nghệ.Thất bàn ra dạ.Ta bà ha.Na ra cẩn trì.Ta bà ha.Ma ra na ra.Ta bà ha.Tất ra tăng a mục khê da.Ta bà ha.Ta bà ma ha a tất đà dạ.Ta bà ha.Giả kiết ra a tất đà dạ.Ta bà ha.Ba đà ma yết tất đà dạ.Ta bà ha.Na ra cẩn trì bàn đà ra dạ.Ta bà ha.Ma bà rị thắng yết ra dạ.Ta bà ha.Nam mô hắc ra đát na đa ra dạ da.Nam mô a rị da.Bà lô yết đế.Thước bàn ra dạ.Ta bà ha.Án tất điện đô.Mạn đa ra.Bạt đà dạ.Ta bà ha
+Mười câu hồng danh Đức Phật A Di Đà, giữ cho tâm được an định.
+Niệm danh hiệu Bồ Tát Địa Tạng
+Nam mô Đại Nguyện Địa Tạng Vương Bồ Tát
+Mười câu xưng danh Bồ Tát Địa Tạng, vị Bồ Tát của đại nguyện cứu độ, thường niệm khi cầu siêu và mùa Vu Lan.
+Tứ Hoằng Thệ Nguyện
+Bốn lời đại nguyện
+Bốn lời nguyện lớn của người học Phật: độ chúng sanh, đoạn phiền não, học pháp môn, thành Phật đạo.
+Chúng sanh vô biên thệ nguyện độ,
+Phiền não vô tận thệ nguyện đoạn,
+Pháp môn vô lượng thệ nguyện học,
+Phật đạo vô thượng thệ nguyện thành.
+Kệ Hồi Hướng
+Nguyện dĩ thử công đức
+Bốn câu kệ khép lại buổi tụng (phẩm Hóa Thành Dụ, kinh Pháp Hoa): nguyện đem công đức này đến khắp mọi người, cùng thành Phật đạo.
+Nguyện dĩ thử công đức,
+Phổ cập ư nhất thiết,
+Ngã đẳng dữ chúng sanh,
+Giai cộng thành Phật đạo.
+Thời khóa ngắn
+~10 phút
+Thời khóa ngắn (~10 phút)
+Trọn một thời công phu nhẹ nhàng cho người mới: khai kinh, Tâm Kinh, Vãng Sanh Thần Chú ba biến, niệm Phật và hồi hướng. Các bài tự nối tiếp nhau.
+Kinh A Di Đà
+Phật Thuyết A Di Đà Kinh · bản Hán-Việt
+Đức Phật kể về cõi Cực Lạc của Đức Phật A Di Đà và khuyên chúng sanh phát nguyện vãng sanh; bài kinh chính của thời tụng Tịnh độ.
+Phẩm Phổ Môn
+Diệu Pháp Liên Hoa Kinh, phẩm 25 · bản Hán-Việt
+Phẩm kinh về Bồ Tát Quán Thế Âm lắng nghe tiếng kêu cứu của chúng sanh, thường tụng khi cầu an.
+Phật Thuyết Vu Lan Bồn Kinh · bản Hán-Việt
+Tôn giả Mục Kiền Liên cứu mẹ và lễ cúng dường chư Tăng ngày rằm tháng Bảy; bài kinh của mùa báo hiếu.
+Kinh Bát Đại Nhân Giác
+Tám điều giác ngộ của bậc đại nhân · bản Hán-Việt
+Tám điều bậc đại nhân giác ngộ: vô thường, ít muốn, biết đủ, tinh tấn, trí tuệ, bố thí, giữ hạnh và phát tâm Đại thừa.
+Bài kinh chưa có chữ nào.
+Bạn đặt tên cho bài kinh nhé.
+Bài dài quá 12.000 ký tự.
+Đã đủ 5 bài. Xoá bớt một bài để thêm bài mới.
+Bài này chỉ lưu trên máy này, không gửi đi đâu. Hãy dùng bản kinh bạn được phép chép.
+Máy này đang giữ bài kinh của một phiên bản Chùa Sen mới hơn. Bạn tải lại trang để xem nhé.
+Trình duyệt này không cho trang lưu dữ liệu nên chưa lưu được bài kinh của bạn. Nếu bạn đang mở Chùa Sen trong một ứng dụng (như Facebook, Zalo), hãy mở bằng trình duyệt thường như Chrome hay Safari.
+Không lưu được bài kinh trên máy này.
+Không tìm thấy bài kinh này.
+Không mở được bài kinh. Bạn thử lại nhé.
+Đang mở bài kinh…
+Nghe pháp thoại
+Bài kinh của tôi
+Tiếp tục
+Bắt đầu
+Sửa bài kinh của bạn
+Thêm bài kinh của bạn
+)}" /> <label class="chant-editor__label" for="chantMyText">Lời kinh (mỗi câu một dòng)</label> <textarea id="chantMyText" class="chant-editor__text" rows="8" aria-describedby="chantMyCount chantMyNote"${n ?
+}" id="chantMyCount" data-role="my-count">${gt(t.length)}</p> <p class="chant-editor__note" id="chantMyNote">${Q(_e)}</p> <p class="chant-editor__error" data-role="my-error" role="alert" hidden></p> <div class="row chant-editor__actions"> <button class="btn btn--gold" type="button" data-action="my-save">Lưu trên máy này</button> <button class="btn btn--ghost" type="button" data-action="my-cancel">Huỷ</button> </div> </div>
+${t(e)} / ${t(fe)} ký tự
+${n}, dài quá ${t(e - fe)} ký tự
+Tụng kinh
+chant: thiếu phần tử ${e}
+Âm thanh đang tắt. Bấm biểu tượng loa ở góc trên để nghe tiếng mõ.
+${t} · đã tụng ${at(n, r.counts)}%
+Tiếp tục lần trước: ${t.title}, đã tụng ${n}%
+≈ ${d(ot([e.syllables], t))} · ${e.lineCount} câu
+Xoá ${e.title}?
+Sửa: ${e.title}
+Xoá: ${e.title}
+≈ ${d(ot([n], t))} · ${e.lines.length} câu
+${t}<button class="btn btn--ghost chant-add" type="button" data-action="my-add">＋ Thêm bài kinh của bạn</button>
+≈ ${d(ot(r, e))} · ${r.length} phần
+Nên bắt đầu
+<header class="view__header"> <h1 class="view__title" tabindex="-1">Tụng kinh</h1> <p class="view__lead">Chọn một bài rồi chạm vào mõ để tụng từng chữ, hoặc bấm “Mõ tự động” để nghe mõ gõ đều theo nhịp; hết bài có ba tiếng khánh. Mới bắt đầu, bạn có thể thử Thời khóa ngắn.</p> </header> ${Ee()} ${ke()} <div class="stack chant-list">${t.join(
+)}</div> <p class="chant-note muted">Thời lượng tính theo nhịp mõ ${e} tiếng/phút. Bạn chỉnh nhịp được khi đang tụng.</p>
+<header class="view__header chant-bar"> <button class="icon-btn" type="button" data-action="list" aria-label="Về danh sách bài kinh" title="Về danh sách bài kinh">${r(
+${n.title} (lần ${i}/${a})
+${H.title} · phần ${b + 1}/${y.length}
+} </div> <button class="icon-btn" type="button" data-action="restart" aria-label="Tụng lại từ đầu bài này" title="Tụng lại từ đầu bài này">${r(
+)}</button> </header> <div class="chant-progress" role="progressbar" aria-label="Tiến độ bài kinh" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="chant-progress__fill"></span></div> <div class="chant-stage"> <div class="chant-text" tabindex="0" role="region" aria-label="Nội dung bài kinh"></div> </div> ${l ?
+} <div class="chant-controls"> <button class="chant-mo" type="button" data-action="mo" aria-label="Gõ mõ, tụng một chữ" aria-disabled="false">${st}</button> <p class="chant-hint muted"></p> <button class="btn btn--ghost btn--lg" type="button" data-action="auto"></button> <div class="chant-tempo"> <label class="chant-tempo__label" for="chantTempo">Nhịp mõ: <strong class="chant-tempo__val">${c}</strong> tiếng/phút</label> <input id="chantTempo" class="chant-tempo__range" type="range" min="${Fe}" max="${Ie}" step="1" value="${c}" data-role="tempo" aria-valuetext="${c} tiếng mỗi phút" /> </div> </div>
+)}<span>Tạm dừng</span>
+)}<span>Mõ tự động</span>
+Mõ tự gõ theo nhịp. Bấm “Tạm dừng” để tự gõ.
+Chạm mõ hoặc nhấn Space
+Chạm vào mõ
+, { size: 36 })}</span> <p class="chant-interlude__title">Đã tụng xong${e ?
+}</p> <p class="chant-interlude__next muted">Tiếp theo: ${Q(t.title)}</p>
+Đã hoàn thành thời khóa
+Đã tụng xong${e ?
+<header class="view__header"> <h1 class="view__title" tabindex="-1">Tụng kinh</h1> </header> <div class="card card--glow stack chant-done"> <span class="chant-done__icon" aria-hidden="true">${r(
+, { size: 44 })}</span> <h2 class="chant-done__title">${Q(a)}</h2> <p class="chant-done__text muted">Hôm nay bạn đã tụng xong ${i} bài kinh. Nam mô A Di Đà Phật.</p> <div class="chant-verse"> <p class="chant-verse__label">Hồi hướng</p> ${n.map((e) =>
+)} </div> <div class="row chant-done__actions"> <button class="btn btn--gold btn--lg" type="button" data-action="again">Tụng lại</button> <button class="btn btn--ghost btn--lg" type="button" data-action="list">Chọn bài khác</button> </div> </div>
+${r} tiếng mỗi phút
+Hít vào…
+Giữ hơi…
+Thở ra…
+Đếm thời gian lên, tối đa 60 phút, hoặc bấm “Xả thiền”.
+Chuông sẽ vang khi đủ ${e} phút. Hãy giữ màn hình sáng để nghe chuông đúng giờ.
+Thiếu phần tử ${t}
+Hôm nay bạn đã thiền <strong>${d(e)}</strong>.
+Hôm nay bạn chưa thiền. Vài phút thôi cũng đủ quý.
+<section class="view med-view"> <header class="view__header"> <h1 class="view__title">Thiền định</h1> <p class="view__lead">Ngồi thẳng lưng, thả lỏng vai, theo dõi hơi thở.</p> </header> <div class="stack med-setup"> <div class="card stack"> <div> <h2 class="med-label" id="med-duration-label">Thời gian thiền</h2> <div class="chips" role="group" aria-labelledby="med-duration-label"> ${yt.map((e) => a(e,
+Tự do
+} /> <span class="med-switch__track" aria-hidden="true"></span> <span class="med-switch__text">Chuông nhắc mỗi 5 phút</span> </label> </div> <p class="notice med-mute" data-ref="mute" role="status" hidden> Âm thanh đang tắt nên chuông sẽ không vang. Bật lại ở nút loa phía trên. </p> <button type="button" class="btn btn--gold btn--lg btn--block" data-act="start"> ${r(
+)}<span>Bắt đầu</span> </button> <p class="muted med-today" data-ref="today"></p> </div> </section>
+<section class="view med-view med-view--run"> <h1 class="sr-only">Thiền định</h1> <div class="med-run"> <div class="med-orb" data-ref="orb"> <span class="med-orb__glow" aria-hidden="true"></span> <span class="med-orb__circle" aria-hidden="true"></span> <p class="med-phase" data-ref="phase"></p> </div> <div class="med-clock"> <p class="med-time" role="timer" data-ref="time"></p> <p class="muted med-sub">${l.durationSec === null ?
+Còn lại
+)}<span>Xả thiền</span> </button> </div> <p class="sr-only" role="status" aria-live="polite" data-ref="live"></p> </div> </section>
+)}<span>Tiếp tục</span>
+Tạm dừng
+Bắt đầu thiền
+Đã tạm dừng
+Tiếp tục thiền
+Phiên thiền dưới 30 giây nên chưa được ghi lại.
+<section class="view med-view"> <header class="view__header"> <h1 class="view__title" tabindex="-1">Hồi hướng công đức</h1> <p class="view__lead">Thiền xong rồi. Xin hồi hướng phước lành đến muôn loài.</p> </header> <div class="stack med-done"> <div class="card card--glow med-verse-card"> <span class="med-verse-card__mark" aria-hidden="true">${r(
+, { size: 40 })}</span> <p class="med-verse__cite">Kệ Hồi Hướng</p> <blockquote class="med-verse"> ${At.map((e) =>
+)} </blockquote> </div> <div class="stats"> <div class="stat"> <span class="stat__value">${d(n)}</span> <span class="stat__label">Lần thiền này</span> </div> <div class="stat"> <span class="stat__value">${d(i)}</span> <span class="stat__label">Hôm nay</span> </div> </div> <button type="button" class="btn btn--gold btn--lg btn--block" data-act="done">Xong</button> <button type="button" class="btn btn--ghost btn--block" data-act="again"> ${r(
+)}<span>Thiền thêm một lần</span> </button> </div> </section>
+Thiền
+Pháp thoại
+Chùa Sen đang chọn bài pháp thoại. Bạn quay lại sau nhé.
+Cần kết nối mạng để nghe pháp thoại.
+Pháp thoại do Chùa Sen chọn từ kênh chính thức của quý thầy cô; nội dung thuộc về kênh gốc.
+(mở thẻ mới)
+${e.minutes} phút
+, { size: 18 })}<span>Mở trên YouTube</span><span class="sr-only">${Kt}</span></a> </div> </article>
+<header class="view__header"> <h1 class="view__title" tabindex="-1">${Ht}</h1> <p class="view__lead">Nghe bài giảng của quý thầy cô ngay trong chùa. Trình phát YouTube chỉ tải khi bạn bấm Nghe.</p> </header> ${V.length === 0 ?
+Đóng trình phát: ${t.title}
+, { size: 18 })}<span>Đóng</span>
+
+=== phrases-Bgsj5Mxn.js (38)
+Chào hỏi
+Lời chúc
+Cảm ơn
+Mời cùng
+Đáp lời
+Xin chào bạn
+Chào cả nhà
+Rất vui gặp bạn
+Hẹn gặp lại nhé
+Chúc bạn an lành
+Chúc bạn sức khỏe
+Chúc ngày an vui
+Chúc gia đình an khang
+Chúc bạn ngủ ngon
+Cảm ơn bạn
+Lành thay, lành thay
+Tùy hỷ cùng bạn
+Chùa đẹp quá
+Xin lỗi bạn nhé
+Mời bạn cùng tụng kinh
+Mời bạn cùng ngồi thiền
+Mời cùng niệm Phật
+Mời cùng quét lá đa
+Mời cùng thắp hương
+Mời bạn đi dạo cùng
+Lại đây cùng mình nhé
+Dạ vâng
+Mình đến ngay
+Không sao đâu
+Để lúc khác nhé
+Xin phép đi trước
+Câu nói có sẵn
+Chờ chút rồi gửi tiếp nhé
+Chỉ có câu có sẵn để chùa luôn an lành
+Gợi ý thêm câu
+)}</div> <div class="phrases__grid" role="tabpanel" id="${u}" data-ref="grid"></div> <p class="phrases__wait" role="status" data-ref="wait"></p> <p class="phrases__foot">${m} · <button type="button" class="phrases__suggest" data-ref="suggest">${h}</button></p> <button type="button" class="phrases__close" data-ref="close" aria-label="Đóng" title="Đóng">${n(
+Câu nói
+Có người
+
+=== pond-life-DdO9GjPO.js (27)
+attribute vec3 aBody; attribute vec4 aFish; attribute vec4 aRel; uniform float uTime; varying vec3 vBody; varying float vPattern; varying float vSeed; varying float vFade; varying float vRipple; void main() { vBody = aBody; vPattern = aFish.x; vSeed = aFish.y; vFade = aRel.y; vRipple = aRel.z; vec3 p = position; // Thân uốn: cong theo vòng bơi (aFish.w) cộng sóng chạy từ đầu về đuôi, mạnh dần về phía đuôi (aFish.z = biên độ). float tail = 1.0 - smoothstep(-0.5, 0.25, p.x); float wave = sin(uTime * 7.0 + aFish.y * 6.2831 - p.x * 7.5) * aFish.z * (0.15 + 0.85 * tail); p.z += wave * 0.16 + aFish.w * (p.x - 0.1) * (p.x - 0.1); // Phần không có trong mặt nạ của thể hiện này (aRel.x: bit 0 thân, 1 đuôi chẻ, 2 đuôi quạt, 3 vòng gợn) co về một điểm. float group = max(0.0, aBody.z - 1.0); p *= mod(floor(aRel.x / exp2(group) + 0.001), 2.0); gl_Position = projectionMatrix * modelViewMatrix * (instanceMatrix * vec4(p, 1.0)); }
+uniform vec3 uBase[5]; uniform vec3 uSpot[5]; uniform vec3 uWater; uniform float uNight; uniform float uTint; varying vec3 vBody; varying float vPattern; varying float vSeed; varying float vFade; varying float vRipple; void main() { float part = vBody.z; vec3 col; float alpha; if (part > 3.5) { // Vòng gợn nước lúc con vật chạm nước: hai vòng sáng loang ra rồi tan. float d = length(vBody.xy); float r1 = 0.15 + 0.85 * vRipple; float ring = smoothstep(0.08, 0.0, abs(d - r1)) + 0.7 * smoothstep(0.06, 0.0, abs(d - r1 * 0.6)); alpha = ring * (1.0 - vRipple) * 0.5 * step(d, 1.0); col = mix(uWater, vec3(1.0), 0.55) * 1.3 * (1.0 - 0.62 * uNight); } else { int k = int(vPattern + 0.5); vec3 base = k == 0 ? uBase[0] : (k == 1 ? uBase[1] : (k == 2 ? uBase[2] : (k == 3 ? uBase[3] : uBase[4]))); vec3 spot = k == 0 ? uSpot[0] : (k == 1 ? uSpot[1] : (k == 2 ? uSpot[2] : (k == 3 ? uSpot[3] : uSpot[4]))); float x = vBody.x; float y = vBody.y; // Đốm loang theo hạt giống của từng con (Kohaku, Sanke). Ogon, cá chép, cá vàng: một màu, đổi dần lên lưng. float blot = sin(x * 11.0 + vSeed * 17.0) * 0.6 + sin(x * 5.3 - y * 2.1 + vSeed * 9.0) * 0.7 + 0.25; float blotch = smoothstep(0.05, 0.35, blot) * (1.0 - smoothstep(0.42, 0.5, x)); col = mix(base, spot, (k == 1 || k > 2) ? (1.0 - abs(y)) * 0.6 : blotch); // Sanke: vài chấm đen nhỏ trên lưng. if (k == 2) { float speck = sin(x * 23.0 + vSeed * 31.0) * sin(y * 4.0 + vSeed * 7.0); col = mix(col, vec3(0.006, 0.006, 0.008), smoothstep(0.72, 0.86, speck) * (1.0 - abs(y))); } // Vây và đuôi mỏng, ánh màu nền; sống lưng tối hơn một chút. col = mix(col, base * 0.9 + spot * 0.1, step(0.5, part) * 0.6); col *= 0.86 + 0.14 * abs(y); // Ngay dưới mặt nước: ngả về màu nước; sáng như mặt nước được nắng chiếu, ban đêm tối đi. col = mix(col, uWater, uTint); col *= 1.45 * (1.0 - 0.62 * uNight); float edge = part > 0.5 ? 0.55 : 1.0 - smoothstep(0.55, 1.0, abs(y)) * 0.55; alpha = 0.78 * edge; } alpha *= vFade; // Màu tuyến tính qua tone-map và đổi sang sRGB như vật liệu có ánh sáng của cảnh, rồi nhân alpha (pha trộn nhân sẵn). gl_FragColor = vec4(col, alpha); #include <tonemapping_fragment> #include <colorspace_fragment> gl_FragColor.rgb *= alpha; }
+attribute vec3 aBody; attribute vec4 aTurtle; uniform float uTime; varying vec3 vBody; varying float vFade; void main() { vBody = aBody; vFade = aTurtle.y; vec3 p = position; // Chân chèo (phần chân, xa sống mai): đầu chân đưa tới đưa lui, hai bên ngược pha. float limb = step(0.5, aBody.z) * smoothstep(0.24, 0.45, abs(p.z)); p.x += sin(uTime * 2.2 + aTurtle.x * 6.2831 + sign(p.z) * 1.57) * 0.07 * aTurtle.z * limb; gl_Position = projectionMatrix * modelViewMatrix * (instanceMatrix * vec4(p, 1.0)); }
+uniform vec3 uShell; uniform vec3 uSeam; uniform vec3 uLimb; uniform vec3 uStripe; uniform vec3 uWater; uniform float uNight; uniform float uTint; varying vec3 vBody; varying float vFade; void main() { vec3 col; float alpha; if (vBody.z < 0.5) { // Mai: vảy giả bằng hai họ đường so le, viền mai sẫm; mai nổi trên mặt nước nên không ngả màu nước. vec2 q = vBody.xy * vec2(6.0, 2.2); float a = abs(fract(q.x + 0.5 * floor(q.y + 0.5)) - 0.5) * 2.0; float b = abs(fract(q.y) - 0.5) * 2.0; float seam = max(smoothstep(0.86, 0.98, a), smoothstep(0.88, 0.98, b)); float rim = smoothstep(0.82, 1.0, length(vBody.xy * vec2(2.6, 1.0))); col = mix(uShell, uSeam, max(seam * 0.8, rim * 0.6)); alpha = 0.95; } else { // Đầu, chân, đuôi: xám ô liu, sọc vàng nhạt, ngay dưới mặt nước. float stripe = smoothstep(0.75, 0.95, sin(vBody.x * 40.0 + vBody.y * 3.0)); col = mix(mix(uLimb, uStripe, stripe * 0.6), uWater, uTint); alpha = 0.82; } col *= 1.35 * (1.0 - 0.62 * uNight); alpha *= vFade; gl_FragColor = vec4(col, alpha); #include <tonemapping_fragment> #include <colorspace_fragment> gl_FragColor.rgb *= alpha; }
+Cá chép
+Cá vàng
+Rùa
+Phóng sinh
+Chọn một loài để thả về hồ:
+Nam mô A Di Đà Phật.
+Nguyện cho chúng sinh này được tự do, bình an, không còn sợ hãi.
+Nguyện cho con lớn thêm lòng từ, biết thương và giữ gìn sự sống của muôn loài.
+Phóng sinh ở Chùa Sen là một cách nuôi lòng từ, không thay được việc thương và giữ gìn sự sống thật.
+Phóng sinh đúng cách ngoài đời
+Đừng đặt mua hay bắt con vật về để thả: mua bán khiến nhiều con bị bắt hơn.
+Đừng thả loài ngoại lai như rùa tai đỏ, cá cảnh xuống sông hồ tự nhiên.
+Thả nhẹ ở mép nước hợp với loài ấy; mang túi ni lông, rác về, đừng bỏ xuống nước.
+Cứu con vật bị nạn, bớt sát sinh, giữ sạch sông hồ cũng là phóng sinh.
+Đã phóng sinh. Nguyện chúng sinh an lành.
+Hôm nay bạn đã phóng sinh rồi. Hẹn bạn ngày mai nhé.
+Chờ chút rồi thả tiếp nhé.
+<p class="release-dlg__today" data-ref="today">${Q}</p> <footer class="release-dlg__actions"> <button type="button" class="release-dlg__btn release-dlg__btn--go" data-ref="later">Đóng</button> </footer>
+<p id="release-lead" class="release-dlg__label">${We}</p> <div class="release-dlg__chips" role="radiogroup" aria-labelledby="release-lead" data-ref="chips"></div> <blockquote class="release-dlg__vow" aria-label="Lời phát nguyện">${o}</blockquote> <footer class="release-dlg__actions"> <button type="button" class="release-dlg__btn" data-ref="later">Để sau</button> <button type="submit" class="release-dlg__btn release-dlg__btn--go" data-ref="go">${t(
+)}<span>Thả</span></button> </footer>
+<form class="release-dlg__card" novalidate> <header class="release-dlg__head"> <h2 id="release-title" class="release-dlg__title" tabindex="-1" data-ref="title">${Ue}</h2> <button type="button" class="release-dlg__close" data-ref="close" aria-label="Đóng">${t(
+Bến phóng sinh bên hồ bán nguyệt chưa sẵn sàng, bạn thử lại sau ít giây nhé.
+Không phóng sinh được
+
+=== preload-helper-CRzLMJPS.js (0)
+
+
+=== progress-BuhROEX9.js (421)
+Gỗ nâu
+Bồ đề
+Gỗ mun
+Trầm hương
+Ngọc bích
+Pha lê sen
+Mặc định
+Mõ gỗ trắc
+Chuông đồng lớn
+Ở trong chùa từ 1 phút
+lần
+Lạy Phật
+lạy
+Thắp hương
+Dâng hoa
+Thắp nến
+Thỉnh chuông
+tiếng
+Thả đèn hoa đăng
+đèn
+Gieo quẻ hôm nay
+quẻ
+Lần trọn một vòng tràng hạt
+vòng
+Tụng xong một bài kinh
+bài
+Thiền (mỗi phút trọn)
+phút
+Ngồi bồ đoàn (mỗi phút trọn)
+Quét một lượt lá đa (36 lá)
+lượt
+Quét thêm lượt lá đa (từ lượt thứ 4, ngoài trần ngày)
+Quét đủ 108 lá đa trong ngày
+Lần thêm vòng tràng hạt (từ vòng thứ 6)
+Tụng thêm bài kinh (từ bài thứ 5)
+Thiền thêm (từ phút thứ 61)
+Ngồi bồ đoàn thêm (từ phút thứ 16)
+Tới một điểm đi dạo khác nhau
+điểm
+Thiền hành (mỗi phút trọn)
+Phóng sinh
+Hái lộc dưới cây bồ đề
+lộc
+Treo nguyện lên cây bồ đề
+lời nguyện
+Công phu chung: có mặt từ 10 phút trong khung 05:00 hoặc 18:00
+buổi
+${e.xpEach} tinh tấn mỗi ${e.unit}, tối đa ${e.cap} ${e.unit}/ngày
+Lần một vòng tràng hạt
+Tụng một bài kinh
+Thiền 5 phút
+Thắp một nén hương
+Thỉnh 3 tiếng chuông
+Lạy Phật 3 lạy
+Thả một đèn hoa đăng
+Lễ Quan Âm ở vườn đông
+Đi dạo tới ${e.name}
+Ngồi bồ đoàn 3 phút
+Đọc lời dạy hôm nay
+Chắp tay chào mọi người
+Nghe niệm Phật 3 phút
+Thiền hành 3 phút
+Chắp tay một lần
+Dâng một nén hương
+Ngồi tĩnh 1 phút
+Lần 27 hạt
+Lạy Phật một lạy
+)?.label; return ((i.tags = a.map((e) => e.kind)), o !== void 0 && (i.festival = o), i); } function vn(e) { return e.replace(/^Ngày\s+/u,
+Thả một hoa đăng ngày ${vn(e)}
+Thắp một nén hương ngày ${e}
+rằm
+mùng một
+Hái lộc
+Treo nguyện
+Rằm tháng ${Gn(n?.month ?? 0)}
+Mùng một tháng ${Gn(n?.month ?? 0)}
+Giêng
+Năm
+Sáu
+Bảy
+Tám
+Chín
+Mười
+Mười một
+Chạp
+Hôm nay là ngày rằm
+Hôm nay là mùng một
+Rằm
+Mùng một
+Ngày mai là ${i ? o : o.toLowerCase()}
+${o} sau ${e} ngày
+Bảy dấu ấn hành hương
+Hai mươi mốt dấu ấn
+Bốn mươi chín dấu ấn
+Lạy Phật lần đầu
+Dâng hương, hoa hoặc nến lần đầu
+Thả đèn hoa đăng lần đầu
+Trọn vòng tràng hạt đầu tiên
+Tụng xong bài kinh đầu tiên
+Thiền đủ 5 phút
+Quét xong lượt lá đa đầu tiên
+Dự công phu chung lần đầu
+Đi hết sáu điểm trong chùa
+Công phu đầu tiên vào mùng một hoặc rằm
+1.080 lạy
+108 vòng tràng hạt
+108 bài kinh
+Quét đủ 108 lá đa trong một ngày
+108 lượt quét lá đa
+1.000 phút thiền
+${e.stamps} dấu ấn
+Rủ được người bạn đầu tiên vào chùa
+Rủ được ${t.friends} bạn vào chùa
+Video về Chùa Sen được duyệt
+Theo dõi fanpage Chùa Sen
+Chuỗi ${e.days} ngày
+Lần 7 vòng tràng hạt
+Tụng trọn 5 bài kinh
+Thiền đủ 60 phút
+Lên chùa 4 ngày khác nhau
+Dạo 3 điểm khác nhau
+Dự công phu chung 2 lần
+Dâng hương vào 3 ngày
+Quét lá đa 5 lượt
+Thả đèn hoa đăng 2 lần
+Chuỗi ${s} ngày
+Rủ được ${i.goal} bạn vào chùa
+video về Chùa Sen được duyệt
+theo dõi fanpage Chùa Sen
+)} và ${s.at(-1) ??
+Ấn mới: ${ri(t.stamps)}
+Sổ hành hương có thêm ${e} dấu ấn
+Danh hiệu mới: ${f.map((e) => e.def.name).join(
+Sổ hành hương
+một ngày vía
+Hành trình: không đọc được trạng thái rủ bạn / KOL
+Không cần vội: tinh tấn ghi lại những lần bạn quay về chùa.
+Chưa mở được Chương trình KOL, bạn thử lại nhé.
+Chưa đọc được tiến độ của bạn trên máy này, nhưng cách làm thì vẫn như dưới đây.
+Bạn đang tắt Hành trình trong Cài đặt. Bật lại để xem tiến độ và việc hôm nay.
+Công phu thêm (niệm Phật, tụng kinh, thiền) sẽ nhanh hơn.
+Cần Cấp ${qi(e)}
+Cần ${ue(R(e.tier))}
+Cần giữ lửa ${e.days} ngày
+Cần rủ ${e.count} bạn vào chùa
+Cần danh hiệu KOL Chùa Sen
+Cần danh hiệu ${e.badge}
+Mở khi giữ lửa ${e.days} ngày
+Mở ở ${ue(t)}
+Cách mở ${t}
+Cách giữ lửa ${e.days} ngày
+Cách rủ bạn vào chùa
+Cách nhận danh hiệu
+Cách lên Cấp ${n}
+khoảng ${e} ngày
+khoảng ${Math.round(e / 7)} tuần
+khoảng ${Math.round(e / 30)} tháng
+Có thể ngay hôm nay, nếu làm nốt việc hôm nay.
+Có thể ngay ngày mai, nếu mai làm đủ 3 việc. ${Gi}
+${i.charAt(0).toUpperCase()}${i.slice(1)} nếu mỗi ngày làm đủ 3 việc hôm nay. ${Gi}
+Đã mở rồi, bạn dùng được ngay.
+Bạn đang ở ${i}. ${oa}
+Bạn đang ở ${i}. Còn ${o} tinh tấn nữa tới Cấp ${n}.
+Tinh tấn tới Cấp ${n}
+Bạn đã giữ lửa ${i} ngày. ${oa}
+Bạn đang giữ lửa ${a} ngày (dài nhất ${i} ngày). Còn ${s} ngày nữa.
+Giữ lửa tới ${e.days} ngày
+Ngày nào cũng giữ lửa thì ${s} ngày nữa là mở${o ?
+, tính cả hôm nay
+Bạn đã rủ đủ ${e.count} bạn. ${oa}
+Đã rủ ${Math.min(t, e.count)}/${e.count} bạn.
+Số bạn đã rủ vào chùa
+Bạn đã có danh hiệu này. ${oa}
+Bạn chưa có danh hiệu KOL Chùa Sen.
+Bạn chưa có danh hiệu này.
+Niệm Phật, lần tràng hạt
+Niệm Phật ngay
+Tụng kinh
+Thiền
+${e.friends} bạn +${e.xp}
+Mỗi việc +30 tinh tấn, xong cả 3 việc thêm +30. Việc mới mỗi ngày.
+Đã xong
+Chưa làm
+Đã xong:
+Chưa xong:
+<ul class="lg-tasks" aria-label="Việc hôm nay">${n}</ul><p class="lg-note">${e?.tasksDone ?? 0}/${e?.tasks.length ?? 3} việc đã xong hôm nay.</p>
+Xong cả 3 việc thì có thêm tối đa 3 việc thêm, mỗi việc +10, ngoài mức công phu của ngày.${i.length > 0 ?
+Việc hôm nay
+Xem việc hôm nay
+Từ ${e.unit} thứ ${e.cap + 1}: ${t.xpEach} tinh tấn mỗi ${t.unit}, tới ${t.cap} ${t.unit} nữa.
+Đã đủ tinh tấn công phu hôm nay. Công phu thêm, việc hôm nay, việc thêm, lượt quét lá thêm, mốc giữ lửa, nhiệm vụ đặc biệt và dấu mốc vẫn được tính.
+Hôm nay đã đủ mức công phu, cả phần công phu thêm, mai lại tiếp nhé. Việc hôm nay, việc thêm, lượt quét lá thêm, mốc giữ lửa, nhiệm vụ đặc biệt và dấu mốc vẫn được tính.
+Hôm nay: ${e.practiceToday}/${n}.
+Hôm nay: ${e.practiceMoreToday}/${r}.
+Công phu
+Công phu mỗi ngày được tính tối đa ${n} tinh tấn.${i}
+Công phu thêm: làm quá mức của từng việc (cả ngồi bồ đoàn) vẫn được tinh tấn, ngoài mức công phu của ngày, tối đa ${r} tinh tấn mỗi ngày.${a}
+Từ lượt thứ ${t.cap + 1}: thêm ${n.xpEach} tinh tấn mỗi lượt, tới ${n.cap} lượt nữa, ngoài mức công phu của ngày.
+${r.label}: +${r.xpEach} tinh tấn.
+Đi quét lá
+Quét lá đa
+${e.days} ngày +${e.xp}
+Giữ lửa
+Ngày nào có công phu là giữ được lửa.${e ?
+Mốc giữ lửa được thưởng một lần: ${n}.
+Xem chuỗi giữ lửa
+Rủ bạn vào chùa, mỗi mốc một lần: ${i}.${t ?
+Mời bạn
+Làm video về Chùa Sen được duyệt: +500 tinh tấn (một lần).
+Gửi video
+Mở fanpage Chùa Sen và bấm Theo dõi: +30 tinh tấn (một lần).
+Nhiệm vụ đặc biệt
+Lần đầu làm
+Mỗi việc làm lần đầu được thưởng một lần:
+Lên cấp bằng tinh tấn. Đây là những cách có tinh tấn:
+Hôm nay bạn đã giữ lửa. Mai nhớ quay lại nhé.
+Hôm nay chưa giữ lửa: công phu một chút là được.
+Giữ lửa mỗi ngày
+Mỗi ngày chỉ cần một việc công phu nhỏ: lạy Phật một lạy, thắp một nén hương, lần một vòng tràng hạt hay quét một lượt lá đa.
+Hôm nào bận, chùa giữ chỗ cho bạn: cứ đủ 7 ngày công phu trong chuỗi là được một ngày nghỉ (giữ tối đa 2). Ngày vắng tự dùng một ngày nghỉ: chuỗi giữ nguyên, chỉ không tăng.${t ?
+Giữ lửa ${e.days} ngày còn được thưởng +${a.xp} tinh tấn (một lần).
+Cách rủ bạn
+Mở Chương trình KOL Chùa Sen, tới phần "Rủ bạn vào chùa" và bấm "Chép" để lấy đường dẫn mời của bạn.
+Gửi đường dẫn ấy cho bạn bè, người thân.
+Mỗi người bạn vào chùa qua đường dẫn của bạn được tính một lần. Số bạn cập nhật khoảng 30 phút một lần.
+Ảnh "Khoe thành tích" cũng mang đường dẫn mời của bạn.
+Mỗi mốc rủ bạn còn được tinh tấn, một lần: ${t}.
+Lấy đường dẫn mời
+Cách nhận danh hiệu KOL
+Làm một video về Chùa Sen, đăng lên TikTok, YouTube, Facebook hoặc Instagram, thêm hashtag #chuasen vào phần mô tả.
+Gửi đường dẫn video trong Chương trình KOL Chùa Sen.
+Ben, người làm Chùa Sen, xem và duyệt trong vài ngày. Được duyệt là mở ngay.
+Thể lệ đầy đủ (số lượt xem cần đạt) có trong Chương trình KOL.
+Video được duyệt còn được +500 tinh tấn (một lần).
+Mở Chương trình KOL
+Mở Cài đặt
+Danh hiệu này do chùa trao trong các chương trình đặc biệt.
+Cấp ${e} mở: ${n.join(
+, { size: 22 })}</span> <h2 id="lg-title" class="lg__title" tabindex="-1">${J(Zi(t, e.item))}</h2> <button type="button" class="lg__close" data-ref="close" aria-label="Đóng">${b(
+} <p id="lg-status" class="lg__status" role="status" aria-live="polite" data-ref="status"></p> <div class="lg__bar" role="progressbar" aria-valuemin="0" data-ref="bar" hidden><i></i></div> <p class="lg__est" data-ref="est" hidden></p> </div> <div class="lg__ways" data-ref="ways"></div> </div> <footer class="lg__foot"> <p class="lg-note" data-ref="calm">${J(Vi)}</p> <button type="button" class="btn btn--ghost" data-ref="done">Đóng</button> </footer> </div>
+Không mở được Chương trình KOL
+Mừng bạn trở lại chùa
+Đang công phu chung · vào nghe
+Tuần mới, ba tâm nguyện mới.
+Công phu chung ${String(n).padStart(2,
+Chào
+Quét
+Chưa thắp lửa
+Còn ${t.minDays - Math.max(0, Math.floor(e) || 0)} ngày tới ${t.name}
+Lửa đã ở bậc cao nhất. Cứ giữ cho lửa sáng.
+Công phu hôm nay để thắp lại lửa.
+Công phu hôm nay để thắp ngọn lửa đầu tiên.
+· +${r} tinh tấn
+Hôm nay đã giữ lửa
+Công phu hôm nay để giữ lửa
+Bắt đầu giữ lửa
+Tinh tấn ghi lại những lần bạn quay về chùa — không phải công đức, không đổi được gì.
+Hành trình
+Sao lưu hành trình
+Hành trình chỉ lưu trên máy này. Sao lưu thành một tệp để giữ khi đổi máy hoặc khi trình duyệt dọn dữ liệu. Tệp này chứa khóa cá nhân và cả lời nguyện riêng tư của bạn (đèn hoa đăng, dải lụa trên cây), đừng gửi cho ai.
+Trên iPhone / iPad (Safari): bấm Chia sẻ, rồi Thêm vào màn hình chính để hành trình được giữ lâu hơn.
+Hôm nay
+Con đường sen
+Dấu mốc
+Chắp tay
+Cầm chổi
+Đến cây bồ đề
+Đưa tôi tới
+Mở ở ${t.name} (Cấp ${t.minLevel})
+Cấp ${t.minLevel}–${n.minLevel - 1}
+Cấp ${t.minLevel} trở lên
+Tràng hạt ${e.name}
+Hôm nay bạn đã công phu. Cứ nhẹ nhàng và đều đặn.
+Hôm nay mình lạy Phật một lạy hay thắp một nén hương là thắp được lửa.
+Hôm nay mình lạy Phật một lạy hay thắp một nén hương là đủ để giữ lửa.
+<span class="pd-done">Đã xong</span>
+Tiến độ: ${r.title}
+<span class="pd-xp">+${c} tinh tấn</span>
+Xong cả 3 việc rồi. Còn muốn công phu thêm thì làm thêm vài việc nhỏ: mỗi việc +10 tinh tấn, ngoài mức mỗi ngày. Không bắt buộc, mai lại có việc mới.
+<section class="pd-extras" data-ref="extras" aria-labelledby="pd-extras-title"> <h4 class="pd-extras__title" id="pd-extras-title">Việc thêm hôm nay · ${t}/${e.extras.length}</h4> <p class="progress-note">${$(Eo)}</p> <ul class="progress-list">${n}</ul> </section>
+có công phu
+chùa giữ chỗ
+vắng
+hôm nay, chưa công phu
+<ol class="pd-week" aria-label="Bảy ngày gần nhất">${e.week .map((e) => { let n = e.state ===
+Lửa của bạn
+Đã qua
+Phía trước
+${r.minDays} ngày${o ?
+Ngày ${mo(t.restUsedOn).slice(0, 5)} chùa đã giữ chỗ cho bạn.
+<div class="progress-streak"> <div class="pd-lamp" data-tier="${n?.id ?? 0}" data-state="${o}"> <span class="pd-lamp__art">${Za(t.current, o)}</span> <div class="pd-lamp__text"> <p class="pd-lamp__name">${$($a(t.current))}</p> <p class="progress-streak__now">Giữ lửa <b>${t.current}</b> ngày</p> <p class="pd-lamp__today">${$(no(t.current, t.practicedToday))}</p> <p class="progress-streak__best">Dài nhất: ${t.best} ngày</p> <p class="pd-lamp__next">${$(to(t.current, t.best))}</p> </div> </div> ${ko(e)} <p class="progress-rest"><span class="progress-rest__icons" aria-hidden="true">${i}</span><span>Ngày nghỉ chùa giữ cho bạn: ${r}/2</span></p> <p class="progress-note">${$(yo(e))}${a ?
+}</p> <details class="pd-more"> <summary>Ngày nghỉ là gì?</summary> <p class="progress-note">Cứ 7 ngày công phu liền nhau, chùa tặng bạn thêm một ngày nghỉ (giữ tối đa 2). Hôm nào bận, chùa tự giữ chuỗi cho bạn.</p> </details> <h4 class="pd-lamps__title">Tám bậc lửa</h4> <p class="progress-note">Giữ lửa càng lâu thì lửa càng lớn và đẹp. Mỗi lần lửa lên bậc, bạn được thêm tinh tấn (một lần).</p> <ol class="pd-lamps" aria-label="Tám bậc lửa">${Ao(t.current, n?.id ?? 0, t.practicedToday)}</ol> </div>
+Chưa gửi video
+Đang chờ duyệt
+Đã duyệt
+Chưa đạt
+Lan tỏa Chùa Sen: mỗi mốc được thêm tinh tấn một lần, ngoài mức công phu mỗi ngày. Mọi người đều làm được, từ Cấp 1.
+Mỗi người bạn vào chùa qua đường dẫn mời của bạn được chùa đếm một lần trên máy chủ; số bạn cập nhật khoảng 30 phút một lần.
+Chưa mở được. Bạn kiểm tra mạng rồi thử lại nhé.
+bộ áo "${e.label}"
+màu "${n.name}" cho bộ ${e.label}
+Bạn đã nhận đủ quà rủ bạn. Cảm ơn bạn đã lan tỏa Chùa Sen.
+Mốc kế tiếp: ${t.def.goal} bạn (còn ${r}), +${t.def.xp} tinh tấn${n ?
+Đã đạt:
+Chưa đạt:
+${e.def.goal} bạn
+, { size: 22 })}</span> <div> <h4 class="pd-quest__title" id="pd-quest-ref">Rủ bạn vào chùa</h4> <p class="pd-quest__now" data-ref="refCount">Đã rủ ${o}/${r} bạn</p> </div> </div> ${xo(r > 0 ? (o / r) * 100 : 0,
+)} <ol class="pd-quest__steps" aria-label="Các mốc rủ bạn">${a}</ol> <p class="progress-note">${$(Vo(e.special))} ${$(Lo)}</p> <button type="button" class="progress-btn pd-quest__go" data-special="ref" data-fk="special-ref">${b(
+, { size: 16 })}<span>Mời bạn</span></button> </section>
+Gửi đường dẫn video về Chùa Sen
+Video đạt từ ${zo(Mo)} lượt xem, Ben xem và duyệt
+Video trước chưa đạt. Bạn xem lời nhắn của Ben trong bảng KOL rồi gửi video khác nhé.
+Ben sẽ xem video của bạn trong vài ngày.
+Bạn là KOL Chùa Sen. Gửi thêm video lúc nào cũng được.
+TikTok, YouTube, Facebook hay Instagram đều được; thêm hashtag ${No} vào phần mô tả video.
+, { size: 22 })}</span> <div> <h4 class="pd-quest__title" id="pd-quest-kol">Làm video về Chùa Sen</h4> <p class="pd-quest__now" data-ref="kolStatus">${$(Po[n])}</p> </div> </div> <ol class="pd-quest__steps" aria-label="Các bước làm video">${s}</ol> <p class="progress-note">${$(
+, { size: 16 })}<span>Gửi video</span></button> </section>
+Đã mở fanpage. Cảm ơn bạn đã ghé fanpage Chùa Sen.
+Chưa mở fanpage
+Mở fanpage Chùa Sen và bấm Theo dõi
+<section class="pd-quest" data-quest="fanpage" data-done="${t}" aria-labelledby="pd-quest-fanpage"> <div class="pd-quest__head"> <span class="pd-quest__icon" aria-hidden="true">${F({ size: 22 })}</span> <div> <h4 class="pd-quest__title" id="pd-quest-fanpage">${$(Go)}</h4> <p class="pd-quest__now" data-ref="fanpageStatus">${$(t ? Ko : qo)}</p> </div> </div> <ol class="pd-quest__steps" aria-label="Các bước theo dõi fanpage">${r}</ol> <p class="progress-note">${$(
+)}</p> <button type="button" class="progress-btn pd-quest__go" data-special="fanpage" data-fk="special-fanpage">${F({ size: 16 })}<span>Mở fanpage</span></button> </section>
+<ol class="progress-tiers" aria-label="Bảy bậc sen">${L.map((t, n) => { let r = t.id <= e.tier, i = t.id === e.tier, a = i ?
+<div class="pd-next is-top"><span class="pd-next__art" aria-hidden="true">${Ja(e.tier, 56)}</span><div><p class="pd-next__kicker">Bậc cao nhất</p><p class="pd-next__name">${$(e.tierName)}</p><p class="progress-note">Mỗi lần quay về chùa vẫn được ghi lại. Cấp vẫn tiếp tục lên.</p></div></div>
+<div class="pd-next"> <span class="pd-next__art" aria-hidden="true">${Ja(t.id, 56)}</span> <div> <p class="pd-next__kicker">Bậc kế tiếp</p> <p class="pd-next__name">${$(t.name)} <span>· Cấp ${t.minLevel}</span></p> <p class="progress-note">Còn ${n} tinh tấn.${r.length > 0 ?
+Tràng hạt
+Âm sắc mõ và chuông
+Tiến độ: ${e.title}
+<h3 class="progress-sec__title">Tuần này · ${t.done}/${t.tasks.length}</h3> ${t.fresh ?
+ngày dâng hương
+vòng tràng hạt
+lượt quét lá đa
+phút thiền
+dấu ấn
+ngày Vu Lan có công phu
+bậc sen
+ngày giữ lửa liền
+Đã có:
+Chưa có:
+Ngày vía
+Đang mang
+Đã có
+Tháo xuống
+Mang danh hiệu
+Tiến độ: ${t.name}
+} <h3 class="progress-sec__title">Sổ hành hương · ${e.stamps.length} dấu ấn</h3> <ul class="progress-miles">${r}</ul> <h4 class="pd-extras__title">Nơi đã đến</h4> <ul class="progress-miles">${i}</ul> <h4 class="pd-extras__title">Mùng một, rằm, ngày vía đã về chùa</h4> ${a} <h3 class="progress-sec__title">Danh hiệu</h3> <p class="progress-note">${$(as)}</p> <ul class="progress-miles">${o}</ul>
+Công phu vào mùng một, rằm hay một ngày vía là có dấu ấn ngày.
+Đủ điều kiện thì mang một danh hiệu dưới tên bạn. Người trong chùa thấy khi bạn bật "Cho người trong chùa thấy cấp của tôi" trong Cài đặt. Danh hiệu không cho tinh tấn.
+<span>· thêm</span><b>${e.practiceMoreToday}/${e.practiceMoreCeiling}</b>
+<table class="progress-rules" data-ref="rulesTable"> <thead><tr><th scope="col">Việc</th><th scope="col">Tinh tấn</th><th scope="col">Tối đa mỗi ngày</th></tr></thead> <tbody>${gt() .map( (e) =>
+)}</tbody> </table> <p class="progress-note">Công phu mỗi ngày được tính tối đa 200 tinh tấn. Các dòng “thêm” trong bảng (lượt quét lá đa thêm, công phu thêm) và những phần dưới đây nằm ngoài mức đó:</p> ${us()}
+Công phu thêm (thiền, ngồi bồ đoàn, tràng hạt, tụng kinh quá mức của từng việc): tính chung tối đa 150 mỗi ngày.
+Việc hôm nay: 30 mỗi việc, thêm 30 khi xong cả 3.
+Việc thêm (chỉ sau khi xong cả 3 việc): 10 mỗi việc, tối đa 3 việc mỗi ngày.
+Rủ bạn vào chùa (máy chủ đếm số bạn): ${xt.map((e) =>
+)}, mỗi mốc một lần.
+Video về Chùa Sen được duyệt (từ ${zo(Mo)} lượt xem): +500, một lần.
+Dấu mốc và mốc chuỗi ngày: mỗi mốc một lần.
+<div class="progress-dlg__card"> <header class="progress-dlg__head"> <div class="pd-hero"> <span class="pd-hero__ring" aria-hidden="true"> <svg viewBox="0 0 80 80"><circle class="pd-hero__track" cx="40" cy="40" r="37" pathLength="1"/><circle class="pd-hero__arc" data-ref="arc" cx="40" cy="40" r="37" pathLength="1"/></svg> <span class="progress-dlg__emblem" data-ref="emblem"></span> </span> <div class="progress-dlg__who"> <p class="pd-hero__kicker">Hành trình của bạn</p> <h2 id="progress-title" class="progress-dlg__title" tabindex="-1" data-ref="title"></h2> <p class="progress-dlg__next" data-ref="next"></p> ${e.levelGuide ?
+} </div> </div> <button type="button" class="progress-dlg__close" data-ref="close" aria-label="Đóng">${b(
+)}</button> <div class="progress-dlg__meters" data-ref="meters"></div> </header> <div class="pd-tabs" role="tablist" aria-label="Hành trình">${s}</div> <div class="progress-dlg__body" data-ref="body"> <section class="pd-panel" role="tabpanel" id="pd-panel-today" aria-labelledby="pd-tab-today" data-panel="today"> <h3 class="progress-sec__title" id="pd-special-title">${Fo}</h3> <div class="pd-special" data-ref="special"></div> <p class="progress-note" role="status" aria-live="polite" data-ref="specialStatus"></p> <h3 class="progress-sec__title">Việc hôm nay</h3> <p class="progress-note" data-ref="dayNote"></p> <div data-ref="tasks"></div> <div data-ref="week"></div> <h3 class="progress-sec__title" id="pd-streak-title" tabindex="-1" data-ref="streakTitle">Chuỗi giữ lửa</h3> <div data-ref="streak"></div> <p class="progress-foot__rule" data-ref="rule"></p> </section> <section class="pd-panel" role="tabpanel" id="pd-panel-path" aria-labelledby="pd-tab-path" data-panel="path" hidden> <div data-ref="path"></div> <footer class="progress-foot"> <details class="progress-fold" data-ref="rules"> <summary>Cách tính tinh tấn</summary> ${cs()} </details> <div class="progress-foot__backup"> <p class="progress-note">${lo}</p> <button type="button" class="progress-btn" data-ref="backup">${b(
+còn ${t} tinh tấn tới Cấp ${e.level + 1}
+<div class="progress-meter"> <p class="progress-meter__label"><span>Tới Cấp ${e.level + 1}</span><span>${e.into}/${e.span}</span></p> ${xo(e.frac * 100,
+)} </div> <p class="pd-today" title="Công phu mỗi ngày được tính tối đa ${e.practiceCeiling} tinh tấn, công phu thêm tối đa ${e.practiceMoreCeiling}"> ${b(
+, { size: 14 })}<span>Công phu hôm nay</span><b>${e.practiceToday}/${e.practiceCeiling}</b>${ss(e)} </p>
+${ao} Lên Cấp ${e.level + 1} cần 50 × ${e.level} tinh tấn.
+Đang mang danh hiệu "${r}".
+Đã tháo danh hiệu.
+Hành trình: không đọc được trạng thái chương trình KOL
+Hành trình: không mở được bảng chương trình KOL & rủ bạn
+Đã tải tệp sao lưu: ${(e.backup ?? y)()}
+Chưa sao lưu được, bạn thử lại nhé.
+Đăng nhập để giữ tiến độ
+Đăng nhập để giữ Việc tuần
+Xong cả 3 tâm nguyện tuần này · +30
+Xong cả 3 việc hôm nay · +30
+Đăng nhập để giữ Cấp ${e}
+Đăng nhập để giữ chuỗi ${e} ngày
+Đã đủ tinh tấn công phu hôm nay. Thiền, lần tràng hạt, tụng kinh thêm vẫn được tinh tấn (tối đa +150).
+Hôm nay bạn đã tinh tấn trọn phần, cả phần công phu thêm. Công phu tiếp là cho chính mình.
+Đã tải tệp sao lưu
+Chưa sao lưu được, bạn thử lại trong Cài đặt nhé.
+Trên iPhone: Chia sẻ, rồi Thêm vào màn hình chính để hành trình được giữ lâu hơn.
+Giữ lửa ${e} ngày!
+Lửa lên bậc: ${i.name}
++${n} tinh tấn
+Lửa
+tràng hạt ${e.name}
+tiếng ${e.name.toLowerCase()}
+Mở khoá: ${t.join(
+Đã mở: ${n.join(
+Chùa ghi nhận hành trình của bạn: ${s}
+Lên ${s}
+Xong cả 3 việc hôm nay
+Xong cả 3 tâm nguyện tuần này và cả 3 việc hôm nay
+Xong cả 3 tâm nguyện tuần này
+Xong việc: ${t.title} · +30
+Xong việc: ${t.title}
+Dấu mốc: ${t.title} · +${t.xp}
+Lửa lên bậc: ${n.name}
+Hôm qua chùa giữ chỗ cho bạn. Chuỗi ${t.streak} ngày vẫn còn.
+dấu mốc
+việc
+điều
+Và ${e.length} ${r} khác — xem trong Hành trình
+Đóng
++${c} tinh tấn
+)}</span><span>Tuần này ${t.done}/${t.tasks.length}</span></p>
+, { size: 16 })}<span>Xong cả 3 việc hôm nay. Hẹn bạn ngày mai!</span></p>
+<p class="ptrack__bonus"><span class="ptrack__dots" aria-hidden="true">${i}</span><span>Xong cả 3: <b>+30</b> tinh tấn</span></p>
+Mở rộng việc hôm nay
+Thu gọn việc hôm nay
+<b>Cấp ${t.level}</b> · ${Zs(t.tierName)}
+Còn ${t.remaining} tinh tấn tới Cấp ${n}
+· ${t.weekly.done}/${t.weekly.tasks.length} tuần
+Xong việc hôm nay
+Việc hôm nay ${t.tasksDone}/${t.tasks.length}
+Mở Hành trình: ${i ?
+}Cấp ${t.level}, ${t.tierName}${l ?
+}, còn ${t.remaining} tinh tấn tới Cấp ${n}. Việc hôm nay ${t.tasksDone}/${t.tasks.length}.${t.weekly ?
+Không mở được hướng dẫn
+
+=== progress-core-C9e35Hb5.js (20)
+Sân trước & hồ sen
+Cây bồ đề
+Sân thiền
+Quan Âm
+Giếng ngọc
+Chánh điện
+Hạt sen
+Mầm sen
+Lá sen
+Nụ sen
+Sen hé
+Sen nở
+Sen ngàn cánh
+Cấp ${Math.max(1, Math.floor(e))} · ${d(e).name}
+Chưa mở được hướng dẫn, bạn thử lại nhé.
+Chưa mở được Hành trình, bạn thử lại nhé.
+Chưa đăng ký bộ nạp Hành trình
+Không mở được Hành trình
+Không mở được hướng dẫn
+Bấm vào nút cấp của bạn ở góc trên bên trái để xem "Việc hôm nay".
+
+=== rank-ZzKaf5p8.js (34)
+Bảng xếp hạng
+Những người giữ lửa công phu cùng chùa.
+Hiện tôi trên bảng xếp hạng
+Đăng nhập để có tên trên bảng
+Bạn đang xem với tư cách khách. Đăng nhập để tên bạn có trên bảng.
+Tuần mới bắt đầu lúc 0 giờ thứ Hai
+Chưa tải được bảng xếp hạng, bạn thử lại nhé.
+Thử lại
+Chưa lưu được. Bạn thử lại nhé.
+Chưa lấy được hạng của bạn lúc này. Bảng vẫn xem được.
+Phiên đăng nhập đã hết hạn. Đăng nhập lại để tên bạn có trên bảng.
+Bạn
+Tuần này chưa có ai lên bảng. Một nén hương, một lần tụng niệm là bạn có thể là người đầu tiên.
+Chưa có ai giữ lửa trong mấy ngày gần đây. Bạn công phu hôm nay là thắp ngọn đầu tiên.
+Bảng này còn trống. Bạn công phu một chút là có tên ở đây.
+Tuần này
+Giữ lửa
+Cấp
+Bạn sẽ có mặt ở bảng tuần này khi có thêm tinh tấn.
+Bạn sẽ có mặt ở bảng này khi đang giữ lửa.
+Bạn chưa có mặt ở bảng này.
+Bạn đang hạng ${n}
+Bạn đang ẩn trên bảng. Bật công tắc bên dưới là tên bạn hiện lại.
+Chùa chưa nhận số liệu nào của bạn. Công phu một chút là tên bạn lên bảng.
+Pháp danh của bạn chưa qua bộ lọc tên nên chưa lên bảng. Bạn đổi tên ở Cài đặt nhé.
+Số liệu của bạn vượt mức chùa ghi nhận được nên chưa lên bảng.
+Bạn đã được gỡ khỏi bảng xếp hạng. Cần hỏi lại thì bạn gửi Góp ý nhé.
+, { size: 22 })}<span>${R}</span></h2> <p class="rank-dlg__sub">${z}</p> </div> <button type="button" class="rank-dlg__close" data-ref="close" aria-label="Đóng">${o(
+${ne(e.weekXp)} tinh tấn
+${e.streak} ngày
+Cấp ${e.level}
+Đang mở bảng…
+Bảng xếp hạng công khai chỉ hiện tên, cấp, chuỗi giữ lửa và tinh tấn tuần của người đã đăng nhập. Tắt thì tên bạn không hiện trên bảng.
+Chưa đọc được công tắc này. Bạn mở lại Cài đặt sau nhé.
+
+=== referral-CM6Fj8ux.js (0)
+
+
+=== reminder-DfmRP7fr.js (6)
+Đăng nhập để giữ cấp, nhiệm vụ và chuỗi giữ lửa trên mọi máy.
+Đăng nhập
+Để sau
+Loa chùa · Fanpage Chùa Sen
+Chùa Sen đã có fanpage trên Facebook. Bạn theo dõi để nhận thông báo mới từ chùa nhé.
+Theo dõi fanpage
+
+=== remotes-8rhCM5oM.js (2)
+đang thiền hành
+Không nạp được hào quang KOL
+
+=== rewards-BiUWDF_0.js (66)
+Đang chờ duyệt
+Đã duyệt
+Chưa đạt
+Bạn dán đường dẫn video giúp chùa nhé.
+Đường dẫn dài quá.
+Đường dẫn chưa đúng, bạn kiểm tra lại nhé.
+Đường dẫn phải bắt đầu bằng https://
+Chùa nhận video trên TikTok, YouTube, Facebook hoặc Instagram.
+Đây là trang chủ, bạn dán đường dẫn của chính video nhé.
+Dữ liệu gửi không hợp lệ.
+Nền tảng không hợp lệ.
+Đường dẫn này là của ${N[n.platform]}, không phải ${N[t.platform]}.
+Bạn cho chùa biết tên hiển thị nhé.
+Tên hiển thị tối đa ${L.displayNameMax} ký tự.
+Tên hiển thị có ký tự lạ.
+Liên hệ không hợp lệ.
+Liên hệ tối đa ${L.contactMax} ký tự.
+Liên hệ có ký tự lạ.
+Thiếu mã thiết bị, bạn tải lại trang rồi gửi lại nhé.
+Đã rủ ${Math.max(0, Math.min(t, Math.floor(Number.isFinite(e) ? e : 0)))}/${t} bạn
+Chưa gửi được. Bạn kiểm tra mạng rồi thử lại sau nhé.
+Bạn gửi hơi nhanh, nghỉ chút rồi thử lại sau ít phút nhé.
+Bạn đã gửi video này rồi, chùa đang xem.
+Nội dung dài quá, bạn rút gọn giúp chùa nhé.
+không có localStorage
+Lỗi khi báo trạng thái chương trình KOL
+Móc mở áo lỗi
+Chương trình KOL: lỗi khi khởi động
+Rủ bạn: lỗi khi đăng ký mã từ thẻ chia sẻ
+Chương trình KOL Chùa Sen
+Bạn làm video về Chùa Sen? Gửi đường dẫn video để nhận danh hiệu riêng "${n}", hào quang vàng và bộ "${Z}" chỉ dành cho KOL.
+Bạn mang danh hiệu "${n}" cạnh tên và hào quang vàng quanh nhân vật; bộ "${Z}" đã mở cho bạn trong Trang phục.
+Phần thưởng cho KOL
+Danh hiệu riêng hiện cạnh tên bạn trong chùa.
+Hào quang vàng
+Vầng sáng vàng dịu quanh nhân vật của bạn.
+Bộ áo chỉ KOL mới có, chọn trong Trang phục.
+Làm một video về Chùa Sen, đăng lên TikTok, YouTube, Facebook hoặc Instagram.
+Thêm hashtag ${I} vào phần mô tả video.
+Video đạt từ ${F.toLocaleString(
+)} lượt xem trở lên.
+Dán đường dẫn video vào ô bên dưới. Ben, người làm Chùa Sen, duyệt trong vài ngày.
+Liên hệ chỉ Ben đọc, để báo tin cho bạn khi cần. Chùa không hiện nó ở đâu cả.
+A Di Đà Phật. Chùa đã nhận video của bạn, Ben sẽ xem trong vài ngày.
+Video này bạn đã gửi rồi, chùa đang xem.
+Khi 3 người bạn vào chùa qua đường dẫn mời của bạn, bạn mở bộ áo "${Q}". Mỗi người bạn chỉ tính một lần.
+Rủ thêm bạn: 5 bạn mở màu "${s.name}", 10 bạn mở màu "${t.name}" cho bộ "${Q}". Mỗi mốc còn được thêm tinh tấn trong Hành trình.
+Bạn đã mở bộ áo "${Q}" trong Trang phục.
+Đã chép đường dẫn mời. Gửi cho bạn bè nhé!
+Chưa chép được. Bạn bấm giữ để chép đường dẫn bên trên nhé.
+<div class="rewards-dlg__card"> <header class="rewards-dlg__head"> <h2 id="rewards-title" class="rewards-dlg__title" tabindex="-1">${Ve}</h2> <button type="button" class="rewards-dlg__close" data-ref="close" aria-label="Đóng">${i(
+, { size: 36 })} <div><strong>Bạn là KOL Chùa Sen</strong><span>${Ue}</span></div> </section> <section class="rewards-dlg__hero" data-ref="perks" aria-labelledby="rewards-perks-title"> <h3 id="rewards-perks-title" class="rewards-dlg__hero-title">${We}</h3> <ul class="rewards-dlg__perks">${n}</ul> </section> <p id="rewards-intro" class="rewards-dlg__intro">${He}</p> <section class="rewards-dlg__section" aria-labelledby="rewards-rules-title"> <h3 id="rewards-rules-title" class="rewards-dlg__label">Thể lệ</h3> <ol class="rewards-dlg__rules">${t}</ol> </section> <section class="rewards-dlg__section" data-ref="mine" aria-labelledby="rewards-mine-title" hidden> <h3 id="rewards-mine-title" class="rewards-dlg__label">Video bạn đã gửi</h3> <ul class="rewards-dlg__items" data-ref="items"></ul> </section> <form class="rewards-dlg__form" data-ref="form" novalidate> <h3 id="rewards-form-title" class="rewards-dlg__label" tabindex="-1">Gửi video</h3> <div class="rewards-dlg__field"> <label class="rewards-dlg__label" for="rewards-url">Đường dẫn video</label> <input id="rewards-url" class="rewards-dlg__input" data-ref="url" type="url" inputmode="url" maxlength="${L.urlMax}" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="https://www.tiktok.com/@ban/video/..." aria-describedby="rewards-platform" /> <p id="rewards-platform" class="rewards-dlg__hint" data-ref="platform" aria-live="polite"></p> </div> <div class="rewards-dlg__field"> <label class="rewards-dlg__label" for="rewards-name">Tên hiển thị</label> <input id="rewards-name" class="rewards-dlg__input" data-ref="name" type="text" maxlength="${L.displayNameMax}" autocomplete="nickname" placeholder="Tên kênh hoặc tên bạn muốn được gọi" /> </div> <div class="rewards-dlg__field"> <label class="rewards-dlg__label" for="rewards-contact">Email hoặc Zalo <span class="rewards-dlg__optional">(không bắt buộc)</span></label> <input id="rewards-contact" class="rewards-dlg__input" data-ref="contact" type="text" maxlength="${L.contactMax}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="rewards-privacy" /> <p id="rewards-privacy" class="rewards-dlg__hint">${qe}</p> </div> <div class="rewards-dlg__trap" aria-hidden="true"> <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" data-ref="trap" /></label> </div> <p class="rewards-dlg__error" role="alert" data-ref="error"></p> <p class="rewards-dlg__ok" role="status" data-ref="ok"></p> <button type="submit" class="btn btn--gold" data-ref="send">Gửi video</button> </form> <section class="rewards-dlg__section rewards-dlg__ref" aria-labelledby="rewards-ref-title"> <h3 id="rewards-ref-title" class="rewards-dlg__label" tabindex="-1">Rủ bạn vào chùa</h3> <p class="rewards-dlg__intro">${Xe}</p> <p class="rewards-dlg__hint" data-ref="refMore">${Ze}</p> <div class="rewards-dlg__bar" data-ref="bar" role="progressbar" aria-valuemin="0" aria-labelledby="rewards-ref-text"><span data-ref="barFill"></span></div> <p id="rewards-ref-text" class="rewards-dlg__progress" data-ref="refText"></p> <p class="rewards-dlg__unlocked" data-ref="refBadge" hidden>${Qe}</p> <div class="rewards-dlg__share"> <input class="rewards-dlg__input" data-ref="shareUrl" type="text" readonly aria-label="Đường dẫn mời của bạn" /> <button type="button" class="btn btn--ghost" data-ref="copy">${i(
+, { size: 18 })}<span>Chép</span></button> </div> <p class="rewards-dlg__hint" role="status" data-ref="copyStatus"></p> </section> </div> <footer class="rewards-dlg__foot"> <button type="button" class="btn btn--ghost" data-ref="cancel">Đóng</button> </footer> </div>
+Lời nhắn của Ben: ${e.note}
+không có clipboard
+Dán đường dẫn video TikTok, YouTube, Facebook hoặc Instagram.
+Chưa nhận ra nền tảng: chùa nhận TikTok, YouTube, Facebook, Instagram.
+Nền tảng: ${N[t]}
+Bấm "Chép" để tạo đường dẫn mời
+Đang gửi…
+Gửi video
+Loa chùa · Chương trình KOL
+Bạn làm video về Chùa Sen? Thêm hashtag ${I} vào mô tả. Video từ ${F.toLocaleString(
+)} lượt xem nhận danh hiệu riêng "${n}", hào quang vàng và bộ "${Z}".
+Xem thể lệ
+Để sau
+
+=== rituals-DFATLOei.js (198)
+Giáp
+Bính
+Đinh
+Mậu
+Tân
+Nhâm
+Quý
+Sửu
+Dần
+Mão
+Thìn
+Ngọ
+Mùi
+Thân
+Dậu
+Tuất
+Hợi
+Chủ nhật
+Thứ Hai
+Thứ Ba
+Thứ Tư
+Thứ Năm
+Thứ Sáu
+Thứ Bảy
+Ngày không hợp lệ.
+Chỉ hỗ trợ năm ${z}-${ie}, nhận ${t}.
+Ngày không tồn tại: ${r}/${n}/${t}.
+Không tìm được tháng chứa Đông chí năm ${e}.
+Số tháng bất thường (${a}) năm ${e}.
+Không tìm được tháng nhuận năm ${e}.
+Chỉ hỗ trợ năm 1801-2199, nhận ${e}.
+Không xác định được tháng âm lịch của ${r}.
+Hồ bán nguyệt
+Suối Giếng ngọc
+Cầu an
+Cầu siêu
+Sức khỏe
+Gia đạo
+Học hành
+Tùy tâm
+Thở vào, biết mình đang thở vào. Thở ra, biết mình đang thở ra. Chỉ vậy thôi cũng đã là một buổi tu.(Một nụ cười dịu dàng buổi sáng có thể làm đổi màu cả ngày, của bạn và của người đối diện.(Điều đang xảy ra lúc này là nơi duy nhất ta có thể sống. Hãy nhẹ nhàng trở về với nó.(Mọi thứ đều đổi thay. Biết vậy, ta bớt bám víu và biết trân trọng hơn những gì đang có.(Lời đã nói ra như nước đổ đi. Trước khi nói, hãy dừng lại một hơi thở.(Giận dữ như cầm than hồng trong tay: người bị bỏng trước tiên là chính mình.(Bố thí không cần của cải lớn. Một lời hỏi han chân thành cũng là một món quà.(Biết đủ là giàu. Biết ơn là cách nhanh nhất để thấy mình đã có rất nhiều.(Nếu cha mẹ còn, đó là một phúc lớn: hôm nay hãy gọi một cuộc điện thoại hoặc nói một lời cảm ơn. Nếu các cụ đã khuất, hãy thầm nhớ ơn và hồi hướng lòng lành.(Hoa sen mọc lên từ bùn. Khó khăn hôm nay có thể là phù sa của một ngày nở hoa.(Hãy đi chậm lại. Mỗi bước chân đặt xuống là một lần ta về nhà.(Tâm như mặt ao: khi lặng thì thấy được tận đáy. Đừng vội khuấy, cứ để nước tự trong.(Việc nhỏ làm trọn vẹn cũng là tu. Khi làm gì, hãy chỉ làm việc đó.(Tha thứ không phải để người kia nhẹ lòng, mà để mình được đặt gánh nặng xuống.(Người khác không cần hoàn hảo để ta thương. Ta cũng không cần hoàn hảo để được thương.(Nghe cho trọn rồi hãy trả lời. Đôi khi người ta chỉ cần được lắng nghe.(Mỗi ngày gieo một hạt thiện, dù nhỏ. Rồi sẽ có ngày bạn nhìn thấy cả một khu vườn.(Thân thể làm việc không ngừng vì ta. Hôm nay hãy đối xử với nó dịu dàng hơn.(Khi buồn, cứ để mình buồn một chút rồi nhẹ nhàng thở. Cảm xúc đến rồi sẽ đi, như mây qua trời.(Không cần đợi hoàn cảnh hoàn hảo mới bắt đầu tu. Chỗ nào có hơi thở, chỗ đó có thể thực tập.(Thấy lỗi của mình trước khi thấy lỗi của người là một bước tiến nhỏ mà vững.(Ăn một bữa cơm thật chậm: nhìn, ngửi, nhai. Bát cơm bình thường cũng là một phép màu.(Giữ lời hứa dù nhỏ. Chữ tín được xây từ những điều bé nhất.(Lòng từ bắt đầu bằng việc mong cho chính mình bình an, rồi mở rộng ra người thân, người lạ và cả người mình chưa thương.(Mỗi sáng thức dậy là được tặng thêm một ngày. Hãy nhận món quà ấy bằng lòng biết ơn.(Lời ái ngữ chẳng tốn gì, nhưng mang lại rất nhiều.(Bạn không phải là những suy nghĩ của mình. Hãy nhìn chúng đến rồi đi, như nhìn khách qua cổng.(Có những điều ta không đổi được. Chấp nhận chúng là bước đầu của bình an.(Hãy sống sao cho tối nay nằm xuống, lòng được nhẹ.(Giúp một người đúng lúc quý hơn giúp thật nhiều khi người ta đã không còn cần.(Trước khi phán xét ai, hãy nhớ rằng họ cũng đang vất vả theo cách riêng của họ.(Khi tâm tán loạn, hãy đếm hơi thở từ một đến mười. Hết mười lại về một, không cần vội.(Một câu niệm Phật nhẹ nhàng giúp tâm có chỗ nương, bớt lo âu.(Thắp một nén hương là thắp lên lòng thành; lòng thành quan trọng hơn nén hương lớn hay nhỏ.(Đừng so sánh con đường của mình với con đường của người khác. Mỗi người đi một nhịp.(Hạnh phúc không ở đâu xa: ly trà ấm, tiếng chim buổi sớm, một người thân bên cạnh.(Biết dừng đúng lúc là một thứ trí tuệ. Nghỉ ngơi cũng là một phần của tu tập.(Nhìn ai cũng thấy có điều đáng quý, ta sẽ ít khi bị phiền lòng vì họ.(Khi bị chê trách, xem có điều gì đáng học. Phần còn lại, nhẹ nhàng buông.(Làm điều thiện không cần ai thấy. Hạt giống gieo âm thầm vẫn nảy mầm.(Kiên nhẫn là tình thương dành cho chính mình và cho người.(Hãy để hôm nay đủ với hôm nay. Lo cho ngày mai bằng cách sống tử tế từ bây giờ.(Tiếng chuông chùa nhắc ta: dừng lại, thở một hơi rồi hãy đi tiếp.(Mỗi người ta gặp đều là một người thầy, dạy ta kiên nhẫn, hiểu biết hay buông bỏ.(Nói ít đi một chút, nghe nhiều hơn một chút, tâm sẽ yên hơn một chút.(Việc nhỏ làm bằng lòng tốt vẫn là việc lớn trong mắt người nhận.(Quá khứ đã qua, tương lai chưa tới. Chỉ có hơi thở này là có thật.(Ánh sáng không cần ồn ào. Một ngọn nến nhỏ cũng đủ làm ấm cả căn phòng tối.(Mỗi lần vấp ngã là một lần học cách đứng dậy nhẹ nhàng hơn.(Lòng biết ơn biến những gì ta đã có thành đủ đầy.(Hoa sen không vội nở. Việc tốt cũng cần thời gian, cứ chăm chút mỗi ngày.(Ở bên người thân, hãy đặt điện thoại xuống một lát và nhìn vào mắt họ.(Đừng tiếc một lời xin lỗi chân thành, và cũng đừng ngại đón nhận lời xin lỗi của người khác.(Sống đơn giản không phải là thiếu thốn, mà là bớt đi những gì không cần.(Nỗi khổ là có thật, nhưng cách ta ôm lấy nó quyết định ta phải chịu bao nhiêu.(Người trước mặt cũng muốn bình an và hạnh phúc, giống như ta.(Đêm xuống, hãy nhớ lại ba điều tốt đẹp của hôm nay, dù rất nhỏ, rồi hãy đi ngủ.(Hãy nhìn vào điều mình đã làm được hôm nay, thay vì điều mình chưa làm được.(Một hạt gạo cũng đến từ công sức của rất nhiều người. Ăn cơm trong lòng biết ơn.(Yên tĩnh không phải là không có tiếng động, mà là có một khoảng lặng trong lòng.(Hãy cho mình quyền được bắt đầu lại, bao nhiêu lần cũng được.(Cây có gốc, nước có nguồn. Nhớ ơn tổ tiên và những người đã nâng đỡ mình giúp lòng ta mềm lại.(Khi bước qua cổng chùa, hãy để lại phía sau những bận tâm, dù chỉ trong chốc lát.(Bình tĩnh không phải là không có sóng, mà là biết mình đang đứng vững khi sóng đến.(Tử tế với bản thân không phải ích kỷ. Có lòng từ với mình mới có lòng từ với người.(Mỗi ngày một việc thiện nhỏ quý hơn một việc lớn chỉ làm một lần.(Ngắm một đóa hoa, nghe một tiếng chim: cuộc sống đang mời ta tỉnh thức.(Làm gì cũng nhẹ tay, nói gì cũng nhẹ lời, đời bớt đi nhiều va chạm.(Hôm nay, hãy thử làm một việc tốt mà không để ai biết.(Khi lo lắng kéo đến, đặt một tay lên ngực và thở ba hơi thật chậm.(Có mặt trọn vẹn với một người là món quà quý hơn mọi lời khuyên.(Hãy nhìn thật kỹ: bông hoa tàn hôm nay từng là nụ non. Mọi thứ đều đang đi qua, và đẹp theo cách của nó.(Một cái cúi đầu khiêm tốn làm lòng mình nhẹ đi trước khi làm người khác vui.
+Tết Nguyên Đán
+Rằm tháng Giêng (Thượng Nguyên)
+Ngày Đức Phật xuất gia
+Ngày Đức Phật nhập Niết bàn
+Vía Quán Thế Âm (đản sinh)
+Lễ Phật Đản
+Vía Quán Thế Âm (thành đạo)
+Lễ Vu Lan
+Vía Quán Thế Âm (xuất gia)
+Rằm tháng Mười (Hạ Nguyên)
+Vía Phật A Di Đà
+Ngày Đức Phật thành đạo
+Hôm nay là mùng một
+Hôm nay là ngày rằm
+rằm
+mùng một
+Ngày mai là ${t}
+Còn ${e.inDays} ngày nữa là ${t}
+Thả đèn hoa đăng
+Lời nguyện chỉ lưu trên máy này — không gửi đi, không ai khác đọc được. Mọi người chỉ thấy một ngọn đèn sáng mang màu ý nguyện bạn chọn. Bạn có thể xóa trong Cài đặt.
+Đèn của bạn đang trôi trên ao sen.
+Đèn của bạn đang trôi trên hồ bán nguyệt.
+Đèn của bạn đang xuôi theo suối Giếng ngọc.
+Lời nguyện đã thả (${e})
+Ví dụ: Nguyện cho gia đình con bình an.
+Ý nguyện của ngọn đèn
+Thả đèn
+<form class="lantern-dlg__card" novalidate> <header class="lantern-dlg__head"> <h2 id="lantern-title" class="lantern-dlg__title" tabindex="-1" data-ref="title">${r.title}</h2> <button type="button" class="lantern-dlg__close" data-ref="close" aria-label="Đóng">${c(
+)}</button> </header> <p id="lantern-privacy" class="lantern-dlg__privacy">${r.privacy}</p> <div class="lantern-dlg__field"> <label class="lantern-dlg__label" for="lantern-text">Lời nguyện của bạn <span class="lantern-dlg__optional">(không bắt buộc)</span></label> <textarea id="lantern-text" class="lantern-dlg__text" data-ref="text" rows="3" maxlength="120" autocomplete="off" placeholder="${r.placeholder}" aria-describedby="lantern-count"></textarea> <p id="lantern-count" class="lantern-dlg__count" data-ref="count"></p> </div> <div class="lantern-dlg__chips" role="radiogroup" aria-labelledby="lantern-intent-label" data-ref="chips"> <span id="lantern-intent-label" class="lantern-dlg__label lantern-dlg__chips-label">${r.chips}</span> </div> <details class="lantern-dlg__history" data-ref="history" hidden> <summary class="lantern-dlg__history-sum" data-ref="historySum"></summary> <ul class="lantern-dlg__wishes" data-ref="wishes"></ul> </details> <footer class="lantern-dlg__actions"> <button type="button" class="lantern-dlg__btn" data-ref="later">Để sau</button> <button type="submit" class="lantern-dlg__btn lantern-dlg__btn--go" data-ref="go">${c(
+Đã đủ 120 ký tự.
+Còn ${n} ký tự.
+Lời nhắc tu tập — không phải bói toán
+Ba hơi thở
+Trước mỗi cuộc gọi hay cuộc họp hôm nay, hãy thở ba hơi thật chậm.
+Lời nói dịu
+Hôm nay, thử nói chậm lại và nhẹ hơn một chút với người thân trong nhà.
+Ba điều biết ơn
+Trước khi đi ngủ, nghĩ đến hoặc viết ra ba điều bạn biết ơn.
+Niệm Phật
+Dành năm phút niệm một câu danh hiệu Phật, chậm rãi theo nhịp thở.
+Lắng nghe
+Hôm nay, hãy nghe ai đó nói trọn câu rồi mới trả lời.
+Một bữa ăn chậm
+Ăn một bữa thật chậm, không điện thoại, không màn hình.
+Đặt điện thoại xuống
+Đặt điện thoại xuống mười phút và chỉ ngồi yên.
+Lời cảm ơn
+Nói lời cảm ơn với một người mà bạn vẫn thường quên cảm ơn.
+Hỏi thăm cha mẹ
+Hỏi thăm cha mẹ, ông bà hay một bậc cao niên hôm nay.
+Chờ ba hơi thở
+Nếu hôm nay thấy giận ai, hãy thở ba hơi rồi hãy trả lời.
+Việc thiện thầm lặng
+Làm một việc tốt nhỏ mà không cần ai biết.
+Bước chân chánh niệm
+Đi bộ năm phút thật chậm, biết từng bước chân chạm đất.
+Dọn một góc nhỏ
+Dọn gọn một góc bàn hay một ngăn kéo, làm thư thả, không vội.
+Chúc bình an
+Nếu lòng đã sẵn sàng, hãy nghĩ về một người từng làm bạn buồn và thầm chúc họ bình an.
+Phút im lặng
+Dành vài phút im lặng trước khi bắt đầu ngày mới.
+Ngước nhìn trời
+Ngước nhìn bầu trời một lần hôm nay và thở thật sâu.
+Một ly trà
+Pha một ly trà hay rót một ly nước, uống từng ngụm với sự chú tâm.
+Lời thật, lời nhẹ
+Hôm nay, nói đúng sự thật nhưng bằng những lời nhẹ nhàng.
+Cho thân nghỉ
+Cho cơ thể nghỉ một lát: duỗi vai, thả lỏng cổ, buông lỏng đôi tay.
+Hồi hướng
+Cuối ngày, hồi hướng phước lành của hôm nay đến tất cả chúng sinh.
+Ngắm một bông hoa
+Ngắm một bông hoa hay một cái cây cho đến khi thấy nó thật rõ.
+Lời khen chân thành
+Khen một người thật lòng hôm nay, dù chỉ về điều rất nhỏ.
+Mong bạn bình an
+Gặp ai vội vã hay cáu kỉnh, hãy thầm nghĩ: mong bạn được bình an.
+Tiếng chuông nhắc
+Khi nghe một tiếng chuông hay một thông báo, dừng lại và thở một hơi.
+Hiền với chính mình
+Hôm nay, nói với chính mình một câu hiền như nói với một người bạn thân.
+Tắt màn hình sớm
+Tối nay, tắt màn hình sớm hơn thường lệ mười lăm phút.
+Gấp lại một lo lắng
+Viết một nỗi lo ra giấy, gấp lại và để ngày mai tính.
+Nhớ người làm ra bữa cơm
+Trước khi ăn, dừng một nhịp để nhớ đến những người đã làm ra bữa ăn này.
+Làm gì cũng nhẹ tay
+Hôm nay, đóng cửa, đặt cốc, đặt đồ vật xuống nhẹ tay hơn thường lệ.
+Đếm hơi thở
+Ngồi thẳng lưng và đếm hơi thở từ một đến mười, ba lượt.
+Bớt một việc
+Bỏ bớt một việc không thật cần thiết khỏi danh sách hôm nay.
+Mỉm cười đầu ngày
+Mỉm cười nhẹ ngay khi vừa mở mắt buổi sáng.
+Một tin hỏi thăm
+Nhắn một tin hỏi thăm người bạn đã lâu chưa liên lạc.
+Từng việc một
+Hôm nay, làm từng việc một. Xong việc này mới sang việc khác.
+Gọi tên cảm xúc
+Khi có cảm xúc mạnh, gọi tên nó trong lòng, như "à, mình đang lo", rồi thở.
+Chia sẻ
+Chia một món đồ, một bữa ăn hay một chút thời gian cho người đang cần.
+Một đoạn kinh
+Đọc chậm một đoạn kinh hay một bài kệ ngắn rồi ngồi yên một phút.
+Nhường đường
+Khi ra đường, hãy nhường một người và đừng vội.
+Chạm vào thiên nhiên
+Bước ra ngoài một lát, chạm vào lá cây hay hít mùi đất ẩm.
+Một lời xin lỗi
+Nếu có điều khiến bạn áy náy, hôm nay hãy thử nói một lời xin lỗi.
+Ba lạy
+Lạy Phật ba lạy thật chậm và nhớ đến những người thương.
+Rửa bát, quét nhà
+Khi rửa bát hay quét nhà, chỉ biết mình đang rửa bát, đang quét nhà.
+Năm điều đang thấy
+Giữa chiều, dừng tay một phút, nhìn quanh và nhận ra năm điều bạn đang thấy.
+Nhớ ơn người giúp
+Nhớ đến một người đã giúp bạn lúc khó khăn và thầm cảm ơn họ.
+Bớt than phiền
+Hôm nay, đổi một lời than phiền thành một lời mong cho điều tốt hơn.
+Chờ đợi cũng là nghỉ
+Khi phải chờ đợi, xem đó là phút nghỉ: thở nhẹ và thả lỏng vai.
+Năm phút ngồi yên
+Ngồi yên năm phút, chỉ biết hơi thở vào ra; tâm đi đâu thì nhẹ nhàng đưa về.
+Trở về hiện tại
+Nếu lòng cứ quay về chuyện cũ, nhẹ nhàng nói: đã qua rồi, và trở lại với hơi thở.
+Giêng
+Chạp
+nhuận
+Âm lịch: ngày ${n.day} tháng ${Vt(n.month, n.leap)}, năm ${n.canChi.year}
+Hôm nay mình bắt đầu bằng một câu niệm Phật nhé, không cần vội.
+Một ngày công phu. Nhẹ nhàng và đều đặn là đủ.
+${t} ngày công phu liên tiếp. Nhẹ nhàng và đều đặn là đủ.
+${t} ngày công phu liên tiếp, thật đáng quý. Có hôm nghỉ cũng không sao, ngày mai mình lại bắt đầu.
+Chùa luôn mở cửa. Hôm nay mình bắt đầu lại nhé.
+Hôm qua chùa giữ chỗ cho bạn.
+<div class="today-card__card"> <header class="today-card__head"> <h2 id="today-title" class="today-card__title" tabindex="-1" data-ref="title">Hôm nay</h2> <button type="button" class="today-card__close" data-ref="close" aria-label="Đóng">${c(
+)}</button> </header> <section class="today-card__date" aria-label="Ngày hôm nay"> <p class="today-card__solar" data-ref="solar"></p> <p class="today-card__lunar" data-ref="lunar"></p> <ul class="today-card__tags" data-ref="tags" aria-label="Ngày đặc biệt"></ul> <p class="today-card__next" data-ref="next"></p> </section> <section class="today-card__streak" data-ref="streak" aria-label="Chuỗi ngày công phu"> <span class="today-card__streak-icon" aria-hidden="true">${c(
+, { size: 22 })}</span> <div> <p class="today-card__streak-num" data-ref="streak-num"></p> <p class="today-card__streak-text" data-ref="streak-text"></p> </div> </section> <section class="today-card__tasks" data-ref="tasks" hidden> <button type="button" class="today-card__tasks-btn" data-ref="tasks-btn"> <span class="today-card__tasks-text" data-ref="tasks-text"></span><span class="today-card__tasks-sep"> · </span><span class="today-card__tasks-go">Xem hành trình</span> ${c(
+, { size: 18 })} </button> </section> <section class="today-card__teaching" aria-labelledby="today-teaching-h"> <h3 id="today-teaching-h" class="today-card__h">Một lời cho hôm nay</h3> <p class="today-card__quote" data-ref="teaching"></p> </section> <section class="today-card__que" aria-labelledby="today-que-h"> <h3 id="today-que-h" class="today-card__h">Gieo quẻ</h3> <p class="today-card__que-label">${Pt}</p> <button type="button" class="today-card__draw" data-ref="draw"> <span class="today-card__draw-glyph" data-ref="glyph" aria-hidden="true">${c(
+, { size: 26 })}</span> <span class="today-card__draw-text"> <span class="today-card__draw-title" data-ref="draw-title">Chạm để nhận lời nhắc</span> <span class="today-card__draw-sub" data-ref="draw-sub">Một việc nhỏ để làm hôm nay</span> </span> </button> <div class="today-card__result" role="status" aria-live="polite" tabindex="-1" data-ref="result" hidden> <p class="today-card__result-title" data-ref="result-title"></p> <p class="today-card__result-text" data-ref="result-text"></p> <p class="today-card__result-foot" data-ref="result-foot"></p> </div> </section> </div>
+Chuỗi công phu: ${p} ngày
+Chuỗi công phu
+Việc hôm nay ${e}/3
+Mỗi ngày một lời nhắc. Mai mình gặp lại nhé.
+Hôm nay bạn đã nhận lời nhắc rồi. Mai mình gặp lại nhé.
+Đang chọn lời nhắc…
+Một hơi thở nhẹ…
+attribute vec4 aVert; attribute vec3 aTint; attribute vec4 aState; uniform float uTime; uniform float uFlicker; uniform float uHalo; varying vec4 vVert; varying vec3 vTint; varying vec4 vState; void main() { vVert = aVert; vTint = aTint; vState = aState; float kind = aVert.x; vec3 p = position; if (kind > 0.5 && kind < 1.5) { // Ngọn lửa lay: kéo dài rồi thu hẹp, mỗi ngọn một pha. float f = uFlicker * (0.10 * sin(uTime * 11.0 + aState.z) + 0.06 * sin(uTime * 23.0 + aState.z * 2.3) + 0.04 * sin(uTime * 6.7 + aState.z * 0.7)); p.y = 0.07 + (p.y - 0.07) * (1.0 + f); p.xz *= 1.0 - 0.5 * f; } if (kind > 1.5 && kind < 2.5) { // Quầng luôn quay mặt về camera: dựng trong không gian nhìn, tỉ lệ theo kích thước của đèn. float s = length(instanceMatrix[0].xyz); vec4 mv = modelViewMatrix * (instanceMatrix * vec4(p, 1.0)); mv.xy += aVert.zw * (uHalo * s); gl_Position = projectionMatrix * mv; } else { gl_Position = projectionMatrix * modelViewMatrix * (instanceMatrix * vec4(p, 1.0)); } }
+uniform float uNight; uniform float uTime; uniform float uFlicker; varying vec4 vVert; varying vec3 vTint; varying vec4 vState; void main() { float kind = vVert.x; float grad = vVert.y; float fade = vState.x; float mine = vState.y; vec3 warm = vec3(1.0, 0.72, 0.38); if (kind < 0.5) { // Cánh sen bằng giấy màu: ban ngày sáng dần về đầu cánh; ban đêm được ngọn lửa rọi từ trong, // gốc cánh ấm và sáng nhất. float ring = vVert.z; float side = vVert.w; vec3 paper = vTint * (0.82 + 0.26 * grad); paper = mix(paper, vec3(1.0), 0.2 * grad); paper *= 1.0 - 0.1 * abs(side); float lit = (1.0 - grad) * 0.8 + 0.3 + 0.16 * ring; vec3 glow = mix(paper, warm * (0.55 + 0.45 * vTint), 0.38 * (1.0 - grad)) * (0.6 + 0.85 * lit); // Ban ngày: giấy sáng và đậm màu hơn (nắng không làm xỉn giấy), mép và chân cánh sẫm để từng cánh tách // khỏi nhau và khỏi mặt nước xanh; ngọn lửa ở giữa rọi ấm lên cánh trong. vec3 day = vTint * (0.94 + 0.28 * grad); day = mix(vec3(dot(day, vec3(0.299, 0.587, 0.114))), day, 1.3); day = mix(day, vec3(1.0), 0.12 * grad + 0.1 * ring); day *= 1.0 - 0.24 * side * side - 0.16 * (1.0 - grad) * (1.0 - ring); day = mix(day, warm, 0.22 * ring * (1.0 - grad)); vec3 col = mix(day, glow, uNight); col *= 1.0 + 0.24 * mine * (0.6 + 0.4 * uNight); gl_FragColor = vec4(col * fade, fade); } else if (kind < 1.5) { // Ngọn lửa phát sáng ngày lẫn đêm: lõi trắng ấm, đầu cam; đêm sáng vượt ngưỡng cho quầng cộng lên. vec3 col = mix(vec3(1.0, 0.98, 0.8), vec3(1.0, 0.5, 0.1), grad); col *= 1.12 + 0.4 * uNight; gl_FragColor = vec4(col * fade, fade); } else { // Quầng (2) và vệt sáng trên nước (3): cộng sáng thuần (alpha 0 trong chế độ nhân sẵn). Ban ngày quầng chỉ // còn ánh ấm quanh ngọn lửa, còn vệt nước hoá thành bóng tối nhẹ dưới đèn (alpha > 0 làm tối nền). float r = length(vVert.zw); float a = pow(max(1.0 - r, 0.0), 2.2); float flick = 1.0 + uFlicker * (0.06 * sin(uTime * 1.9 + vState.z) + 0.03 * sin(uTime * 4.3 + vState.z * 2.1)); bool halo = kind < 2.5; float dayGlow = halo ? 0.2 : 0.0; float gain = (dayGlow + (1.0 - dayGlow) * uNight) * (halo ? 0.6 : 0.34) * (1.0 + 0.4 * mine) * flick * fade; vec3 col = mix(warm, vTint, 0.4); float shade = halo ? 0.0 : (1.0 - uNight) * 0.5 * a * fade; gl_FragColor = vec4(col * a * gain, shade); } }
+Không tải được cá koi
+attribute vec4 aVert; attribute vec4 aState; uniform float uTime; uniform float uFlicker; uniform float uHalo; varying vec4 vVert; varying vec4 vState; void main() { vVert = aVert; vState = aState; float kind = aVert.x; float scale = aState.x; float burn = mix(${gr.toFixed(2)}, 1.0, aState.y); vec3 p = position; // Thân nến ngắn dần khi cháy; ngọn lửa và quầng đi theo đỉnh nến. if (kind > 0.5 && kind < 1.5) p.y = ${fr.toFixed(3)} + (p.y - ${fr.toFixed(3)}) * burn; else if (kind > 1.5) p.y -= ${pr.toFixed(3)} * (1.0 - burn); if (kind > 1.5 && kind < 2.5) { float f = uFlicker * (0.10 * sin(uTime * 13.0 + aState.z) + 0.07 * sin(uTime * 29.0 + aState.z * 2.3) + 0.05 * sin(uTime * 7.1 + aState.z * 0.7)); float base = ${(0.17).toFixed(3)} - ${pr.toFixed(3)} * (1.0 - burn); p.y = base + (p.y - base) * (1.0 + f); p.xz *= 1.0 - 0.5 * f; p.x += uFlicker * 0.004 * sin(uTime * 5.0 + aState.z) * (p.y - base) * 10.0; } p *= scale; if (kind > 2.5) { vec4 mv = modelViewMatrix * (instanceMatrix * vec4(p, 1.0)); mv.xy += aVert.zw * (uHalo * scale); gl_Position = projectionMatrix * mv; } else { gl_Position = projectionMatrix * modelViewMatrix * (instanceMatrix * vec4(p, 1.0)); } }
+uniform float uNight; uniform float uTime; uniform float uFlicker; varying vec4 vVert; varying vec4 vState; void main() { float kind = vVert.x; float grad = vVert.y; if (kind < 0.5) { vec3 gold = vec3(0.86, 0.66, 0.26) * (0.62 + 0.38 * grad); gl_FragColor = vec4(gold, 1.0); } else if (kind < 1.5) { // Nến đỏ, sáng dần về đầu nến do ngọn lửa rọi; mặt nến chảy ngả kem. vec3 red = mix(vec3(0.5, 0.08, 0.06), vec3(0.88, 0.2, 0.12), 0.25 + 0.75 * smoothstep(0.0, 1.0, grad)); vec3 col = vVert.z > 0.5 ? vec3(1.0, 0.86, 0.58) : red; col *= 0.88 + 0.3 * uNight; gl_FragColor = vec4(col, 1.0); } else if (kind < 2.5) { vec3 col = mix(vec3(1.0, 0.97, 0.78), vec3(1.0, 0.58, 0.2), grad); gl_FragColor = vec4(col, 1.0); } else { float a = pow(max(1.0 - length(vVert.zw), 0.0), 2.2); float flick = 1.0 + uFlicker * (0.12 * sin(uTime * 13.0 + vState.z) + 0.07 * sin(uTime * 29.0 + vState.z * 2.3)); // Cộng sáng thuần (alpha 0 ở chế độ nhân sẵn); hơi yếu hơn quầng nến có sẵn của bàn thờ. gl_FragColor = vec4(vec3(1.0, 0.64, 0.25) * a * (0.3 + 0.22 * uNight) * flick, 0.0); } }
+attribute vec4 aVert; attribute vec4 aState; uniform float uTime; uniform float uFlicker; uniform vec2 uSmoke; uniform float uRise; varying vec4 vVert; varying vec4 vState; varying float vAlpha; void main() { vVert = aVert; vState = aState; vAlpha = 0.0; float kind = aVert.x; bool smoke = aState.w > ${(1.5).toFixed(1)}; if (smoke != (kind > ${(3.5).toFixed(1)})) { // Phần không thuộc thể hiện này (thân que của hạt khói, tấm khói của que): đẩy ra ngoài khung cắt. gl_Position = vec4(0.0, 0.0, 2.0, 1.0); return; } if (smoke) { // Hạt khói: (bật, pha, lư, cờ + độ lệch ngang). Cùng nhịp với khói hương cũ (life 5..6,5 giây, lắc, nở, tan). float side = aState.w - ${Rr.toFixed(1)}; float life = 5.0 + fract(aState.y * 7.31 + side * 3.17) * 1.5; float age = mod(uTime + aState.y * life, life); float u = age / life; float sway = sin(age * 0.9 + side * 6.2831) * 0.22 * u; vec4 c = instanceMatrix * vec4(0.0, 0.0, 0.0, 1.0); c.x += sway + u * 0.25 * (side * 2.0 - 1.0); c.y += age * uRise; c.z += sway * 0.6; vec4 mv = modelViewMatrix * c; mv.xy += aVert.zw * (0.1 + 0.425 * u); gl_Position = projectionMatrix * mv; float lit = aState.x * (aState.z < 0.5 ? uSmoke.x : uSmoke.y); float env = u < 0.15 ? u / 0.15 : (1.0 - u) / 0.85; vAlpha = 0.3 * lit * smoothstep(0.0, 1.0, clamp(env, 0.0, 1.0)); return; } vec3 p = position; // Thân ngắn dần khi cháy: đỉnh thân, đầu than và quầng dời xuống cùng nhau, chân đỏ đứng yên. float moves = kind > 2.5 ? 1.0 : aVert.z; p.y -= moves * (1.0 - aState.y) * ${Or.toFixed(4)}; p *= aState.x; vec4 mv = modelViewMatrix * (instanceMatrix * vec4(p, 1.0)); if (kind > 2.5) { // Quầng quay về camera, cỡ theo chiều dài que của lư (trục Y của ma trận thể hiện); của mình to hơn chút. float len = length(instanceMatrix[1].xyz); float glow = (1.0 + 0.3 * aState.w) * (1.0 + uFlicker * 0.12 * sin(uTime * 2.7 + aState.z)); mv.xy += aVert.zw * (${kr.toFixed(3)} * len * aState.x * glow); } gl_Position = projectionMatrix * mv; }
+uniform float uNight; uniform float uTime; uniform float uFlicker; varying vec4 vVert; varying vec4 vState; varying float vAlpha; void main() { float kind = vVert.x; float grad = vVert.y; float mine = vState.w; float shade = mix(1.0, 0.5, uNight); if (kind > 3.5) { // Khói: trộn thường (alpha nhân sẵn), mềm ở rìa. float a = pow(max(1.0 - length(vVert.zw), 0.0), 1.9) * vAlpha; gl_FragColor = vec4(vec3(0.86, 0.84, 0.8) * a, a); } else if (kind < 0.5) { // Chân nén đỏ son, sẫm dần xuống mặt tro. gl_FragColor = vec4(vec3(0.62, 0.13, 0.1) * (0.72 + 0.28 * grad) * shade, 1.0); } else if (kind < 1.5) { // Thân bột trầm nâu sẫm, ửng đỏ dần lên gần đầu đang cháy. vec3 col = mix(vec3(0.34, 0.19, 0.11), vec3(0.5, 0.21, 0.11), grad * grad); gl_FragColor = vec4(col * shade, 1.0); } else if (kind < 2.5) { // Đầu than tự sáng (không theo đèn); nén của mình sáng hơn một chút. float flick = 1.0 + uFlicker * 0.1 * sin(uTime * 3.3 + vState.z); vec3 ember = mix(vec3(0.6, 0.15, 0.07), vec3(1.0, 0.42, 0.15), grad) * (1.0 + 0.3 * mine) * flick; gl_FragColor = vec4(min(ember, vec3(1.0)), 1.0); } else { float a = pow(max(1.0 - length(vVert.zw), 0.0), 2.0); float flick = 1.0 + uFlicker * 0.15 * sin(uTime * 2.7 + vState.z); // Cộng sáng thuần (alpha 0 ở chế độ nhân sẵn), rõ hơn về đêm. gl_FragColor = vec4(vec3(1.0, 0.45, 0.18) * a * (0.32 + 0.38 * uNight) * (1.0 + 0.6 * mine) * flick, 0.0); } }
+
+=== rolldown-runtime-DK3Fl9T5.js (0)
+
+
+=== rooms-BkU8lBuh.js (53)
+Phòng ${t}
+1 giờ
+1 ngày
+7 ngày
+30 ngày
+Bạn không có quyền quản trị, hoặc phiên đăng nhập đã hết hạn.
+Người này đã rời phòng.
+Thao tác nhanh quá, thử lại sau.
+Không kết nối được.
+Máy chủ đang bận, thử lại sau.
+sắp hết hạn
+còn ${r} phút
+còn ${i} giờ
+còn ${Math.floor(i / 24)} ngày
+Chặn theo mạng (IP) ở mọi phòng. Người dùng chung wifi/4G có thể bị chặn theo.
+${e} phút
+Thời gian ban
+Lý do (tuỳ chọn, chỉ quản trị viên thấy)
+Lý do (tuỳ chọn)
+Nội quy
+Huỷ
+Đang ban…
+Đã ban ${r} trong ${I(o)}.
+Đã đưa ${r} ra khỏi phòng, nhưng chưa chặn được theo mạng (không thấy địa chỉ).
+Đang ban
+Chưa ai đang bị ban.
+Phòng ${c.room} · ${P(c.until, t())}
+Lý do: ${c.reason}
+Gỡ ban
+Gỡ ban ${c.name}
+Đã gỡ ban ${c.name}.
+Đang tải…
+Đang dùng
+Đầy
+<div class="rooms__card" data-ref="roomsView"> <header class="rooms__head"> <h2 id="rooms-title" class="rooms__title">Chọn phòng</h2> <button type="button" class="rooms__tab" data-ref="friendsTab">${n(
+)}<span>Bạn đạo</span></button> <button type="button" class="rooms__close" data-ref="close" aria-label="Đóng">${n(
+)}</button> </header> <p class="rooms__hint">Mỗi phòng chứa tối đa ${e.capacity ?? 100} người. Số người chỉ là ước chừng.</p> <ul class="rooms__grid" data-ref="grid"></ul> <footer class="rooms__foot"> <p class="rooms__status" role="status" aria-live="polite" data-ref="status"></p> <button type="button" class="rooms__refresh" data-ref="refresh">${n(
+)}<span>Làm mới</span></button> </footer> </div> <div class="rooms__card" data-ref="friendsView" hidden></div>
+khoảng ${t.count}/${t.capacity}
+Phòng ${r}
+Đang tải danh sách…
+Chưa lấy được danh sách phòng. Bạn thử lại sau nhé.
+Chưa lấy được danh sách phòng. Bạn vẫn đang ở Phòng ${e.currentRoom}.
+Đang mở Bạn đạo…
+Chưa mở được Bạn đạo. Bạn kiểm tra mạng rồi thử lại nhé.
+Bạn đang một mình trong chùa.
+Đang vào phòng…
+Trong phòng
+Cấp ${e}
+Giữ lửa ${t} ngày
+Tôi
+<div class="rooms__card"> <header class="rooms__head"> <h2 id="people-title" class="rooms__title">Người trong chùa</h2> <button type="button" class="rooms__close" data-ref="close" aria-label="Đóng">${n(
+)}</button> </header> <p class="rooms__summary" data-ref="summary"></p> <ul class="rooms__people" data-ref="list" aria-labelledby="people-title"></ul> <p class="rooms__hint">Chỉ tính người thật đang ở cùng phòng với bạn.</p> ${e.onSay && t.phrases ?
+
+=== share-2XnwscAk.js (44)
+Chùa Sen
+Đã chép link, dán vào Zalo
+Đã sao chép liên kết
+${e} tại Chùa Sen. Cùng tu tập với mình nhé!
+Cấp ${e.value} · ${e.tierName}
+${x(e)} ngày liên tiếp
+ngày liên tiếp
+Cấp
+Thẻ khoe thành tích Chùa Sen: ${e.headline}
+Nhân vật của bạn đứng giữa ảnh, mặc bộ đang mặc
+Giữ lửa ${ue(e.streak)}
+CHÙA SEN
+lạy Phật
+vòng tràng hạt
+câu niệm Phật
+phút thiền
+Ngày ${e.day}/${e.month}${e.leap ?
+Tại Chùa Sen · ${e}
+Tại Chùa Sen
+${e.text} · đã mở bộ áo "${t}"
+${e.text} · đủ ${e.goal} bạn mở bộ áo "${t}"
+Hôm nay tôi đã tu tập
+Hôm nay tôi đã lên chùa
+Phật tử
+Cùng tu tập tại ${P(e.link)}
+Bài đăng
+Khung dọc
+Đã tải ảnh về máy
+Không dựng được ảnh nhân vật cho thẻ khoe thành tích
+<div class="share-card__card"> <header class="share-card__head"> <h2 id="share-title" class="share-card__title" tabindex="-1" data-ref="title">Khoe thành tích ${r(
+, { size: 20 })}</h2> <button type="button" class="share-card__close" data-ref="close" aria-label="Đóng">${r(
+)}</button> </header> <div class="share-card__formats" role="group" aria-label="Khung ảnh"> ${[
+)}<span><b>Chia sẻ</b><small>Zalo, Facebook, Messenger…</small></span></button> <div class="share-card__row"> <button type="button" class="share-card__btn share-card__btn--fb" data-act="facebook">Facebook</button> <button type="button" class="share-card__btn share-card__btn--zalo" data-act="zalo">Zalo</button> <button type="button" class="share-card__btn share-card__btn--ms" data-act="messenger" hidden>Messenger</button> <button type="button" class="share-card__btn" data-act="download">${r(
+, { size: 18 })}<span>Tải ảnh</span></button> <button type="button" class="share-card__btn" data-act="copy">${r(
+, { size: 18 })}<span>Sao chép link</span></button> </div> <p class="share-card__note" id="share-note">Liên kết chỉ kèm một mã giới thiệu ngẫu nhiên, không có thông tin cá nhân.</p> <p class="share-card__ref" data-ref="refLine" hidden></p> <button type="button" class="share-card__done" data-ref="done">Đóng</button> </div> </div>
+Không nạp được chương trình rủ bạn
+Không tạo được ảnh thẻ khoe thành tích
+Đang tạo ảnh…
+Chưa tạo được ảnh. Bạn vẫn có thể chia sẻ liên kết.
+Chưa tải được ảnh. Bạn thử lại nhé.
+Chưa sao chép được. Liên kết của bạn: ${h}
+Không dựng được ảnh nhân vật
+Công phu viên mãn. Chia vui cùng bạn bè nhé?
+Để sau
+
+=== shot-hFjbYDRK.js (14)
+Điểm xuất phát nhìn vào chánh điện
+Trước hiên chánh điện
+Trong chánh điện nhìn tượng
+Quỳ ở bồ đoàn hàng đầu
+Sân gần lư hương
+Nhìn ra núi qua tam quan
+Nghi môn nhìn từ sân trước
+Sân trước, cầu và tam quan
+Sân thiền và tượng Phật đá
+Quan Âm vườn Đông
+Giếng ngọc
+Cổng phụ phía Tây
+Toàn cảnh từ góc vườn
+Cận tượng chánh điện
+
+=== sky-X0ndF2_S.js (3)
+uniform vec3 uTop; uniform vec3 uUpper; uniform vec3 uMid; uniform vec3 uHorizon; uniform vec3 uGlow; uniform float uGlowAmt; uniform vec3 uGlowDir; vec3 skyGradient(vec3 d) { float h = max(d.y, 0.0); // Bốn dải màu: chân trời, dải giữa, dải trên, đỉnh trời. vec3 col = mix(uHorizon, uMid, smoothstep(0.0, 0.16, h)); col = mix(col, uUpper, smoothstep(0.1, 0.42, h)); col = mix(col, uTop, smoothstep(0.34, 0.95, h)); // Ráng chiều: quầng rộng sát chân trời phía sau chánh điện, cộng một điểm sáng hẹp. float g = max(dot(d, uGlowDir), 0.0); float low = 1.0 - smoothstep(0.0, 0.5, h); col += uGlow * uGlowAmt * (pow(g, 2.5) * 0.3 * low + pow(g, 12.0) * 0.28); return col; }
+varying vec3 vDir; void main() { vDir = normalize(position); // .xyww đặt độ sâu đúng mặt phẳng xa: vòm trời vẽ cuối cùng và chỉ tô các điểm ảnh chưa có gì che, // nên không tốn shader mây cho phần màn hình đã bị chùa, đất, núi phủ. gl_Position = (projectionMatrix * modelViewMatrix * vec4(position, 1.0)).xyww; }
+uniform vec3 uSunDir; uniform vec3 uSunColor; uniform float uSunAmt; uniform vec3 uMoonDir; uniform float uMoonAmt; uniform float uStars; uniform vec3 uCloudLit; uniform vec3 uCloudShade; uniform float uCloudCover; uniform float uTime; varying vec3 vDir; #include <common> #include <dithering_pars_fragment> ${A} float hash21(vec2 p) { p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); } float hash31(vec3 p) { p = fract(p * vec3(443.897, 441.423, 437.195)); p += dot(p, p.yzx + 19.19); return fract((p.x + p.y) * p.z); } float vnoise(vec2 p) { vec2 i = floor(p); vec2 f = fract(p); f = f * f * (3.0 - 2.0 * f); return mix( mix(hash21(i), hash21(i + vec2(1.0, 0.0)), f.x), mix(hash21(i + vec2(0.0, 1.0)), hash21(i + vec2(1.0, 1.0)), f.x), f.y ); } float fbm(vec2 p) { float a = 0.5; float s = 0.0; for (int i = 0; i < CLOUD_OCTAVES; i++) { s += a * vnoise(p); p = p * 2.03 + vec2(17.1, 9.2); a *= 0.5; } return s; } void main() { vec3 d = normalize(vDir); vec3 col = skyGradient(d); float h = d.y; // Mặt trời: quầng mềm và một đĩa nhỏ sáng gắt. float s = max(dot(d, uSunDir), 0.0); col += uSunColor * uSunAmt * (pow(s, 5.0) * 0.22 + pow(s, 64.0) * 0.7 + smoothstep(0.9990, 0.9996, s) * 1.4); // Sao (chỉ trên chân trời, nhấp nháy rất nhẹ) và trăng rằm có vài mảng tối. float stars = 0.0; if (uStars > 0.001 && h > 0.0) { vec3 p = d * 62.0; vec3 cell = floor(p); vec3 f = fract(p) - 0.5; float r = hash31(cell); vec3 jitter = vec3(hash31(cell + 3.1), hash31(cell + 7.7), hash31(cell + 11.3)) - 0.5; float dist = length(f - jitter * 0.55); float size = 0.07 + 0.09 * hash31(cell + 5.5); float tw = 0.8 + 0.2 * sin(uTime * 1.7 + r * 60.0); stars = step(0.9, r) * (1.0 - smoothstep(0.0, size, dist)) * tw * smoothstep(0.0, 0.12, h) * uStars; col += vec3(0.85, 0.9, 1.0) * stars * 1.6; } if (uMoonAmt > 0.001) { float md = dot(d, uMoonDir); col += vec3(0.62, 0.7, 0.95) * uMoonAmt * (pow(max(md, 0.0), 300.0) * 0.4 + pow(max(md, 0.0), 40.0) * 0.1); if (md > 0.9985) { vec3 t = normalize(cross(uMoonDir, vec3(0.0, 1.0, 0.0))); vec3 b = cross(t, uMoonDir); vec2 q = vec2(dot(d, t), dot(d, b)) / 0.045; float disc = 1.0 - smoothstep(0.93, 1.0, length(q)); float maria = vnoise(q * 3.2 + 4.0) * 0.55 + vnoise(q * 7.0) * 0.25; vec3 moon = mix(vec3(1.0, 0.97, 0.88), vec3(0.5, 0.55, 0.68), maria * 1.1); col = mix(col, moon * 1.05, disc * uMoonAmt); } } // Mây mỏng: nhiễu fbm trên một mặt phẳng ảo, thưa dần và tan vào sương khi sát chân trời. if (h > 0.0) { vec2 uv = d.xz / (h + 0.28) * vec2(2.8, 2.0) + vec2(uTime * 0.02, uTime * 0.007); float n = fbm(uv); float cover = smoothstep(uCloudCover, uCloudCover + 0.16, n); float fade = smoothstep(0.0, 0.2, h); if (cover * fade > 0.003) { #if CLOUD_LIT vec2 toLight = normalize(uSunDir.xz + vec2(0.0001, 0.0)); float n2 = fbm(uv + toLight * 0.09); float lit = clamp(0.5 + (n - n2) * 4.2 + (1.0 - cover) * 0.25, 0.0, 1.0); #else float lit = clamp(0.35 + (1.0 - cover) * 0.9, 0.0, 1.0); #endif vec3 cloud = mix(uCloudShade, uCloudLit, lit); // Mây phía ráng chiều ửng màu ráng; mây gần mặt trời có viền sáng. float gl = pow(max(dot(d, uGlowDir), 0.0), 3.0); cloud += uGlow * uGlowAmt * gl * 0.45; cloud += uSunColor * uSunAmt * pow(s, 8.0) * 0.5 * (1.0 - cover * 0.5); col = mix(col, cloud, cover * fade * 0.92); } } gl_FragColor = vec4(col, 1.0); #include <tonemapping_fragment> #include <colorspace_fragment> #include <dithering_fragment> }
+
+=== sound-D3Z2fPqp.js (32)
+Câu ngân ngắn của một vị tăng
+Đàn guzheng (họ hàng đàn tranh Việt), thang ngũ cung
+Guzheng trên nền nhạc núi rừng
+Đàn phím, chuông, tiếng ngân
+Nhạc làm bằng máy (GarageBand) của một người Việt, chủ đề chùa và hoa sen
+Đàn dây kiểu Á Đông làm bằng máy, trên tiếng gió và nước
+Giọng miền Nam
+Giọng miền Bắc
+Chỉ tiếng mõ
+Lỗi trong hàm lắng nghe lựa chọn nghe
+không có bộ nhớ
+Đã huỷ kéo giãn
+tốc độ không hợp lệ: ${t}
+mảng ra dài ${l.length}, cần ${c}
+Tiếng mõ (không lời)
+Máy này chưa đổi được tốc độ, đang phát tốc độ gốc
+Mất kết nối, chuyển sang tiếng mõ tổng hợp
+Lỗi trong hàm lắng nghe niệm Phật
+Đã huỷ tải
+Tải đứng yên quá lâu
+không có bản ghi
+tệp rỗng
+Đã dừng
+kéo giãn không ghi vào bộ đệm phát
+giải mã hỏng
+Nhạc nền tổng hợp lỗi khi xếp lịch
+không có bản nhạc
+Không phát được nhạc nền tổng hợp
+Nhạc nền lỗi khi bắt đầu
+Chùa đang mở nhạc nền và tiếng mõ. Bấm Tắt cho yên lặng, hay chỉnh ở nút loa.
+Tắt
+Để vậy
+
+=== streak-tiers-B_2fwVfy.js (8)
+Đốm lửa
+Ngọn nến
+Đèn dầu
+Đèn lồng
+Đèn hoa sen
+Đèn lưu ly
+Đèn trường minh
+Vô tận đăng
+
+=== sweeping-Ch-n_tow.js (9)
+Quét lá đa
+Xong, cất chổi
+Hôm nay đã quét ${e}/${t} lá
+Hôm nay: ${t} ✓ · thêm ${e - t} lá${n ?
+Đã cầm chổi. Thong thả đi qua chỗ lá rụng để quét.
+Đủ 108 lá hôm nay. Tâm cũng nhẹ như lá. Quét tiếp vẫn được tinh tấn.
+Đã đủ tinh tấn quét lá hôm nay, vẫn quét tiếp được.
+Đã quét một phần ba số lá hôm nay.
+Đã quét hai phần ba số lá hôm nay. Thong thả thôi.
+
+=== updates-BQVStjbI.js (3)
+Đang cập nhật Chùa Sen bản mới…
+Có bản mới của Chùa Sen
+Cập nhật
+
+=== vn-time-DznqUr4I.js (0)
+
+
+=== wardrobe-BkkAP1eO.js (41)
+Cần ${h(m(e.tier))}
+Giữ lửa ${e.days} ngày
+Rủ ${e.count} bạn vào chùa
+Danh hiệu KOL
+Danh hiệu ${e.badge}
+Chọn tối đa 2 phụ kiện. Bỏ bớt một món trước nhé.
+${n.label} đang khoá: ${v(r.style) ??
+${n.label} đã có sẵn nên bỏ ${w(u)}.
+} đang khoá: ${b(o) ??
+${s.label} đang khoá: ${y(r.id) ??
+${l(a.style).label} đã có sẵn, không đeo thêm ${s.label.toLowerCase()}.
+Đã đổi ${o(c).label.toLowerCase()} sang ${s.label.toLowerCase()}.
+Dáng suông
+Tà dài
+Kiểu áo
+Màu
+Phụ kiện
+Áo tràng đi chùa màu xám tro, giản dị.
+Áo tràng màu lam của Phật tử tại gia.
+Áo bà ba cổ tròn, hàng khuy trước ngực, quần ống rộng.
+Áo dài cổ đứng, tay dài; chọn tà dài hay dáng suông.
+Áo tứ thân mở vạt, yếm thắm, thắt lưng lụa và khăn mỏ quạ.
+Áo dài có dải thêu hoa sen trên tà trước.
+Áo tràng tại gia viền chỉ vàng ở cổ, tay và gấu áo.
+Áo bà ba, hoa sen cài áo và túi vải dệt của người rủ bạn đi chùa.
+Áo dài thêu sen chỉ vàng trước ngực, khăn thắt lưng thắt nơ bên hông.
+Màu viền
+Màu quần
+Màu yếm
+Màu chỉ thêu
+Màu khăn thắt lưng
+Chưa mở được hướng dẫn, bạn thử lại nhé.
+${e}, đang khoá, chạm để xem cách mở${t ?
+${e}, đang khoá: ${t ??
+<div class="outfit__sheet"> <header class="outfit__head"> <h2 class="outfit__title" id="outfit-title">Trang phục</h2> ${e ?
+)}<span class="sr-only" data-ref="turnLabel">Xem phía sau</span></button>
+} <button type="button" class="outfit__icon" data-ref="close" aria-label="Đóng">${s(
+)}</button> </header> <p class="outfit__now" id="outfit-now" data-ref="now"></p> <div class="outfit__tabs" role="tablist" aria-label="Tuỳ chỉnh trang phục">${t}</div> <div class="outfit__panels"> <section class="outfit__panel" role="tabpanel" id="outfit-panel-style" aria-labelledby="outfit-tab-style" data-panel="style"> <div class="outfit__styles" role="radiogroup" aria-label="Kiểu áo" aria-describedby="outfit-blurb" data-ref="styles">${n}</div> <p class="outfit__hint outfit__blurb" id="outfit-blurb" data-ref="blurb"></p> <div class="outfit__group" data-ref="cutGroup"> <p class="outfit__label" id="outfit-cut-label">Dáng áo dài</p> <div class="outfit__cuts" role="radiogroup" aria-labelledby="outfit-cut-label" data-ref="cuts">${o}</div> </div> </section> <section class="outfit__panel" role="tabpanel" id="outfit-panel-color" aria-labelledby="outfit-tab-color" data-panel="color"> <p class="outfit__label" id="outfit-primary-label">Màu chính</p> <div class="outfit__swatches" role="radiogroup" aria-labelledby="outfit-primary-label" data-ref="primary"></div> <p class="outfit__label" id="outfit-secondary-label" data-ref="secondaryLabel"></p> <div class="outfit__swatches" role="radiogroup" aria-labelledby="outfit-secondary-label" data-ref="secondary"></div> </section> <section class="outfit__panel" role="tabpanel" id="outfit-panel-accessory" aria-labelledby="outfit-tab-accessory" data-panel="accessory"> <p class="outfit__hint">Thêm tối đa hai món, mỗi chỗ một món: nón lá hay khăn vấn, một chuỗi hạt, một món trước ngực.</p> <div class="outfit__accs" role="group" aria-label="Phụ kiện" data-ref="accs">${c}</div> </section> </div> <p class="outfit__msg" role="status" aria-live="polite" data-ref="msg"></p> <footer class="outfit__foot"> <button type="button" class="btn btn--ghost" data-ref="cancel">Hủy</button> <button type="button" class="btn btn--gold" data-ref="save">Lưu</button> </footer> </div>
+Bộ này đã có
+Xem phía trước
+Xem phía sau
+
+=== water-paths-DYM7yuBe.js (1)
+samplePath: cần ít nhất hai điểm
+
+=== wishtree-B9TYxUUX.js (98)
+Lời chúc lành và lời nhắc tu tập — không phải bói toán
+Chúc bạn một ngày thân khỏe, tâm an, nói lời dịu dàng.
+Chúc bạn thở chậm một chút giữa ngày bận, và thấy lòng nhẹ lại.
+Chúc nhà bạn hôm nay có một bữa cơm ấm, đủ mặt, nhiều tiếng cười.
+Chúc bạn gặp một người tử tế, và chính bạn cũng là người tử tế với ai đó.
+Chúc bạn biết nghỉ khi mệt, biết nói khi cần, biết lặng im khi nên.
+Chúc bạn ngủ ngon đêm nay và thức dậy với một tâm trong lành.
+Chúc bạn đủ kiên nhẫn với người thân, và đủ dịu dàng với chính mình.
+Chúc bạn một ngày làm việc chăm chỉ mà không vội vã.
+Chúc bạn nhìn thấy một điều đẹp nhỏ: một tán lá, một nụ cười, một khoảng trời trong.
+Chúc bạn đặt xuống được một nỗi lo không cần mang theo.
+Chúc bạn có một lời cảm ơn để nói, và một người để nói lời ấy.
+Chúc bạn có một phút nhớ về ông bà, cha mẹ, dù người còn bên cạnh hay đã đi xa.
+Chúc bạn bước đi chậm rãi, thấy mỗi bước chân là một lần trở về.
+Chúc bạn giữ được một lời hứa nhỏ với chính mình hôm nay.
+Chúc bạn đọc được một trang sách hay, nghe được một câu nói lành.
+Chúc bạn nhẹ nhàng bỏ qua một lỗi nhỏ của người khác.
+Chúc bạn có một khoảng lặng giữa ngày để nghe lòng mình.
+Chúc bạn ăn uống điều độ, sống chừng mực, thân tâm an ổn.
+Chúc bạn làm được một việc tốt nhỏ mà không cần ai biết.
+Chúc bạn có bạn hiền để chia sẻ, và lòng rộng để lắng nghe.
+Chúc bạn mỉm cười với chính mình trong gương sáng nay.
+Chúc bạn đi qua việc khó hôm nay bằng sự bình tĩnh và lòng tin.
+Chúc bạn nhận ra mình đã đi được một quãng đường dài, và biết trân trọng.
+Chúc bạn có thêm một chút thương cảm với người đang khó khăn.
+Chúc bạn sống trọn với hiện tại, không tiếc chuyện đã qua, không lo quá xa.
+Chúc bạn có trái tim biết ơn trước những điều bình dị.
+Chúc nhà bạn hòa thuận, người trong nhà nói với nhau lời êm ái.
+Chúc bạn có sức khỏe để làm việc, có thời gian để nghỉ ngơi.
+Chúc bạn giữ tâm sáng như nắng sớm, lòng mát như bóng cây.
+Chúc bạn học được một điều mới và vui với điều mình học.
+Chúc bạn nói lời chân thật, nhẹ nhàng, đúng lúc.
+Chúc bạn có một buổi chiều thong thả bên người thương.
+Chúc bạn thấy được điều tốt nơi người khác, kể cả người khó tính.
+Chúc bạn biết đủ với những gì đang có, và thấy lòng đầy đủ.
+Chúc bạn làm dịu cơn giận bằng ba hơi thở trước khi lên tiếng.
+Chúc bạn gieo một hạt lành hôm nay: một lời khen, một bàn tay giúp đỡ.
+Chúc bạn và những người bạn thương được bình an, dù ở gần hay xa.
+Chúc bạn một ngày không quá bận để quên mình đang sống.
+Chúc bạn có giấc ngủ yên và một sáng mai nhiều hy vọng.
+Chúc bạn bền lòng với điều thiện, dù chỉ là việc nhỏ mỗi ngày.
+Chúc bạn biết chăm sóc thân này như chăm một cây non.
+Chúc bạn tìm thấy sự yên ổn ngay trong việc mình đang làm.
+Chúc bạn được người khác hiểu, và bạn cũng hiểu được người khác.
+Chúc bạn có lòng bao dung như tán cây che mát cho mọi người.
+Chúc bạn sống chậm lại đủ để nghe tiếng chim, tiếng gió.
+Chúc bạn có một lời xin lỗi được nói ra và được đón nhận.
+Chúc bạn giữ lòng hiền hòa trước những điều không như ý.
+Chúc bạn thấy mình đáng được thương yêu, như mọi người khác.
+Đầu năm chúc bạn thân tâm an lạc, nhà cửa ấm êm, lòng nhẹ như mây xuân.
+Năm mới chúc bạn sống chậm hơn, thương nhiều hơn, giận ít hơn.
+Xuân về chúc bạn và gia đình mạnh khỏe, hòa thuận, sum vầy.
+Đầu năm chúc bạn gieo những hạt lành và chăm từng việc nhỏ cho tròn.
+Năm mới chúc bạn giữ được những lời nguyện tốt đẹp của mình suốt bốn mùa.
+Chúc bạn một mùa xuân bình an: người thân bên cạnh, lòng biết ơn trong tim.
+Chúc bạn một ngày thanh tịnh: ăn nhẹ, nói hiền, nghĩ điều lành.
+Chúc bạn có tâm sáng như trăng rằm, lòng lặng như mặt hồ thu.
+Chúc bạn dành ít phút niệm Phật hay ngồi yên cho lòng lắng lại.
+Chúc bạn khởi một ý nghĩ lành và giữ nó suốt ngày hôm nay.
+Chúc bạn và gia đình bình an, quây quần trong ngày sóc vọng.
+Chúc bạn buông bớt một thói quen chưa lành và nuôi thêm một điều tốt.
+Mùa Vu Lan chúc bạn có dịp tỏ lòng biết ơn cha mẹ, dù cha mẹ còn bên cạnh hay đã đi xa.
+Chúc bạn nhớ ơn sinh thành bằng một việc làm thương yêu hôm nay.
+Chúc bạn gọi cho cha mẹ, ông bà, hay thắp một nén hương tưởng nhớ.
+Chúc bạn sống tốt mỗi ngày, như món quà dành cho người đã sinh thành.
+Rằm tháng Giêng chúc bạn và gia đình bình an, lòng sáng như trăng đầu năm.
+Rằm tháng Giêng chúc bạn thong thả lễ Phật, thắp một nén hương lòng rồi về nhà nhẹ nhõm.
+Mùa Phật Đản chúc bạn một ngày an lành: một việc tốt, một lời hiền, một phút ngồi yên.
+Ngày Phật Đản chúc bạn nuôi lớn lòng từ, thương mình và thương người nhiều hơn.
+Ngày Đức Phật thành đạo dưới cội bồ đề: chúc bạn ngồi yên một lát, thở chậm, lòng sáng thêm.
+Lộc đầu năm
+Lộc hôm nay
+Cây bồ đề
+Cây bồ đề nhắc nhớ nơi Đức Phật thành đạo. Hái một lộc là nhận một lời chúc lành; treo một lời nguyện là gửi lòng mình lên cây.
+Hái lộc
+Xem lộc hôm nay
+Một lộc mỗi ngày, cả chùa cùng nhận.
+Treo nguyện
+Lời nguyện ở lại máy này; cây chỉ mang một dải lụa.
+Bạn đã hái lộc hôm nay
+Gửi lộc cho người thân
+Lộc hôm nay từ Chùa Sen
+Lộc đã hái
+Đã hái ${e} lộc
+Lời nguyện chỉ lưu trên máy này — không gửi đi, không ai khác đọc được. Mọi người chỉ thấy một dải lụa mang màu ý nguyện bạn chọn, treo trên cây vài giờ. Bạn có thể xóa trong Cài đặt.
+Ví dụ: Nguyện cho mẹ con mau khỏe.
+Ý nguyện của dải lụa
+Treo lên cây
+Lời nguyện đã treo (${e})
+Lời nguyện của bạn đã được treo lên cây bồ đề.
+Hôm nay bạn đã treo 3 lời nguyện. Mai mình treo tiếp nhé.
+Mỗi lời nguyện cách nhau một phút. Bạn thở chậm vài hơi rồi treo tiếp nhé.
+Cây đang nhiều dải quá, chờ chút rồi treo nhé.
+Vườn Tây còn đang tải. Bạn thử lại sau giây lát nhé.
+<div class="bodhi-dlg__card"> <header class="bodhi-dlg__head"> <h2 id="bodhi-title" class="bodhi-dlg__title" tabindex="-1">${se}</h2> <button type="button" class="bodhi-dlg__close" data-ref="close" aria-label="Đóng">${p(
+<div class="bodhi-dlg__card"> <header class="bodhi-dlg__head"> <h2 id="loc-title" class="bodhi-dlg__title" tabindex="-1">${n.heading}</h2> <button type="button" class="bodhi-dlg__close" data-ref="close" aria-label="Đóng">${p(
+}>${me}</p> <p class="bodhi-dlg__wish" data-ref="wish"></p> <p class="bodhi-dlg__teach"><span class="bodhi-dlg__teach-tag">Lời nhắc</span> <span data-ref="teach"></span></p> <p id="loc-label" class="bodhi-dlg__label">${ee}</p> <button type="button" class="bodhi-dlg__btn bodhi-dlg__btn--go" data-ref="share">${p(
+)}<span>${he}</span></button> <details class="bodhi-dlg__history" data-ref="history" hidden> <summary class="bodhi-dlg__history-sum">${_e} · <span data-ref="count"></span></summary> <ul class="bodhi-dlg__days" data-ref="days"></ul> </details> <footer class="bodhi-dlg__foot"> <button type="button" class="bodhi-dlg__btn" data-ref="done">Đóng</button> </footer> </div>
+
+=== xinque-DEqVyW1x.js (45)
+Quẻ ở Chùa Sen chỉ để vui và để nhắc mình sống tốt hơn. Đây không phải lời tiên tri, không nói trước điều gì sẽ xảy ra. Đừng dựa vào quẻ để quyết định việc lớn. Theo tinh thần lời Phật dạy, an vui đến từ việc mình làm hôm nay.
+Hôm nay thử lạy Phật ba lạy thật chậm, mỗi lạy một hơi thở.
+Ngồi thiền ba phút, chỉ theo dõi hơi thở vào và hơi thở ra.
+Gọi điện hỏi thăm bố mẹ hay người thân; nếu các cụ đã khuất, thầm nhớ ơn các cụ.
+Lần tràng hạt một vòng, mỗi hạt một câu niệm Phật theo nhịp thở.
+Thắp một nén hương ở lư giữa sân và thầm nhớ ơn một người đã giúp mình.
+Quét lá đa một vòng trong sân chùa, quét chậm và nhẹ tay.
+Đi thiền hành vài phút: bước chậm, biết từng bước chân chạm đất.
+Thỉnh một tiếng chuông rồi đứng yên nghe cho tới khi tiếng chuông tan hẳn.
+Dâng một bông hoa lên bàn thờ và mỉm cười với chính mình.
+Tụng một bài kinh ngắn, đọc chậm và rõ từng câu.
+Uống một ly nước thật chậm, cảm nhận từng ngụm.
+Nói lời cảm ơn với một người mà bạn vẫn hay quên cảm ơn.
+Nhắn một tin hỏi thăm người bạn lâu rồi chưa gặp.
+Làm một việc tốt nhỏ mà không cần ai biết.
+Trước khi ngủ, nhớ lại ba điều tốt đẹp của hôm nay.
+Đặt điện thoại xuống mười phút và nhìn ra bầu trời.
+Khen thật lòng một người, dù chỉ về một điều nhỏ.
+Ăn một bữa thật chậm, không nhìn màn hình.
+Dọn gọn một góc bàn, làm thong thả, không vội.
+Khi thấy bực, thở ba hơi thật chậm rồi mới nói.
+Đi dạo một vòng khuôn viên chùa và ghé thăm cây bồ đề.
+Ngồi xuống một bồ đoàn, nhắm mắt nghe tiếng gió và tiếng chim.
+Giúp người trong nhà một việc nhỏ mà không đợi ai nhờ.
+Nhìn người thân bằng ánh mắt hiền và thầm chúc họ bình an.
+Không quẻ nào làm bài thay mình được. Những giờ ôn bài hôm nay mới là chỗ dựa vững nhất cho ngày thi.
+Ôn lại một phần bạn thấy khó nhất, chậm thôi cũng được.
+Kỳ thi cho thấy mình đã học được bao nhiêu, không đo giá trị con người bạn. Cứ học đều mỗi ngày.
+Học hai mươi lăm phút rồi nghỉ năm phút, lúc nghỉ thở ba hơi thật chậm.
+Tâm yên thì đầu óc sáng. Trước giờ thi, hít một hơi sâu và thở ra thật chậm.
+Trước khi mở sách, ngồi thẳng lưng và thở ba hơi.
+Cố gắng hết sức là đủ. Việc của hôm nay là học cho hiểu, từng phần một.
+Tối nay ngủ đủ giấc, để sáng mai đầu óc tỉnh táo.
+Hồi hộp trước kỳ thi là chuyện thường. Ai cũng từng như vậy, và bạn không một mình.
+Rủ một người bạn cùng ôn bài, hỏi nhau những chỗ chưa hiểu.
+Làm bài xong rồi thì nhẹ nhàng buông xuống. Dù thế nào, bạn vẫn đáng được thương và được nghỉ ngơi.
+Gửi lời cảm ơn tới thầy cô hay người đã kèm bạn học.
+Xin quẻ
+Lắc ống xăm, rút một que, nhận một lời nhắn nhỏ cho hôm nay.
+Đang lắc ống xăm…
+Mỗi ngày một quẻ. Mai xin lại nhé.
+Hôm nay bạn đã xin quẻ rồi. Mai xin lại nhé.
+<div class="xin-que__card"> <header class="xin-que__head"> <h2 id="xin-que-title" class="xin-que__title" tabindex="-1" data-ref="title">${C}</h2> <button type="button" class="xin-que__close" data-ref="close" aria-label="Đóng">${a(
+, { size: 16 })}<span id="xin-que-note" data-ref="note"></span></p> <div class="xin-que__body" data-ref="body"> <div class="xin-que__stage" data-ref="stage" aria-hidden="true">${O}</div> <p class="xin-que__intro" data-ref="intro">${w}</p> <button type="button" class="xin-que__draw" data-ref="draw">${C}</button> <div class="xin-que__result" role="status" aria-live="polite" tabindex="-1" data-ref="result" hidden> <p class="xin-que__num" data-ref="num"></p> <h3 class="xin-que__h">Lời nhắn hôm nay</h3> <p class="xin-que__loi" data-ref="loi"></p> <h3 class="xin-que__h">Việc nhỏ hôm nay</h3> <p class="xin-que__viec" data-ref="viec"></p> <p class="xin-que__foot" data-ref="foot"></p> </div> </div> </div>
+Quẻ số ${e}

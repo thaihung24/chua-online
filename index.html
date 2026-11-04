@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+    <title>Chùa Liên Hoa — Chùa online 3D miễn phí: đi chùa, tụng kinh</title>
+    <meta name="description" content="Chùa Liên Hoa là ngôi chùa online 3D miễn phí: dạo sân chùa, thắp hương, lễ Phật, gõ mõ tụng kinh, lần tràng hạt, ngồi thiền, thả đèn hoa đăng và cùng bạn đạo công phu mỗi ngày. Lên chùa mọi lúc, mọi nơi." />
+    <meta name="theme-color" content="#140d08" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="application-name" content="Chùa Liên Hoa" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Chùa Liên Hoa" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Chùa Liên Hoa" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Chùa Liên Hoa — Chùa online 3D miễn phí" />
+    <meta property="og:description" content="Đi chùa, thắp hương, tụng kinh gõ mõ, lần tràng hạt, ngồi thiền cùng mọi người — ngay trên điện thoại hay máy tính." />
+    <meta property="og:image" content="/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Chùa Liên Hoa — Chùa online 3D miễn phí" />
+    <meta name="twitter:description" content="Lên chùa mọi lúc, mọi nơi: lễ Phật, tụng kinh, thiền, thả đèn hoa đăng." />
+    <meta name="twitter:image" content="/og.png" />
+
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "name": "Chùa Liên Hoa",
+            "alternateName": "Chùa online 3D Liên Hoa",
+            "inLanguage": "vi-VN",
+            "description": "Chùa online 3D miễn phí: đi chùa, thắp hương, tụng kinh, thiền, thả đèn hoa đăng."
+          },
+          {
+            "@type": "Organization",
+            "name": "Chùa Liên Hoa",
+            "logo": "/icons/icon-512.png"
+          },
+          {
+            "@type": "WebApplication",
+            "name": "Chùa Liên Hoa",
+            "applicationCategory": "LifestyleApplication",
+            "operatingSystem": "Web, iOS, Android",
+            "inLanguage": "vi-VN",
+            "isAccessibleForFree": true,
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "VND" },
+            "description": "Ứng dụng web 3D để đi chùa online: lễ Phật, tụng kinh gõ mõ, tràng hạt, thiền, đèn hoa đăng, phòng nhiều người."
+          }
+        ]
+      }
+    </script>
+
+    <!-- CSS tối thiểu để màn hình mở đầu hiện đẹp ngay trước khi nạp gói chính -->
+    <style>
+      html, body { margin: 0; background: #140d08; color: #f5ead9; }
+      .world-root { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: #140d08; }
+      .boot { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; background: radial-gradient(90% 70% at 50% 28%, #3a2515 0%, #1b120b 58%, #140d08 100%); }
+    </style>
+  </head>
+  <body>
+    <div id="world" class="world-root"></div>
+    <div id="app"></div>
+
+    <!-- Màn hình mở đầu (boot splash): U1 điều khiển tiến trình qua #bootFill/#bootStatus -->
+    <div class="boot" id="boot" role="status" aria-live="polite">
+      <div class="boot__glow" aria-hidden="true"></div>
+      <div class="boot__inner">
+        <svg class="boot__lotus" viewBox="0 0 160 130" width="150" height="122" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="bootGold" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#fbe3a2" />
+              <stop offset=".55" stop-color="#e0b25c" />
+              <stop offset="1" stop-color="#b9822f" />
+            </linearGradient>
+            <radialGradient id="bootHalo" cx="50%" cy="55%" r="55%">
+              <stop offset="0" stop-color="#f3c973" stop-opacity=".38" />
+              <stop offset="1" stop-color="#f3c973" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+          <circle cx="80" cy="66" r="62" fill="url(#bootHalo)" />
+          <g class="boot__petals" fill="none" stroke="url(#bootGold)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path class="bp bp-c" d="M80 14c17 18 21 42 0 74-21-32-17-56 0-74z" fill="rgba(243,201,115,.14)" />
+            <path class="bp bp-l1" d="M62 38C42 42 30 56 28 76c2 18 20 28 52 28" fill="rgba(243,201,115,.08)" />
+            <path class="bp bp-r1" d="M98 38c20 4 32 18 34 38-2 18-20 28-52 28" fill="rgba(243,201,115,.08)" />
+            <path class="bp bp-l2" d="M54 68C34 68 18 76 12 92c6 10 24 14 46 12" />
+            <path class="bp bp-r2" d="M106 68c20 0 36 8 42 24-6 10-24 14-46 12" />
+            <path class="bp bp-b" d="M34 112c28 10 64 10 92 0" stroke-width="2" />
+            <path class="bp bp-b2" d="M50 121c20 5 40 5 60 0" stroke-width="1.6" opacity=".6" />
+          </g>
+        </svg>
+        <h1 class="boot__title">Chùa Liên Hoa</h1>
+        <p class="boot__tag">Lên chùa mọi lúc, mọi nơi</p>
+        <div class="boot__bar" aria-hidden="true"><span id="bootFill"></span></div>
+        <p class="boot__status" id="bootStatus">Đang mở cổng chùa…</p>
+      </div>
+      <nav class="boot__links" aria-label="Trang giới thiệu">
+        <a href="/gioi-thieu/">Giới thiệu</a>
+        <a href="/huong-dan-di-chua-online/">Hướng dẫn đi chùa online</a>
+        <a href="/kinh/">Tụng kinh</a>
+        <a href="/lich-am/">Lịch âm</a>
+        <a href="/hoi-dap/">Hỏi đáp</a>
+      </nav>
+      <noscript>
+        <p class="boot__noscript">Chùa Liên Hoa cần JavaScript để dựng cảnh chùa 3D. Bạn vui lòng bật JavaScript, hoặc đọc <a href="/kinh/">kinh văn</a> và xem <a href="/lich-am/">lịch âm</a> ngay trên các trang tĩnh.</p>
+      </noscript>
+    </div>
+
+    <div id="onboarding-root"></div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

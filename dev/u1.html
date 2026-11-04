@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>U1 · Harness khung UI</title>
+    <style>
+      html, body { margin: 0; background: #140d08; }
+      .world-root {
+        position: fixed; inset: 0; z-index: 0; overflow: hidden;
+        background:
+          radial-gradient(65% 45% at 50% 30%, rgba(243, 196, 110, 0.28), rgba(243, 196, 110, 0) 70%),
+          radial-gradient(40% 30% at 22% 62%, rgba(95, 181, 154, 0.16), transparent 70%),
+          radial-gradient(45% 32% at 80% 58%, rgba(235, 169, 187, 0.16), transparent 70%),
+          linear-gradient(180deg, #3c291b 0%, #5c3e26 36%, #3f2d1e 64%, #241911 100%);
+      }
+      .world-scene { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.85; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="world" class="world-root">
+      <svg class="world-scene" viewBox="0 0 1280 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#47301e" />
+            <stop offset="0.52" stop-color="#6e4b2d" />
+            <stop offset="1" stop-color="#2c1e13" />
+          </linearGradient>
+          <radialGradient id="sun" cx="50%" cy="34%" r="36%">
+            <stop offset="0" stop-color="#fbe0a2" stop-opacity="0.55" />
+            <stop offset="1" stop-color="#fbe0a2" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <rect width="1280" height="800" fill="url(#sky)" />
+        <circle cx="640" cy="272" r="320" fill="url(#sun)" />
+        <!-- Chánh điện & mái chùa phía xa -->
+        <path d="M360 360 Q640 280 920 360 L880 376 L400 376 Z" fill="#2d1b10" stroke="#d9a44b" stroke-opacity="0.35" />
+        <path d="M410 315 Q640 248 870 315 L840 330 L440 330 Z" fill="#382113" stroke="#e9bf68" stroke-opacity="0.4" />
+        <rect x="438" y="376" width="404" height="128" fill="#3a2314" opacity="0.9" />
+        <rect x="598" y="406" width="84" height="98" rx="8" fill="#6b4420" opacity="0.7" />
+        <!-- Cây bồ đề bên trái & hồ sen bên phải -->
+        <circle cx="210" cy="370" r="118" fill="#2e3f27" opacity="0.65" />
+        <rect x="198" y="440" width="24" height="80" fill="#3b2616" />
+        <ellipse cx="1010" cy="590" rx="190" ry="52" fill="#26403b" opacity="0.65" />
+        <!-- Sân gạch ấm -->
+        <path d="M0 504 L1280 504 L1280 800 L0 800 Z" fill="#332216" opacity="0.72" />
+        <path d="M520 504 L760 504 L910 800 L370 800 Z" fill="#462f1e" opacity="0.55" />
+        <!-- Lư hương giữa sân -->
+        <ellipse cx="640" cy="536" rx="34" ry="12" fill="#7a5429" />
+        <rect x="614" y="514" width="52" height="24" rx="8" fill="#5e3f1e" stroke="#d9a44b" stroke-opacity="0.45" />
+      </svg>
+    </div>
+    <div id="app"></div>
+    <div class="boot" id="boot" hidden>
+      <div class="boot__glow" aria-hidden="true"></div>
+      <div class="boot__inner">
+        <svg class="boot__lotus" viewBox="0 0 160 130" width="150" height="122" aria-hidden="true">
+          <defs>
+            <linearGradient id="bootGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbe3a2" /><stop offset=".55" stop-color="#e0b25c" /><stop offset="1" stop-color="#b9822f" /></linearGradient>
+            <radialGradient id="bootHalo" cx="50%" cy="55%" r="55%"><stop offset="0" stop-color="#f3c973" stop-opacity=".38" /><stop offset="1" stop-color="#f3c973" stop-opacity="0" /></radialGradient>
+          </defs>
+          <circle cx="80" cy="66" r="62" fill="url(#bootHalo)" />
+          <g class="boot__petals" fill="none" stroke="url(#bootGold)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path class="bp bp-c" d="M80 14c17 18 21 42 0 74-21-32-17-56 0-74z" fill="rgba(243,201,115,.14)" />
+            <path class="bp bp-l1" d="M62 38C42 42 30 56 28 76c2 18 20 28 52 28" fill="rgba(243,201,115,.08)" />
+            <path class="bp bp-r1" d="M98 38c20 4 32 18 34 38-2 18-20 28-52 28" fill="rgba(243,201,115,.08)" />
+            <path class="bp bp-l2" d="M54 68C34 68 18 76 12 92c6 10 24 14 46 12" />
+            <path class="bp bp-r2" d="M106 68c20 0 36 8 42 24-6 10-24 14-46 12" />
+            <path class="bp bp-b" d="M34 112c28 10 64 10 92 0" stroke-width="2" />
+            <path class="bp bp-b2" d="M50 121c20 5 40 5 60 0" stroke-width="1.6" opacity=".6" />
+          </g>
+        </svg>
+        <h1 class="boot__title">Chùa Liên Hoa</h1>
+        <p class="boot__tag">Lên chùa mọi lúc, mọi nơi</p>
+        <div class="boot__bar"><span id="bootFill"></span></div>
+        <p class="boot__status" id="bootStatus">Đang mở cổng chùa…</p>
+      </div>
+      <nav class="boot__links"><a href="#">Giới thiệu</a><a href="#">Hướng dẫn đi chùa online</a><a href="#">Tụng kinh</a><a href="#">Lịch âm</a><a href="#">Hỏi đáp</a></nav>
+    </div>
+    <div id="onboarding-root"></div>
+    <div class="toast" id="toast"></div>
+    <script type="module" src="/dev/u1.ts"></script>
+  </body>
+</html>

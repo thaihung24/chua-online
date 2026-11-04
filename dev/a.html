@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>A — Âm thanh (harness)</title>
+  <style>
+    body { margin: 0; padding: 16px; font: 15px/1.4 system-ui, sans-serif; background: #2a1d14; color: #f1e4c8; }
+    h1 { font-size: 18px; margin: 0 0 12px; }
+    h2 { font-size: 14px; margin: 18px 0 8px; color: #d9a641; }
+    .grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    button { min-height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid #8a6a4a; background: #4a3220; color: #f7e3a4; font: inherit; cursor: pointer; }
+    button.on { background: #d9a641; color: #2a1d14; }
+    label { display: block; margin: 6px 0; }
+    input[type=range] { width: 260px; vertical-align: middle; }
+    #log { white-space: pre-wrap; font: 12px/1.4 ui-monospace, monospace; color: #b9d79a; margin-top: 12px; max-height: 240px; overflow: auto; }
+  </style>
+</head>
+<body>
+  <h1>Âm thanh tổng hợp — thử nghiệm</h1>
+  <div class="grid" id="sfx"></div>
+  <h2>Nền &amp; niệm Phật</h2>
+  <div class="grid">
+    <button id="amb">Nhạc nền</button>
+    <button id="mo">Vòng mõ 80bpm</button>
+    <select id="voice"></select>
+    <button id="radio">Radio niệm Phật</button>
+  </div>
+  <label>Ngày ⟷ Đêm <input id="night" type="range" min="0" max="1" step="0.01" value="0" /></label>
+  <label>Âm lượng nền <input id="vol" type="range" min="0" max="1" step="0.01" value="0.6" /></label>
+  <div class="grid" id="sw"></div>
+  <h2>Xuất WAV (OfflineAudioContext)</h2>
+  <div class="grid"><button id="exp">Xuất tất cả → log</button></div>
+  <div id="log"></div>
+  <script type="module" src="/dev/a.ts"></script>
+</body>
+</html>

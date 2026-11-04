@@ -1,0 +1,33 @@
+{
+  "name": "Chùa Liên Hoa",
+  "short_name": "Chùa Liên Hoa",
+  "description": "Chùa online 3D miễn phí: đi chùa, thắp hương, lễ Phật, tụng kinh gõ mõ, lần tràng hạt, ngồi thiền và thả đèn hoa đăng.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#140d08",
+  "theme_color": "#140d08",
+  "lang": "vi",
+  "dir": "ltr",
+  "categories": ["lifestyle"],
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+# A — Âm thanh tổng hợp (WebAudio)
+
+Sở hữu: `src/audio/**`. Cổng dev 5207. Harness `dev/a.html`+`dev/a.ts`: bảng nút thử từng âm + nhạc nền + radio niệm Phật + thanh đổi ngày/đêm, và chế độ **xuất WAV** (OfflineAudioContext) để bạn tự kiểm bằng phân tích (RMS, phổ) vì không nghe được: kiểm tra không clip, không im lặng, độ dài, DC offset ≈ 0, spectrum hợp lý (mõ ~ 800–1200Hz; chuông ~ 200–600Hz hài hoà bội số). Không dùng file âm thanh ngoài.
+Xuất `createAudio(): AudioApi` (contracts.ts) và `src/audio/voices.ts: CHANT_VOICES`. Lưu `AudioSettings` ở `@/core/store` key `audio` (mặc định bật hết, ambientVolume 0.6); `onChange`. `unlock()` tạo/resume `AudioContext` an toàn cho iOS/Android (gọi trong cử chỉ người dùng; có thể gọi nhiều lần). Tôn trọng `master`/`sfx`/`ambient`/`chant`. Tạm dừng khi tab ẩn (suspend) và tiếp tục khi hiện.
+## Âm (tất cả tổng hợp, chất lượng cao, ấm, không chói):
+- `mo`: mõ gỗ (click có nhấn: noise burst băng hẹp + 2–3 sine giảm nhanh quanh 700–1100Hz, thân gỗ rỗng), biến thiên pitch/biên độ nhẹ để tự nhiên; `startMoLoop(bpm)` lặp mõ chính xác bằng lịch AudioContext (lookahead scheduler), trả hàm dừng.
+- `bell`/`bellBig`: chuông đồng (FM/additive các thành phần không hài hoà kiểu chuông, ngân 6–10s, tremolo "ngân nga" beating), `chime` chuông gió nhỏ.
+- `bead` (hạt gỗ chạm khẽ), `incense` (xì nhẹ + chuông cực nhỏ), `flower`, `candle` (lách tách), `lantern` (whoosh nhẹ + chuông), `bow` (vải sột soạt + trầm), `click`, `levelUp` (hợp âm ngũ cung lên, sáng, ấm), `sweep` (xào xạc lá), `que` (lọc cọc que tre), `splash` (nước), `ribbon`.
+- **Nền** `setAmbient(true)`: gió nhẹ (noise lọc), chim hót ngẫu nhiên ban ngày (chirp tổng hợp), dế/ve ban đêm theo `setNight(v)` (crossfade), suối róc rách nhỏ, drone pad ấm (hợp âm ngũ cung La/Mi, chậm, reverb mềm bằng convolver sinh từ noise), thỉnh thoảng chuông gió xa. Mức tiêu thụ CPU thấp (<5%), tối đa ~16 voice đồng thời, dọn node khi dừng.
+- `setChantRadio(on, voice)`: "niệm Phật" tổng hợp: nền mõ nhịp 80bpm + giọng "A Di Đà Phật" bằng **formant synth** (sawtooth qua bộ lọc formant /a/ /i/ /ə/ tạo âm vị gần giống tiếng người đều đều, cao độ ngũ cung, mỗi giọng khác: `nam-tram` (trầm), `nu-trong` (cao), `hop-xuong` (nhiều giọng chồng, reverb lớn), `chuong-mo` (chỉ mõ + chuông)), + drone; vòng lặp vô hạn mượt.
+- Bộ reverb chung (convolver sinh), master compressor nhẹ + limiter, ducking nền khi `bellBig`/`mo` dày.
+## Nghiệm thu
+Xuất WAV mẫu cho từng âm ra `dev/audio-out/*.wav` (script `dev/a.ts` + Chrome headless chạy OfflineAudioContext rồi ghi file qua `page.evaluate` trả base64), phân tích bằng Node script nhỏ (`scripts/analyze-wav.mjs`) in RMS/peak/độ dài/centroid phổ; sửa đến khi hợp lý. Báo cáo ngắn kèm số liệu.

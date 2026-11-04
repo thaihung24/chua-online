@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="36%" r="68%">
+      <stop offset="0%" stop-color="#332013"/>
+      <stop offset="62%" stop-color="#1b120b"/>
+      <stop offset="100%" stop-color="#120b06"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="50%" cy="54%" r="48%">
+      <stop offset="0%" stop-color="#f6d588" stop-opacity="0.36"/>
+      <stop offset="65%" stop-color="#e0b25c" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#e0b25c" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff0c2"/>
+      <stop offset="52%" stop-color="#e5b861"/>
+      <stop offset="100%" stop-color="#b67d2b"/>
+    </linearGradient>
+    <linearGradient id="petalOuter" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e6b85c" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#9e6820" stop-opacity="0.16"/>
+    </linearGradient>
+    <linearGradient id="petalMid" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fbe3a2" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#ba802c" stop-opacity="0.20"/>
+    </linearGradient>
+    <linearGradient id="petalCenter" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff1c7" stop-opacity="0.52"/>
+      <stop offset="100%" stop-color="#cc9138" stop-opacity="0.26"/>
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="61" fill="url(#bg)" stroke="#b8372d" stroke-width="2" stroke-opacity="0.55"/>
+  <circle cx="64" cy="64" r="56.5" fill="none" stroke="url(#gold)" stroke-width="1.5" stroke-opacity="0.55"/>
+  <circle cx="64" cy="64" r="48" fill="url(#halo)"/>
+  <g stroke="url(#gold)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="url(#petalOuter)" d="M58 88 C32 91 15 82 12 65 C27 59 45 66 58 88 Z"/>
+    <path fill="url(#petalOuter)" d="M70 88 C96 91 113 82 116 65 C101 59 83 66 70 88 Z"/>
+    <path fill="url(#petalMid)" d="M62 88 C37 85 24 67 30 39 C47 45 58 63 62 88 Z"/>
+    <path fill="url(#petalMid)" d="M66 88 C91 85 104 67 98 39 C81 45 70 63 66 88 Z"/>
+    <path fill="url(#petalCenter)" d="M64 20 C80 40 81 64 64 88 C47 64 48 40 64 20 Z"/>
+  </g>
+  <path d="M30 96 Q64 106 98 96" fill="none" stroke="url(#gold)" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M44 104 Q64 110 84 104" fill="none" stroke="url(#gold)" stroke-width="1.8" stroke-linecap="round" opacity="0.68"/>
+  <circle cx="64" cy="56" r="2.6" fill="#fff0c2"/>
+</svg>
