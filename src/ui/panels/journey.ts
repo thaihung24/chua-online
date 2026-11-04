@@ -2,17 +2,15 @@
  * Panel "Hành trình" (toàn khung): bậc sen + cấp + tinh tấn, tab Hôm nay / Con đường sen / Dấu mốc / Sổ hành hương.
  * Dữ liệu: ctx.progress.view()/exportState(), `STAMPS`, `LIFETIME_LABELS`, `UNLOCK_INFO` từ @/core/quests.
  */
-import type { ActionId, AppContext, DailyTask, PanelDef, PanelId, ProgressView, SpotId } from '@/core/contracts';
+import type { AppContext, DailyTask, PanelDef, ProgressView } from '@/core/contracts';
 import { TIERS } from '@/core/contracts';
 import { LIFETIME_LABELS, STAMPS, STAMP_GROUPS, STREAK_MILESTONES, UNLOCK_INFO } from '@/core/quests';
 import { vnDayKey } from '@/core/store';
 import { esc, fmt, h } from '@/ui/dom';
 import { icon } from '@/ui/icons';
 import { tierIcon } from '@/ui/tier-icon';
+import { runDailyTask, SPOT_IDS as SPOTS } from '@/ui/task-run';
 
-const PANELS = new Set<string>(['journey', 'rank', 'beads', 'chant', 'meditate', 'dharma', 'today', 'wardrobe', 'lantern', 'que', 'wish', 'rooms', 'settings', 'feedback', 'account', 'share', 'friends', 'install', 'sayings', 'listen', 'walkMeditation']);
-const SPOTS = new Set<string>(['yard', 'bodhi', 'meditate', 'quanam', 'well', 'hall']);
-const ACTIONS = new Set<string>(['pray', 'bow', 'sweep', 'incense', 'flowers', 'candle', 'bell', 'lantern', 'que', 'release', 'loc', 'wish']);
 type Tab = 'today' | 'path' | 'stamps' | 'book';
 
 interface RawState { lastLit?: string; milestones?: number[]; life?: Record<string, number>; spotsEver?: string[] }
@@ -42,13 +40,10 @@ export const panel: PanelDef = {
     wrap.append(head, bar, tabs, content);
 
     function runTask(t: DailyTask): void {
-      const a = t.action as string | undefined;
-      if (!a) return;
+      if (!t.action) return;
       ctx.closePanel();
-      if (t.kind === 'walkSpot' && SPOTS.has(a)) { ctx.world.goTo(a as SpotId); ctx.toast('Đang đi tới điểm hôm nay…'); return; }
-      if (PANELS.has(a)) { window.setTimeout(() => void ctx.openPanel(a as PanelId), 260); return; }
-      if (ACTIONS.has(a)) { void ctx.world.perform(a as ActionId); return; }
-      if (SPOTS.has(a)) ctx.world.goTo(a as SpotId);
+      if (t.kind === 'walkSpot' && SPOTS.has(t.action)) ctx.toast('Đang đi tới điểm hôm nay…');
+      runDailyTask(ctx, t, 260);
     }
 
     function paintHead(v: ProgressView): void {

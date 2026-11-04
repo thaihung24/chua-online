@@ -471,7 +471,13 @@ export function createWorld(): World {
     const dist = Math.hypot(mover.x - it.pos.x, mover.z - it.pos.z);
     if (dist > ap.stopR) {
       const goal = nearestFree(ap.stand.x, ap.stand.z, 4);
-      const ok = await mover.walkTo(goal.x, goal.z, { stopNear: { x: ap.stand.x, z: ap.stand.z, r: 0.75 } });
+      emitter.emit('travel', { label: `Đang đến ${it.label.toLocaleLowerCase('vi')}` });
+      let ok = false;
+      try {
+        ok = await mover.walkTo(goal.x, goal.z, { stopNear: { x: ap.stand.x, z: ap.stand.z, r: 0.75 } });
+      } finally {
+        emitter.emit('travel', { label: null });
+      }
       if (!ok || token !== opId || disposed) return false;
     }
     const faceAng = Math.hypot(ap.look.x - mover.x, ap.look.z - mover.z) > 0.25
@@ -877,7 +883,13 @@ export function createWorld(): World {
       if (seatedSlot !== null) standUpInternal();
       const token = cancelActiveOp();
       void (async () => {
-        const ok = await mover.walkTo(sp.pos.x, sp.pos.z);
+        emitter.emit('travel', { label: `Đang đi tới ${sp.name}` });
+        let ok = false;
+        try {
+          ok = await mover.walkTo(sp.pos.x, sp.pos.z);
+        } finally {
+          emitter.emit('travel', { label: null });
+        }
         if (!ok || token !== opId || disposed) return;
         await mover.turnTo(sp.face);
         if (token !== opId || disposed) return;
@@ -910,6 +922,7 @@ export function createWorld(): World {
           playerRig.setCarry('broom');
         }
         if (env && env.leavesRemaining() < 15) env.respawnLeaves();
+        emitter.emit('actionStart', { action: 'sweep' });
         await new Promise<void>((resolve) => {
           sweepState = {
             elapsed: 0,
@@ -932,6 +945,7 @@ export function createWorld(): World {
       }
 
       const targetPos = INTERACTABLE_MAP[targetId].pos;
+      emitter.emit('actionStart', { action });
 
       // ── Chắp tay & Lạy Phật ──
       if (action === 'pray') {

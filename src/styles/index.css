@@ -1,6 +1,7 @@
 /* Tập hợp toàn bộ CSS của ứng dụng — main.ts chỉ cần `import '@/styles/index.css'`. */
 @import './base.css';
 @import './hud.css';
+@import './hud-quest.css';
 @import './onboarding.css';
 @import './panels-meta.css';
 @import './practice.css';

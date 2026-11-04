@@ -102,6 +102,10 @@ export interface WorldEvents extends Record<string, unknown> {
   tapRemote: { id: string };
   /** Chiều/đêm: 0 = ban ngày, 1 = ban đêm (để UI/âm thanh đổi theo). */
   night: { value: number };
+  /** Đang tự đi tới một điểm (label = "Đang đến lư hương"…), null khi tới nơi hoặc huỷ. */
+  travel: { label: string | null };
+  /** Bắt đầu hoạt cảnh một hành động (sau khi đã tới nơi) — để hiện bong bóng trên đầu. */
+  actionStart: { action: ActionId };
 }
 
 export interface World extends Emitter<WorldEvents> {

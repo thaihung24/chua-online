@@ -8,6 +8,7 @@ import { isChantRadioOn, onChantRadioChange, startChantRadio, stopChantRadio } f
 import { esc, isTyping } from './dom';
 import { icon, type IconName } from './icons';
 import { createMoreMenu, FEATURE_LABEL, offeringBusyMsg } from './menu';
+import { createQuestCard } from './quest-card';
 import { tierIcon } from './tier-icon';
 
 export interface NoticeButton { label: string; onClick?: () => void }
@@ -22,6 +23,10 @@ export interface Hud {
   notice(text: string, buttons?: NoticeButton[]): void;
   setStreak(n: number, litToday: boolean): void;
   setListening(on: boolean): void;
+  /** Viên "Đang đến … · Dừng" khi nhân vật tự đi tới một điểm (null = ẩn). */
+  setTravel(label: string | null): void;
+  /** Dòng gợi ý điều khiển ở giữa màn hình (null = ẩn dần). */
+  hint(text: string | null): void;
   /** Ẩn/hiện toàn bộ HUD (vd khi chụp ảnh). */
   setVisible(v: boolean): void;
   destroy(): void;
@@ -74,15 +79,24 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
         <span class="lvl-btn__num">1</span>
         <span class="lvl-btn__hint" hidden></span>
       </button>
+    </div>
+    <div class="hud__chips">
       <button type="button" class="hud-chip hud-chip--flame glass is-dim" id="hud-streak" hidden>${icon('flame', { size: 19 })}<span class="hud-chip__n">0</span></button>
       <button type="button" class="hud-chip hud-chip--listen glass" id="hud-listen" aria-pressed="false" aria-label="Nghe niệm Phật (nhấn giữ để mở danh sách)"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>Nghe niệm Phật</span></button>
     </div>
+    <div class="travel glass glass--strong" id="hud-travel" role="status" aria-live="polite" hidden>
+      <span class="travel__steps" aria-hidden="true">${icon('footsteps', { size: 18 })}</span>
+      <span class="travel__txt"></span>
+      <span class="travel__sep" aria-hidden="true"></span>
+      <button type="button" class="travel__stop">Dừng</button>
+    </div>
+    <p class="hint" id="hud-hint" role="status" aria-live="polite" hidden></p>
     <div class="banner glass glass--strong" id="hud-banner" role="status" aria-live="polite" hidden>
       <p class="banner__text"></p><div class="banner__actions"></div>
     </div>
     <button type="button" class="fb-tab glass" id="hud-feedback" aria-label="Góp ý hoặc báo lỗi">${icon('mail', { size: 16 })}<span>Góp ý · Báo lỗi</span></button>
     <div class="ctx" id="hud-ctx" aria-live="polite"><span class="ctx__label"></span><div class="ctx__row"></div></div>
-    <div class="seat-row" id="hud-seat">
+    <div class="seat-row" id="hud-seat" inert aria-hidden="true">
       <button type="button" class="seat-btn glass" data-seat="chant">${icon('book', { size: 20 })}Tụng kinh</button>
       <button type="button" class="seat-btn glass" data-seat="meditate">${icon('meditate', { size: 20 })}Thiền</button>
       <button type="button" class="seat-btn seat-btn--stand glass" data-seat="stand">${icon('user', { size: 20 })}Đứng dậy</button>
@@ -93,7 +107,7 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
       <button type="button" class="dock__btn" data-dock="bow">${icon('bow', { size: 26 })}<span>Lạy Phật</span></button>
       <button type="button" class="dock__btn" data-dock="sweep" aria-pressed="false">${icon('broom', { size: 26 })}<span>Quét lá</span></button>
       <button type="button" class="dock__btn" data-dock="beads">${icon('beads', { size: 26 })}<span>Tràng hạt</span></button>
-      <button type="button" class="dock__btn dock__btn--top is-hot" data-dock="top">${icon('trophy', { size: 26 })}<span>Top</span></button>
+      <button type="button" class="dock__btn dock__btn--top is-hot" data-dock="top" aria-label="Bảng xếp hạng">${icon('trophy', { size: 26 })}<span>Xếp hạng</span></button>
       <button type="button" class="dock__btn" data-dock="more" aria-expanded="false" aria-controls="hud-more">${icon('more', { size: 26 })}<span>Thêm</span></button>
     </nav>`;
   root.append(el);
@@ -118,6 +132,45 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
   const sndPop = q<HTMLElement>('#hud-snd');
   const moreBtn = q<HTMLButtonElement>('[data-dock="more"]');
   const sweepBtn = q<HTMLButtonElement>('[data-dock="sweep"]');
+  const travelEl = q<HTMLElement>('#hud-travel');
+  const hintEl = q<HTMLElement>('#hud-hint');
+
+  // ── Thẻ "Việc hôm nay" (thay nút cấp tròn; nút cấp vẫn giữ cho bản rút gọn)
+  const quest = createQuestCard(ctx);
+  q('.hud__stack').prepend(quest.el);
+  el.classList.add('hud--quest');
+
+  // ── Viên "Đang đến … · Dừng"
+  let travelling = false;
+  let travelHideTimer = 0;
+  q<HTMLButtonElement>('.travel__stop').addEventListener('click', () => ctx.world.stop());
+  function setTravel(label: string | null): void {
+    window.clearTimeout(travelHideTimer);
+    travelling = !!label;
+    if (label) {
+      (travelEl.querySelector('.travel__txt') as HTMLElement).textContent = label;
+      travelEl.hidden = false;
+      requestAnimationFrame(() => travelEl.classList.add('is-on'));
+    } else {
+      travelEl.classList.remove('is-on');
+      travelHideTimer = window.setTimeout(() => { if (!travelling) travelEl.hidden = true; }, 260);
+    }
+    paintCtx();
+  }
+
+  // ── Gợi ý điều khiển
+  let hintTimer = 0;
+  function hint(text: string | null): void {
+    window.clearTimeout(hintTimer);
+    if (text) {
+      hintEl.textContent = text;
+      hintEl.hidden = false;
+      requestAnimationFrame(() => hintEl.classList.add('is-on'));
+    } else {
+      hintEl.classList.remove('is-on');
+      hintTimer = window.setTimeout(() => { if (!hintEl.classList.contains('is-on')) hintEl.hidden = true; }, 600);
+    }
+  }
 
   const open = (id: Parameters<AppContext['openPanel']>[0]) => () => void ctx.openPanel(id);
   roomBtn.addEventListener('click', open('rooms'));
@@ -254,6 +307,7 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
   let lastView: ProgressView | null = null;
   function setLevel(v: ProgressView): void {
     lastView = v;
+    quest.update(v);
     lvlIcon.innerHTML = tierIcon(v.tier.id, { size: 38, ring: false });
     lvlNum.textContent = String(v.level);
     lvlArc.style.strokeDashoffset = String(RING_C * (1 - Math.max(0, Math.min(1, v.frac))));
@@ -348,7 +402,7 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
   }
   function paintCtx(): void {
     const acts = ctxActions();
-    const show = acts.length > 0 && !panelOpen;
+    const show = acts.length > 0 && !panelOpen && !travelling;
     ctxBox.classList.toggle('is-on', show);
     if (!acts.length) return;
     (ctxBox.querySelector('.ctx__label') as HTMLElement).textContent = nearby.label ?? '';
@@ -459,6 +513,8 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
     setSeated(s) {
       seated = s;
       seatRow.classList.toggle('is-on', s);
+      seatRow.inert = !s;
+      if (s) seatRow.removeAttribute('aria-hidden'); else seatRow.setAttribute('aria-hidden', 'true');
       if (!s) setSweeping(false);
       paintCtx();
       menu.refresh();
@@ -471,8 +527,12 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
       listenBtn.setAttribute('aria-pressed', String(on));
     },
     setVisible(v) { el.style.display = v ? '' : 'none'; },
+    setTravel,
+    hint,
     destroy() {
       offStatus(); offCount(); offPlayers(); offSolo(); offAudio(); offRadio(); offProgress(); offLevelUp(); offPanel();
+      quest.destroy();
+      window.clearTimeout(travelHideTimer); window.clearTimeout(hintTimer);
       document.removeEventListener('keydown', onKeyDown);
       document.removeEventListener('pointerdown', onOutsideSound, true);
       window.clearTimeout(bannerTimer); window.clearTimeout(holdTimer);

@@ -268,7 +268,7 @@
   .hud-pill__name, .hud-pill__sep { display: none; }
 }
 @media (max-width: 400px) {
-  .hud-chip--listen span { display: none; }
+  .hud-chip--listen span:not(.eq) { display: none; }
   .hud-chip--listen { padding: 0 12px; }
 }
 @media (max-width: 360px) { .dock__btn { font-size: 0.68rem; } .tile { font-size: 0.72rem; } }

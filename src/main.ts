@@ -22,6 +22,13 @@ import { DURATIONS, loadOfferings, minutesLeft, saveOfferings, type Offerings } 
 
 const root = document.getElementById('app') ?? document.body;
 
+/** Bong bóng nhỏ hiện trên đầu nhân vật khi bắt đầu một việc công phu. */
+const ACTION_BUBBLE: Partial<Record<ActionId, string>> = {
+  pray: '🙏 Chắp tay', bow: '🙇 Lạy Phật', sweep: '🧹 Quét lá', incense: '🪔 Thắp hương', flowers: '🌸 Dâng hoa',
+  candle: '🕯️ Thắp nến', bell: '🔔 Thỉnh chuông', lantern: '🏮 Thả đèn hoa đăng', que: '🎋 Xin quẻ',
+  release: '🐟 Phóng sinh', loc: '🍃 Hái lộc', wish: '🎗️ Treo nguyện',
+};
+
 async function boot(): Promise<void> {
   const bus = createEmitter<AppEvents>();
   const progress = createProgress();
@@ -290,6 +297,29 @@ function wireWorld(
 
   world.on('nearby', (n) => shell.hud.setNearby(n));
   world.on('night', ({ value }) => audio.setNight(value));
+  world.on('travel', ({ label }) => shell.hud.setTravel(label));
+  world.on('actionStart', ({ action }) => {
+    const b = ACTION_BUBBLE[action];
+    if (b) world.say(b);
+  });
+
+  // Gợi ý điều khiển cho vài lần vào chùa đầu tiên; ẩn khi người chơi bắt đầu đi.
+  const hintSeen = load<number>('seen:controls', 0);
+  if (hintSeen < 3) {
+    save('seen:controls', hintSeen + 1);
+    const touch = matchMedia('(pointer: coarse)').matches;
+    shell.hud.hint(touch
+      ? 'Kéo nửa trái màn hình để đi · vuốt nửa phải để nhìn quanh · chạm vào sân để tới đó'
+      : 'Bấm chuột vào sân hoặc W A S D để đi · kéo chuột để nhìn quanh · Q E để xoay');
+    let moves = 0;
+    const offHintTimer = window.setTimeout(() => shell.hud.hint(null), 16_000);
+    const offMove = world.on('moved', (m) => {
+      if (!m.moving || ++moves < 8) return;
+      window.clearTimeout(offHintTimer);
+      shell.hud.hint(null);
+      offMove();
+    });
+  }
   world.on('tapRemote', ({ id }) => {
     const p = lastPlayers.find((x) => x.id === id);
     if (p) ctx.toast(`${p.profile.name} · Cấp ${p.level}`);
