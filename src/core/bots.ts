@@ -217,7 +217,7 @@ export class BotColony {
       const ry = faceToward(SLEEPER_POS, SLEEPER_LOOK);
       this.bots.push({
         id: SLEEPER_ID,
-        profile: { name: 'ThaisHungw', gender: 'male', outfit: 'ba-ba', colorIndex: 0, accessory: 'conical-hat' },
+        profile: { name: 'ThaisHungw', gender: 'male', outfit: 'ba-ba', colorIndex: 0, accessory: 'hat-tram' },
         level: 82,
         streak: 81,
         x: SLEEPER_POS.x,

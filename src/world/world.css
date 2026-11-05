@@ -43,21 +43,37 @@
 .w2-say.on { display: block; animation: w2-pop 0.28s cubic-bezier(0.22, 0.9, 0.3, 1.2) both; }
 @keyframes w2-pop { from { opacity: 0; transform: translateY(6px) scale(0.85); } to { opacity: 1; transform: none; } }
 
-/* Đứng ngủ gật: "z Z z" bay lên lững lờ bên phải nhãn tên */
+/* Đứng ngủ gật: huy hiệu Zzz xanh dịu trên nhãn + chuỗi "z Z Z" & bong bóng bay lên nổi bật */
 .w2-pill { position: relative; }
-.w2-zzz { display: none; position: absolute; left: calc(100% - 2px); bottom: 60%; width: 44px; height: 52px; pointer-events: none; }
+.w2-sleep {
+  display: none; place-items: center; width: 20px; height: 20px; border-radius: 999px; flex: 0 0 auto;
+  color: #0d2238; background: linear-gradient(145deg, #bfeaff, #74c2ff);
+  box-shadow: 0 0 10px rgba(116, 194, 255, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  animation: w2-sleep-pulse 2.2s ease-in-out infinite;
+}
+.w2-doze .w2-sleep { display: inline-grid; }
+.w2-tag.w2-doze:not(.w2-mine) .w2-pill { padding-left: 5px; border-color: rgba(140, 206, 255, 0.72); }
+@keyframes w2-sleep-pulse {
+  0%, 100% { transform: scale(0.95); }
+  50% { transform: scale(1.08); }
+}
+.w2-zzz { display: none; position: absolute; left: calc(100% - 2px); bottom: 56%; width: 58px; height: 64px; pointer-events: none; }
 .w2-doze .w2-zzz { display: block; }
 .w2-zzz i {
-  position: absolute; left: 0; bottom: 0; font: italic 900 16px/1 var(--font-serif, Georgia, serif); color: #eef3ff;
-  text-shadow: 0 0 8px rgba(150, 180, 255, 0.95), 0 0 2px rgba(60, 80, 160, 0.9), 0 1px 2px rgba(0, 0, 0, 0.7); opacity: 0;
+  position: absolute; left: 2px; bottom: 0;
+  font: italic 900 17px/1 var(--font-sans, system-ui, sans-serif); letter-spacing: -0.02em;
+  color: #dff4ff;
+  -webkit-text-stroke: 3px rgba(16, 30, 58, 0.92); paint-order: stroke fill;
+  text-shadow: 0 0 10px rgba(120, 198, 255, 0.95), 0 2px 4px rgba(0, 0, 0, 0.65);
+  opacity: 0;
   animation: w2-zzz 3s ease-in-out infinite;
 }
-.w2-zzz i:nth-child(2) { font-size: 21px; animation-delay: 1s; }
-.w2-zzz i:nth-child(3) { font-size: 13px; animation-delay: 2s; }
+.w2-zzz i:nth-child(2) { font-size: 22px; color: #b8e6ff; animation-delay: 1s; }
+.w2-zzz i:nth-child(3) { font-size: 27px; color: #fff6cf; animation-delay: 2s; }
 @keyframes w2-zzz {
-  0% { opacity: 0; transform: translate(0, 0) rotate(-8deg) scale(0.6); }
-  20% { opacity: 1; }
-  100% { opacity: 0; transform: translate(24px, -38px) rotate(12deg) scale(1.15); }
+  0% { opacity: 0; transform: translate(0, 2px) rotate(-10deg) scale(0.55); }
+  16%, 72% { opacity: 1; }
+  100% { opacity: 0; transform: translate(30px, -46px) rotate(12deg) scale(1.12); }
 }
 
 /* Joystick ảo (chạm giữ nửa trái màn hình) */
@@ -72,8 +88,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .w2-say.on { animation: none; }
-  .w2-zzz i { animation: none; opacity: 0.85; }
-  .w2-zzz i:nth-child(2) { transform: translate(9px, -14px); }
-  .w2-zzz i:nth-child(3) { transform: translate(18px, -26px); }
+  .w2-sleep { animation: none; }
+  .w2-zzz i { animation: none; opacity: 0.92; }
+  .w2-zzz i:nth-child(2) { transform: translate(11px, -15px); }
+  .w2-zzz i:nth-child(3) { transform: translate(23px, -31px); }
   .w2-stick { transition: none; }
 }

@@ -9,7 +9,7 @@ import {
   DIM, disposeBuildCache, disposeHalo, foreArmGeometry, getHaloGeometry, headGeometry, lapGeometry, lookOf,
   shinGeometry, thighGeometry, torsoGeometry, upperArmGeometry, type Look,
 } from './build';
-import { ANIMS, GESTURES, P, applyGesture, standBase, type Anim, type AnimCtx, type GestureId } from './pose';
+import { ANIMS, GESTURES, P, applyGesture, dozeBubble, standBase, type Anim, type AnimCtx, type GestureId } from './pose';
 import { BROOM_LEN, createFish, createProp, disposeProps, type PropInstance, type PropName } from './props';
 import { createLabelEl, SAY_MAX, type LabelParts, type LabelTarget } from './labels';
 import { petal, merge } from './geo';
@@ -134,6 +134,58 @@ function assetsOf(t: TierDef): TierAssets {
   return a;
 }
 
+interface SnotAssets {
+  rimGeo: THREE.BufferGeometry;
+  rimMat: THREE.MeshBasicMaterial;
+  fillGeo: THREE.BufferGeometry;
+  fillMat: THREE.MeshBasicMaterial;
+  shineGeo: THREE.BufferGeometry;
+  shineMat: THREE.MeshBasicMaterial;
+  dropGeo: THREE.BufferGeometry;
+}
+let snotAssets: SnotAssets | null = null;
+function getSnotAssets(): SnotAssets {
+  if (snotAssets) return snotAssets;
+  // Tâm bóng lệch (0.34, -0.14, 0.93) để gốc (0,0,0) dính đúng cánh mũi và bóng rủ nhẹ dưới hai mắt ^ ^
+  const cx = 0.34, cy = -0.14, cz = 0.93;
+  const rimGeo = new THREE.SphereGeometry(1.1, 22, 16);
+  rimGeo.translate(cx, cy, cz);
+  const rimMat = new THREE.MeshBasicMaterial({
+    color: '#eaf9ff',
+    transparent: true,
+    opacity: 0.84,
+    side: THREE.BackSide,
+    depthWrite: false,
+    toneMapped: false,
+  });
+  const fillGeo = new THREE.SphereGeometry(1.0, 22, 16);
+  fillGeo.translate(cx, cy, cz);
+  const fillMat = new THREE.MeshBasicMaterial({
+    color: '#7ad2ff',
+    transparent: true,
+    opacity: 0.52,
+    depthWrite: false,
+    toneMapped: false,
+  });
+  const s1 = new THREE.SphereGeometry(0.23, 12, 10);
+  s1.scale(1.12, 0.8, 0.55);
+  s1.translate(cx - 0.28, cy + 0.8, cz + 0.52);
+  const s2 = new THREE.SphereGeometry(0.1, 10, 8);
+  s2.scale(0.95, 0.95, 0.55);
+  s2.translate(cx - 0.5, cy + 0.56, cz + 0.62);
+  const shineGeo = merge([s1, s2]);
+  const shineMat = new THREE.MeshBasicMaterial({
+    color: '#ffffff',
+    transparent: true,
+    opacity: 0.96,
+    depthWrite: false,
+    toneMapped: false,
+  });
+  const dropGeo = new THREE.SphereGeometry(0.022, 8, 6);
+  snotAssets = { rimGeo, rimMat, fillGeo, fillMat, shineGeo, shineMat, dropGeo };
+  return snotAssets;
+}
+
 /** Giải phóng toàn bộ cache hình/vật liệu của nhân vật (khi huỷ thế giới). */
 export function disposeAvatarCaches(): void {
   disposeBuildCache();
@@ -147,6 +199,13 @@ export function disposeAvatarCaches(): void {
   tierAssets.clear();
   blobTex?.dispose(); blobGeo?.dispose(); blobMat?.dispose();
   blobTex = null; blobGeo = null; blobMat = null;
+  if (snotAssets) {
+    snotAssets.rimGeo.dispose(); snotAssets.rimMat.dispose();
+    snotAssets.fillGeo.dispose(); snotAssets.fillMat.dispose();
+    snotAssets.shineGeo.dispose(); snotAssets.shineMat.dispose();
+    snotAssets.dropGeo.dispose();
+    snotAssets = null;
+  }
 }
 
 // ───────────────────────── Rig ─────────────────────────
@@ -238,6 +297,43 @@ export function createAvatar(profile: Profile, level: number): AvatarRig {
   const head = mk(new THREE.BufferGeometry());
   neck.add(head);
   let halo: THREE.Mesh | null = null;
+  // Bong bóng mũi 3D (chỉ tạo khi nhân vật ngủ gật `doze`)
+  let snotGroup: THREE.Group | null = null;
+  let snotBubble: THREE.Group | null = null;
+  let snotDrops: THREE.Mesh[] | null = null;
+  const POP_DIRS: [number, number, number][] = [
+    [-0.12, 0.16, 0.28],
+    [0.22, 0.14, 0.26],
+    [0.06, -0.14, 0.3],
+  ];
+  function ensureSnot(): void {
+    if (snotGroup) return;
+    const sa = getSnotAssets();
+    snotGroup = new THREE.Group();
+    // Đặt ngay cánh mũi (dưới hai mắt y≈0.254, trên miệng y≈0.155) để lộ trọn đôi mắt cười ^ ^
+    snotGroup.position.set(0.036, 0.192, 0.29);
+    snotBubble = new THREE.Group();
+    const rim = new THREE.Mesh(sa.rimGeo, sa.rimMat);
+    rim.renderOrder = 5;
+    rim.userData.noShadow = true;
+    const fill = new THREE.Mesh(sa.fillGeo, sa.fillMat);
+    fill.renderOrder = 6;
+    fill.userData.noShadow = true;
+    const shine = new THREE.Mesh(sa.shineGeo, sa.shineMat);
+    shine.renderOrder = 7;
+    shine.userData.noShadow = true;
+    snotBubble.add(rim, fill, shine);
+    snotDrops = POP_DIRS.map(() => {
+      const d = new THREE.Mesh(sa.dropGeo, sa.shineMat);
+      d.visible = false;
+      d.renderOrder = 7;
+      d.userData.noShadow = true;
+      snotGroup!.add(d);
+      return d;
+    });
+    snotGroup.add(snotBubble);
+    neck.add(snotGroup);
+  }
   // tay: arms[0] = x<0 (phải của nhân vật), arms[1] = x>0
   const arms = [-1, 1].map((sx) => {
     const ua = mk(new THREE.BufferGeometry());
@@ -466,6 +562,36 @@ export function createAvatar(profile: Profile, level: number): AvatarRig {
     for (let i = 0; i < P.N; i++) cur[i] += (tgt[i] - cur[i]) * k;
     applyPose();
     updateProps();
+    // Bong bóng mũi phồng xẹp & nổ bụp khi ngủ gật
+    if (anim === 'doze' && !gesture) {
+      ensureSnot();
+      snotGroup!.visible = true;
+      const sb = dozeBubble(animT, time, seed);
+      if (sb.radius > 0.002) {
+        snotBubble!.visible = true;
+        const r = sb.radius;
+        snotBubble!.scale.set(
+          r * (1 - sb.wobble * 0.06),
+          r * (1 + sb.wobble * 0.05),
+          r * (1 + sb.wobble * 0.08),
+        );
+      } else {
+        snotBubble!.visible = false;
+      }
+      const popping = sb.pop > 0;
+      for (let i = 0; i < snotDrops!.length; i++) {
+        const d = snotDrops![i];
+        d.visible = popping;
+        if (popping) {
+          const [dx, dy, dz] = POP_DIRS[i];
+          const kPop = 0.35 + sb.pop * 0.95;
+          d.position.set(0.03 + dx * kPop, -0.01 + dy * kPop, 0.12 + dz * kPop);
+          d.scale.setScalar(Math.max(0.05, 1 - sb.pop * 0.85));
+        }
+      }
+    } else if (snotGroup) {
+      snotGroup.visible = false;
+    }
     // vòng bậc + cánh sen
     ringPulse += dt * 1.6;
     const rs = 1 + Math.sin(ringPulse + seed) * 0.03;
@@ -539,7 +665,11 @@ export function createAvatar(profile: Profile, level: number): AvatarRig {
     setMoveSpeed(v) { moveSpeed = v; },
     setSeatLift(h) { seatLift = h; },
     setCastShadow(on) {
-      group.traverse((o) => { if ((o as THREE.Mesh).isMesh && o !== shadow && o.parent !== ringHolder && o.parent !== orbit) o.castShadow = on; });
+      group.traverse((o) => {
+        if ((o as THREE.Mesh).isMesh && !o.userData.noShadow && o !== shadow && o.parent !== ringHolder && o.parent !== orbit) {
+          o.castShadow = on;
+        }
+      });
     },
     dispose() {
       finishGesture();

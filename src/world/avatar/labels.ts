@@ -26,15 +26,18 @@ export function createLabelEl(): LabelParts {
   const me = document.createElement('span');
   me.className = 'w2-me';
   me.textContent = 'Tôi';
+  const sleep = document.createElement('span');
+  sleep.className = 'w2-sleep';
+  sleep.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" aria-hidden="true"><path d="M3.5 15.5h5l-5 5h5M10.5 9.5h6l-6 6h6M16.5 3.5h4.5l-4.5 4.5h4.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const name = document.createElement('span');
   name.className = 'w2-name';
   const level = document.createElement('span');
   level.className = 'w2-lv';
-  pill.append(me, name, level);
-  // "z Z z" bay lên khi nhân vật đứng ngủ gật (chỉ hiện với lớp .w2-doze)
+  pill.append(me, sleep, name, level);
+  // Biểu tượng "z Z Z" bay lên khi nhân vật đứng ngủ gật (.w2-doze)
   const zzz = document.createElement('span');
   zzz.className = 'w2-zzz';
-  zzz.innerHTML = '<i>z</i><i>Z</i><i>z</i>';
+  zzz.innerHTML = '<i>z</i><i>Z</i><i>Z</i>';
   pill.append(zzz);
   root.append(bubble, pill);
   return { root, pill, me, name, level, bubble };

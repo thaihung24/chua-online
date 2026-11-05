@@ -4,6 +4,7 @@ import { BotColony, DEFAULT_BOT_COUNT, SLEEPER_ID, SLEEPER_POS } from '../src/co
 import { validateName } from '../src/core/profile';
 import { BOT_QUIPS, phraseText } from '../src/content/phrases';
 import { BLOCKS, BOUNDS } from '../src/world/layout';
+import { DOZE_T, dozeBubble } from '../src/world/avatar/pose';
 import { Client, Http, PROFILE, sleep, startTest } from './server-helpers';
 
 describe('BotColony (20 Phật tử ảo)', () => {
@@ -114,6 +115,24 @@ describe('BotColony (20 Phật tử ảo)', () => {
     expect(says.length).toBeGreaterThan(0);
     for (let i = 0; i < 40; i++) { now += 200; colony.step(0.2, now); }
     expect(find().anim).toBe('doze');
+  });
+
+  it('dozeBubble phồng to dần khi ngủ gật, nổ bụp đúng nhịp giật mình rồi thổi lại quả mới', () => {
+    const start = dozeBubble(0.05, 0, 0);
+    const deep = dozeBubble(4.5, Math.PI * 0.5 / 2.8, 0);
+    const popMid = dozeBubble(4.82, 4.82, 0);
+    const awakePause = dozeBubble(5.2, 5.2, 0);
+    const regrow = dozeBubble(DOZE_T - 0.05, 6.15, 0);
+
+    expect(start.radius).toBeGreaterThan(0.02);
+    expect(deep.radius).toBeGreaterThan(start.radius + 0.07);
+    expect(deep.pop).toBe(0);
+    expect(popMid.radius).toBe(0);
+    expect(popMid.pop).toBeGreaterThan(0.2);
+    expect(popMid.pop).toBeLessThan(0.9);
+    expect(awakePause.radius).toBe(0);
+    expect(awakePause.pop).toBe(0);
+    expect(regrow.radius).toBeGreaterThan(0.02);
   });
 
   it('đồng bộ 20 bot qua máy chủ WebSocket, đếm đúng 21 người khi có 1 người thật và xuất hiện trên /api/bxh', async () => {

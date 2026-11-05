@@ -212,7 +212,31 @@ function beads(p: Pose, c: AnimCtx): void {
  * Đứng ngủ gật tựa chổi: hai tay ôm cán chổi dựng trước ngực, đầu gục dần rồi giật mình ngẩng lên,
  * người lắc lư nhẹ như sắp ngã (chu kỳ ~6 giây, lệch pha theo từng nhân vật).
  */
-const DOZE_T = 6.2;
+export const DOZE_T = 6.2;
+
+/**
+ * Thông số bong bóng mũi khi ngủ gật (đồng bộ nhịp gật đầu & giật mình của `doze`):
+ * phồng to dần theo nhịp thở khi gục đầu, nổ "bụp" đúng lúc giật mình ngẩng lên rồi thổi quả mới.
+ */
+export function dozeBubble(animT: number, time: number, seed: number): { radius: number; wobble: number; pop: number } {
+  const t = (animT + seed * 3) % DOZE_T;
+  const wobble = Math.sin(time * 2.8 + seed);
+  if (t >= 4.7 && t < 4.98) {
+    return { radius: 0, wobble, pop: (t - 4.7) / 0.28 };
+  }
+  if (t >= 4.98 && t < 5.5) {
+    return { radius: 0, wobble, pop: 0 };
+  }
+  if (t >= 5.5) {
+    return { radius: seg(t, 5.5, DOZE_T) * 0.032, wobble, pop: 0 };
+  }
+  const grow = seg(t, 0.0, 0.45);
+  const sink = seg(t, 0.3, 4.6);
+  const breath = 0.5 + 0.5 * wobble;
+  const radius = 0.032 + grow * 0.028 + sink * 0.072 + breath * (0.016 + sink * 0.026);
+  return { radius, wobble, pop: 0 };
+}
+
 function doze(p: Pose, c: AnimCtx): void {
   standBase(p);
   c.smooth = 7;
@@ -233,11 +257,11 @@ function doze(p: Pose, c: AnimCtx): void {
   const l = Math.hypot(dx, dy, dz) || 1;
   const up = 0.13;
   handL(p, -rx - (dx / l) * up, ry - (dy / l) * up, rz - (dz / l) * up);
-  // Thân & đầu: nghiêng tựa vào chổi, đầu gục, lắc lư
-  p[P.PITCH] = 0.1 + nod * 0.08;
-  p[P.ROLL] = sway * 0.035 + nod * 0.02;
-  p[P.H_PITCH] = 0.08 + nod * 0.62 - jerk * 0.1 * (1 - seg(t, 5.0, 5.6));
-  p[P.H_ROLL] = sway * 0.08 + nod * 0.12;
+  // Thân & đầu: nghiêng tựa vào chổi, đầu gật gù nghiêng sang vai để lộ rõ mặt & bong bóng mũi
+  p[P.PITCH] = 0.08 + nod * 0.07;
+  p[P.ROLL] = sway * 0.035 + nod * 0.025;
+  p[P.H_PITCH] = 0.05 + nod * 0.32 - jerk * 0.12 * (1 - seg(t, 5.0, 5.6));
+  p[P.H_ROLL] = 0.08 + sway * 0.07 + nod * 0.15;
   p[P.H_YAW] = sway * 0.05;
   p[P.ROOT_Y] = -nod * 0.012 + Math.sin(c.time * 1.4 + c.seed) * 0.003;
   p[P.KNEE_L] = p[P.KNEE_R] = 0.08 + nod * 0.08;
