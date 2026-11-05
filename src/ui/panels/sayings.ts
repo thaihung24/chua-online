@@ -2,6 +2,8 @@
  * Panel "Lời chào" (hộp thoại): lưới câu chào soạn sẵn theo nhóm + nút mở khung trò chuyện tự do.
  */
 import type { PanelDef } from '@/core/contracts';
+import { CHAT_COOLDOWN_MS } from '@/core/profile';
+import { load, save } from '@/core/store';
 import { PHRASES, PHRASE_GROUPS } from '@/content/phrases';
 import { esc, h } from '@/ui/dom';
 import { icon } from '@/ui/icons';
@@ -40,6 +42,14 @@ export const panel: PanelDef = {
       if (!b) return;
       const p = PHRASES.find((x) => x.id === b.dataset.id);
       if (!p) return;
+      const now = Date.now();
+      const last = load<number>('chat:lastSendAt', 0);
+      if (last <= now && now - last < CHAT_COOLDOWN_MS) {
+        const sec = Math.max(1, Math.ceil((last + CHAT_COOLDOWN_MS - now) / 1000));
+        ctx.toast(`Mỗi 20 giây mới chat được 1 lần. Xin chờ ${sec}s nữa nhé.`);
+        return;
+      }
+      save('chat:lastSendAt', now);
       ctx.net.sendSay(p.id);
       ctx.world.say(p.text);
       ctx.progress.record('greet');

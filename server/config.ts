@@ -34,6 +34,7 @@ export interface ServerOptions {
     roomsPerHour: number;
   };
   sayCooldownMs: number;
+  chatCooldownMs: number;
   lanternCooldownMs: number;
   /** Tắt ghi đĩa (test nhanh). */
   persist: boolean;
@@ -72,7 +73,8 @@ export function loadOptions(over: Partial<ServerOptions> = {}): ServerOptions {
     botCount: Math.max(0, Math.min(80, num(env.BOT_COUNT, 20))),
     wsMaxPerIp: num(env.WS_MAX_PER_IP, 20),
     limits: { apiPerMin: 300, authFailMax: 8, registerPerHour: 10, feedbackPerHour: 5, roomsPerHour: 10 },
-    sayCooldownMs: 3000,
+    sayCooldownMs: num(env.SAY_COOLDOWN_MS, 20_000),
+    chatCooldownMs: num(env.CHAT_COOLDOWN_MS, 20_000),
     lanternCooldownMs: 10_000,
     persist: true,
     version: readVersion(),

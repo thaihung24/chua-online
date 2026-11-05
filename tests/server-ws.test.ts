@@ -3,7 +3,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { Client, Http, PROFILE, profileNamed, sleep, startTest } from './server-helpers';
 
 let S: Awaited<ReturnType<typeof startTest>>;
-beforeAll(async () => { S = await startTest({ roomCapacity: 3, sayCooldownMs: 300, lanternCooldownMs: 400, wsMaxPerIp: 50, privateRoomTtlMs: 200 }); });
+beforeAll(async () => { S = await startTest({ roomCapacity: 3, sayCooldownMs: 300, chatCooldownMs: 300, lanternCooldownMs: 400, wsMaxPerIp: 50, privateRoomTtlMs: 200 }); });
 afterAll(async () => { await S.close(); });
 
 const players = (m: any) => m.t === 'players';
@@ -138,15 +138,16 @@ describe('say / lantern', () => {
     await sleep(100);
   });
 
-  it('chat: gửi tin nhắn tự do cho phòng, hiện bong bóng snapshot, lưu chatHistory và chặn spam/liên kết', async () => {
+  it('chat: 2 cơ chế global (lưu chatHistory) & bubble (chỉ hiện trên đầu, không lưu), kèm chặn spam/liên kết', async () => {
     const a = new Client(S.url); const b = new Client(S.url);
     const wa = await a.hello(profileNamed('Minh Tâm'), 12);
     await b.hello(profileNamed('Diệu Liên'), 8);
 
+    // 1. Chat tổng (mặc định scope = 'global') → lưu vào lịch sử phòng
     a.send({ t: 'chat', text: 'Chào các bạn ở Chùa Rắn nhé!' });
     const ca = await a.waitFor((m) => m.t === 'chat' && m.msg?.senderId === wa.id);
     const cb = await b.waitFor((m) => m.t === 'chat' && m.msg?.senderId === wa.id);
-    expect(ca.msg).toMatchObject({ senderId: wa.id, name: 'Minh Tâm', level: 12, text: 'Chào các bạn ở Chùa Rắn nhé!', kind: 'chat' });
+    expect(ca.msg).toMatchObject({ senderId: wa.id, name: 'Minh Tâm', level: 12, text: 'Chào các bạn ở Chùa Rắn nhé!', scope: 'global' });
     expect(cb.msg.id).toBe(ca.msg.id);
 
     // xuất hiện trong snapshot làm bong bóng trên đầu nhân vật
@@ -156,7 +157,16 @@ describe('say / lantern', () => {
     // gửi quá nhanh → nhận notice
     a.msgs.length = 0;
     a.send({ t: 'chat', text: 'Nhắn liền tay' });
-    await a.waitFor((m) => m.t === 'notice');
+    const fastNotice = await a.waitFor((m) => m.t === 'notice');
+    expect(fastNotice.text).toMatch(/20 giây/);
+
+    // 2. Chat trên đầu (scope = 'bubble') → hiện bong bóng nhưng KHÔNG lưu vào chatHistory
+    await sleep(350);
+    a.send({ t: 'chat', text: 'Câu nói thoáng qua trên đầu', scope: 'bubble' });
+    const cbBubble = await b.waitFor((m) => m.t === 'chat' && m.msg?.text === 'Câu nói thoáng qua trên đầu');
+    expect(cbBubble.msg).toMatchObject({ senderId: wa.id, scope: 'bubble', text: 'Câu nói thoáng qua trên đầu' });
+    const snapBubble = await b.waitFor((m) => players(m) && m.list[0]?.say === 'Câu nói thoáng qua trên đầu');
+    expect(snapBubble.list[0].id).toBe(wa.id);
 
     // liên kết quảng cáo → bị từ chối kèm notice
     await sleep(350);
@@ -165,14 +175,30 @@ describe('say / lantern', () => {
     const warn = await a.waitFor((m) => m.t === 'notice');
     expect(warn.text).toMatch(/liên kết|quảng cáo/);
 
-    // người thứ 3 mới vào nhận được chatHistory
+    // người thứ 3 mới vào nhận được chatHistory: có tin global, KHÔNG có tin bubble
     const c = new Client(S.url);
     await c.hello(profileNamed('Huệ Quang'), 3);
     const hist = await c.waitFor((m) => m.t === 'chatHistory');
     expect(hist.list.some((x: any) => x.text === 'Chào các bạn ở Chùa Rắn nhé!')).toBe(true);
+    expect(hist.list.some((x: any) => x.text === 'Câu nói thoáng qua trên đầu')).toBe(false);
 
     a.close(); b.close(); c.close();
     await sleep(100);
+  });
+
+  it('chat: mặc định giới hạn 20 giây mới được chat 1 lần', async () => {
+    const s20 = await startTest({});
+    const a = new Client(s20.url);
+    await a.hello(profileNamed('Tâm Tịnh'), 5);
+    a.send({ t: 'chat', text: 'Câu đầu tiên' });
+    await a.waitFor((m) => m.t === 'chat');
+    a.msgs.length = 0;
+    a.send({ t: 'chat', text: 'Câu thứ hai ngay sau đó' });
+    const notice = await a.waitFor((m) => m.t === 'notice');
+    expect(notice.text).toMatch(/Mỗi 20 giây mới chat được 1 lần/);
+    expect(a.msgs.some((m) => m.t === 'chat')).toBe(false);
+    a.close();
+    await s20.close();
   });
 });
 

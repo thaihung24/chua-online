@@ -1081,7 +1081,7 @@ export function createWorld(): World {
     },
 
     say(text) {
-      playerRig?.say(text, 4000);
+      playerRig?.say(text);
     },
 
     setOfferings(o) {

@@ -2,7 +2,7 @@
  * Client mạng nhiều người: WebSocket `/ws` tự kết nối lại (backoff 1s→15s), throttle vị trí 100ms,
  * rơi về chế độ "một mình" (offline) êm ái nếu không kết nối được.
  */
-import type { ChatMessage, NetApi, NetEvents, Profile, RemotePlayer, RoomInfo } from '@/core/contracts';
+import type { ChatMessage, ChatScope, NetApi, NetEvents, Profile, RemotePlayer, RoomInfo } from '@/core/contracts';
 import { createEmitter } from '@/core/bus';
 import { phraseText } from '@/content/phrases';
 import { API_ORIGIN, apiUrl } from './api';
@@ -277,7 +277,7 @@ export function createNet(): NetApi {
       else moveTimer = setTimeout(flushMove, wait);
     },
     sendSay(phraseId) { sendRaw({ t: 'say', phrase: phraseId }); },
-    sendChat(text) { sendRaw({ t: 'chat', text }); },
+    sendChat(text, scope: ChatScope = 'global') { sendRaw({ t: 'chat', text, scope }); },
     sendLantern(color) { sendRaw({ t: 'lantern', color }); },
     sendProfile(profile, level) {
       lastIdentity = { profile, level };

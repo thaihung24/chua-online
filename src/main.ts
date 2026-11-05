@@ -421,16 +421,17 @@ function wireNet(
     }, 4500));
   });
   net.on('chat', (msg) => {
-    if (msg.kind === 'say' || msg.senderId === net.selfId?.()) return;
+    if (msg.senderId === net.selfId?.()) return;
     const p = lastPlayers.find((x) => x.id === msg.senderId);
     if (!p) return;
     p.say = msg.text;
     world.setRemotes(lastPlayers);
+    const showMs = Math.min(8000, Math.max(5500, 1800 + [...msg.text].length * 70));
     window.clearTimeout(sayTimers.get(msg.senderId));
     sayTimers.set(msg.senderId, window.setTimeout(() => {
       const q = lastPlayers.find((x) => x.id === msg.senderId);
       if (q) { q.say = undefined; world.setRemotes(lastPlayers); }
-    }, 5500));
+    }, showMs));
   });
   net.on('lantern', ({ id, color, by }) => {
     if (by === 'me') return;

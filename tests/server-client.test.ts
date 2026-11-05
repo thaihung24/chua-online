@@ -18,7 +18,7 @@ const until = async (fn: () => boolean, ms = 4000): Promise<void> => {
 };
 
 beforeAll(async () => {
-  S = await startTest({ sayCooldownMs: 100, lanternCooldownMs: 100 });
+  S = await startTest({ sayCooldownMs: 100, chatCooldownMs: 100, lanternCooldownMs: 100 });
   useLocation(S.url);
   const origFetch = globalThis.fetch;
   // fetch tương đối → trỏ về máy chủ test; giữ cookie đơn giản.
@@ -75,17 +75,22 @@ describe('createNet', () => {
     expect(bLan[0]).toMatchObject({ color: '#f3c25a', by: expect.stringMatching(/^[0-9a-f]{8}$/) });
     expect(bSay).toHaveLength(0); // không nhận lại say của chính mình
 
-    // chat tự do: cả người gửi và người nhận đều nhận 'chat', bong bóng văn bản tự do giữ nguyên trong snapshot
+    // chat tự do: cả người gửi và người nhận đều nhận 'chat', phân biệt scope global (lưu lịch sử) và bubble (không lưu)
     const aChats: any[] = []; const bChats: any[] = [];
     a.on('chat', (m) => aChats.push(m));
     b.on('chat', (m) => bChats.push(m));
     await sleep(150);
-    b.sendChat('Chúc cả chùa buổi sáng an lành!');
-    await until(() => aChats.some((m) => m.text === 'Chúc cả chùa buổi sáng an lành!'));
-    await until(() => bChats.some((m) => m.text === 'Chúc cả chùa buổi sáng an lành!'));
+    b.sendChat('Chúc cả chùa buổi sáng an lành!', 'global');
+    await until(() => aChats.some((m) => m.text === 'Chúc cả chùa buổi sáng an lành!' && m.scope === 'global'));
+    await until(() => bChats.some((m) => m.text === 'Chúc cả chùa buổi sáng an lành!' && m.scope === 'global'));
     expect(b.selfId?.()).toBeTruthy();
     expect(bChats.find((m) => m.text === 'Chúc cả chùa buổi sáng an lành!')?.senderId).toBe(b.selfId?.());
     await until(() => aPlayers.some((l) => l[0]?.say === 'Chúc cả chùa buổi sáng an lành!'));
+
+    await sleep(150);
+    b.sendChat('Lời nói thoáng qua trên đầu', 'bubble');
+    await until(() => aChats.some((m) => m.text === 'Lời nói thoáng qua trên đầu' && m.scope === 'bubble'));
+    await until(() => aPlayers.some((l) => l[0]?.say === 'Lời nói thoáng qua trên đầu'));
 
     // không mở phòng riêng, mọi người ở chung main-1
     const room = await a.createPrivateRoom();

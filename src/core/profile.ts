@@ -11,6 +11,7 @@ const PROFILE_KEY = 'profile';
 export const NAME_MIN = 2;
 export const NAME_MAX = 24;
 export const CHAT_MAX = 100;
+export const CHAT_COOLDOWN_MS = 20_000;
 
 // ───────────────────────── Pháp danh ─────────────────────────
 const MALE_FIRST = ['Minh', 'Tuệ', 'Nhật', 'Như', 'Thiện', 'Đức', 'Quảng', 'Chánh', 'Giác', 'Hạnh', 'Trí', 'Thanh', 'Pháp', 'Tâm', 'Huệ', 'Từ', 'Định', 'Nguyên', 'Bảo', 'Đạt'];

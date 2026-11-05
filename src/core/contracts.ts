@@ -216,6 +216,7 @@ export type UnlockFeature = 'flowers' | 'bell' | 'candle' | 'lantern' | 'today' 
 
 // ───────────────────────── Mạng nhiều người ─────────────────────────
 export interface RoomInfo { id: string; label: string; online: number; capacity: number; kind: 'public' | 'private' }
+export type ChatScope = 'global' | 'bubble';
 export interface ChatMessage {
   id: string;
   senderId: string;
@@ -223,7 +224,7 @@ export interface ChatMessage {
   level: number;
   text: string;
   ts: number;
-  kind?: 'chat' | 'say';
+  scope?: ChatScope;
 }
 export interface NetEvents extends Record<string, unknown> {
   status: { state: 'offline' | 'connecting' | 'online'; room?: RoomInfo };
@@ -244,7 +245,7 @@ export interface NetApi extends Emitter<NetEvents> {
   createPrivateRoom(): Promise<RoomInfo | null>;
   sendMove(m: { x: number; z: number; ry: number; anim: RemotePlayer['anim'] }): void;
   sendSay(phraseId: string): void;
-  sendChat(text: string): void;
+  sendChat(text: string, scope?: ChatScope): void;
   sendLantern(color: string): void;
   sendProfile(profile: Profile, level: number): void;
   room(): RoomInfo | null;

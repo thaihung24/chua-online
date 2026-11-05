@@ -1,23 +1,23 @@
 /**
- * Hộp trò chuyện trực tiếp sân Chùa Rắn:
- * - Nút viên thuốc nổi (`.chat-pill`) hiện số tin chưa đọc & xem trước dòng mới nhất.
- * - Ngăn kéo kính mờ (`.chat-panel`) hiển thị luồng tin nhắn thời gian thực, dải lời chào nhanh 1 chạm,
- *   và ô nhập văn bản tự do (tối đa 100 ký tự, lọc từ ngữ & chống spam).
+ * Trò chuyện sân chùa (HUD) — gồm 2 cơ chế rõ ràng:
+ *  1. "Chat tổng" (scope: 'global'): lưu lịch sử ở khung Trò chuyện sân chùa + hiện bong bóng trên đầu nhân vật.
+ *  2. "Chat tại chỗ" (scope: 'bubble'): chỉ hiện bong bóng lời nói trên đầu nhân vật, KHÔNG lưu lịch sử.
+ * Giới hạn chung: 20 giây mới được chat 1 lần, có đồng hồ đếm ngược trực tiếp.
  */
-import type { AppContext, ChatMessage } from '@/core/contracts';
-import { CHAT_MAX, validateChatText } from '@/core/profile';
+import type { AppContext, ChatMessage, ChatScope } from '@/core/contracts';
+import { CHAT_COOLDOWN_MS, CHAT_MAX, validateChatText } from '@/core/profile';
+import { load, save } from '@/core/store';
 import { esc } from './dom';
 import { icon } from './icons';
 
 const MAX_ITEMS = 60;
-const CLIENT_COOLDOWN_MS = 1400;
 
 const QUICK_CHIPS = [
   'A Di Đà Phật 🙏',
   'Chúc bình an 🌸',
   'Tùy hỷ công đức ✨',
   'Xin chào mọi người',
-  'Mình cùng tụng kinh nhé',
+  'Cùng tụng kinh nhé',
 ];
 
 export interface ChatBox {
@@ -42,15 +42,17 @@ export function createChatBox(
   host: HTMLElement,
   opts: { onOpen?: () => void } = {},
 ): ChatBox {
+  let mode: ChatScope = load<ChatScope>('chat:mode', 'global') === 'bubble' ? 'bubble' : 'global';
+
   const pillEl = document.createElement('button');
   pillEl.type = 'button';
   pillEl.className = 'chat-pill glass';
   pillEl.id = 'hud-chat-btn';
-  pillEl.setAttribute('aria-label', 'Mở trò chuyện sân chùa');
+  pillEl.setAttribute('aria-label', 'Mở Trò chuyện sân chùa');
   pillEl.setAttribute('aria-expanded', 'false');
   pillEl.setAttribute('aria-controls', 'hud-chat-panel');
   pillEl.innerHTML = `
-    ${icon('chat', { size: 19 })}
+    ${icon('chat', { size: 18 })}
     <span class="chat-pill__text">Trò chuyện</span>
     <span class="chat-pill__badge" hidden>0</span>
     <kbd class="chat-pill__key" aria-hidden="true">Enter</kbd>
@@ -63,23 +65,41 @@ export function createChatBox(
   panelEl.inert = true;
   panelEl.innerHTML = `
     <header class="chat__head">
-      <div class="chat__title">
-        ${icon('chat', { size: 18 })}
-        <span>Trò chuyện sân chùa</span>
+      <div class="chat__top">
+        <div class="chat__title-wrap">
+          <span class="chat__dot" data-state="offline" aria-hidden="true"></span>
+          <h2 class="chat__title">Trò chuyện sân chùa</h2>
+        </div>
+        <div class="chat__actions">
+          <button type="button" class="chat__preset-btn" title="Chọn câu chào soạn sẵn" aria-label="Câu chào soạn sẵn">
+            ${icon('hands', { size: 15 })}<span>Lời chào</span>
+          </button>
+          <button type="button" class="chat__close" title="Thu gọn (Esc)" aria-label="Thu gọn khung trò chuyện">
+            ${icon('chevron-down', { size: 18 })}
+          </button>
+        </div>
       </div>
-      <div class="chat__actions">
-        <button type="button" class="chat__preset-btn" title="Chọn câu chào soạn sẵn">Lời chào</button>
-        <button type="button" class="chat__close" aria-label="Thu gọn trò chuyện">${icon('chevron-down', { size: 19 })}</button>
+      <div class="chat__modes" role="tablist" aria-label="Chế độ trò chuyện">
+        <button type="button" role="tab" class="chat__tab" data-mode="global" aria-selected="true">
+          <span>Chat tổng</span>
+          <span class="chat__tab-badge" hidden>0</span>
+        </button>
+        <button type="button" role="tab" class="chat__tab" data-mode="bubble" aria-selected="false">
+          <span>Chat tại chỗ</span>
+        </button>
       </div>
     </header>
     <div class="chat__solo" hidden>
       <span>Đang ở chế độ tịnh tâm một mình.</span>
       <button type="button" class="chat__solo-btn">Vào sân chung</button>
     </div>
-    <div class="chat__list" role="log" aria-live="polite">
-      <p class="chat__empty">Chưa có tin nhắn mới. Hãy gửi lời chào an lành tới mọi người tại Chùa Rắn nhé!</p>
+    <div class="chat__list" role="log" aria-live="polite" aria-relevant="additions">
+      <p class="chat__empty">Chưa có tin nhắn trong sân chùa. Gửi lời chào hoan hỷ đầu tiên nhé!</p>
     </div>
-    <div class="chat__quick" aria-label="Lời chào nhanh">
+    <p class="chat__bubble-note" hidden>
+      Chỉ hiện bong bóng lời nói tại chỗ đang đứng · <strong>không lưu</strong> vào lịch sử sân chùa.
+    </p>
+    <div class="chat__quick" aria-label="Gợi ý lời chào nhanh">
       ${QUICK_CHIPS.map((t) => `<button type="button" class="chat__chip" data-chip="${esc(t)}">${esc(t)}</button>`).join('')}
     </div>
     <form class="chat__form" autocomplete="off">
@@ -90,8 +110,8 @@ export function createChatBox(
         enterkeyhint="send"
         autocomplete="off"
         autocapitalize="sentences"
-        placeholder="Nhắn lời lành tới mọi người…"
-        aria-label="Nhập lời nhắn trò chuyện"
+        placeholder="Nhắn Chat tổng (lưu lịch sử sân chùa)…"
+        aria-label="Nội dung tin nhắn"
       />
       <span class="chat__count" hidden>0/${CHAT_MAX}</span>
       <button type="submit" class="chat__send" aria-label="Gửi tin nhắn">${icon('send', { size: 17 })}</button>
@@ -101,86 +121,199 @@ export function createChatBox(
   host.append(pillEl, panelEl);
 
   const pillText = pillEl.querySelector('.chat-pill__text') as HTMLElement;
-  const badgeEl = pillEl.querySelector('.chat-pill__badge') as HTMLElement;
+  const pillBadge = pillEl.querySelector('.chat-pill__badge') as HTMLElement;
+  const dotEl = panelEl.querySelector('.chat__dot') as HTMLElement;
   const presetBtn = panelEl.querySelector('.chat__preset-btn') as HTMLButtonElement;
   const closeBtn = panelEl.querySelector('.chat__close') as HTMLButtonElement;
+  const tabGlobal = panelEl.querySelector('[data-mode="global"]') as HTMLButtonElement;
+  const tabBubble = panelEl.querySelector('[data-mode="bubble"]') as HTMLButtonElement;
+  const tabBadge = panelEl.querySelector('.chat__tab-badge') as HTMLElement;
   const soloBar = panelEl.querySelector('.chat__solo') as HTMLElement;
   const soloBtn = panelEl.querySelector('.chat__solo-btn') as HTMLButtonElement;
   const listEl = panelEl.querySelector('.chat__list') as HTMLElement;
   const emptyEl = panelEl.querySelector('.chat__empty') as HTMLElement;
+  const bubbleNoteEl = panelEl.querySelector('.chat__bubble-note') as HTMLElement;
   const quickEl = panelEl.querySelector('.chat__quick') as HTMLElement;
   const formEl = panelEl.querySelector('.chat__form') as HTMLFormElement;
   const inputEl = panelEl.querySelector('.chat__input') as HTMLInputElement;
   const countEl = panelEl.querySelector('.chat__count') as HTMLElement;
+  const sendBtn = panelEl.querySelector('.chat__send') as HTMLButtonElement;
+  const sendIconHtml = sendBtn.innerHTML;
 
   let opened = false;
+  let cdTimer = 0;
   let unread = 0;
-  let lastSendAt = 0;
-  let localSeq = 0;
+  let lastPreview = '';
+  const messages: ChatMessage[] = [];
   const seenIds = new Set<string>();
-  const items: ChatMessage[] = [];
 
-  function isMine(m: ChatMessage): boolean {
-    if (m.senderId === 'me') return true;
+  function isMineMsg(m: ChatMessage): boolean {
+    if (m.senderId === 'local-me') return true;
     const myId = ctx.net.selfId?.();
-    return !!myId && m.senderId === myId;
+    return Boolean(myId && m.senderId === myId);
   }
 
-  function updateBadge(): void {
-    if (unread <= 0 || opened) {
-      badgeEl.hidden = true;
-      pillEl.classList.remove('has-unread');
-      if (items.length === 0) pillText.textContent = 'Trò chuyện';
-    } else {
-      badgeEl.hidden = false;
-      badgeEl.textContent = unread > 9 ? '9+' : String(unread);
+  function isNearBottom(): boolean {
+    return listEl.scrollHeight - listEl.scrollTop - listEl.clientHeight < 56;
+  }
+
+  function scrollToBottom(): void {
+    listEl.scrollTop = listEl.scrollHeight;
+  }
+
+  function getLastSendAt(): number {
+    const t = load<number>('chat:lastSendAt', 0);
+    return t > Date.now() ? 0 : t;
+  }
+
+  function remainCooldownSec(now = Date.now()): number {
+    const left = getLastSendAt() + CHAT_COOLDOWN_MS - now;
+    return left > 0 ? Math.max(1, Math.ceil(left / 1000)) : 0;
+  }
+
+  function paintBadgesAndPill(sec = remainCooldownSec()): void {
+    const badgeTxt = unread > 9 ? '9+' : String(unread);
+    if (unread > 0) {
+      pillBadge.hidden = false;
+      pillBadge.textContent = badgeTxt;
       pillEl.classList.add('has-unread');
+      pillText.textContent = lastPreview || 'Trò chuyện';
+    } else {
+      pillBadge.hidden = true;
+      pillEl.classList.remove('has-unread');
+      pillText.textContent = sec > 0 ? `Trò chuyện · ${sec}s` : 'Trò chuyện';
+    }
+
+    if (unread > 0 && mode === 'bubble') {
+      tabBadge.hidden = false;
+      tabBadge.textContent = badgeTxt;
+    } else {
+      tabBadge.hidden = true;
     }
   }
 
-  function paintSolo(): void {
-    const solo = ctx.isSolo?.() ?? false;
-    soloBar.hidden = !solo;
+  function paintCooldown(): void {
+    const sec = remainCooldownSec();
+    if (sec > 0) {
+      pillEl.classList.add('is-cooldown');
+      sendBtn.classList.add('is-cooldown');
+      sendBtn.setAttribute('aria-disabled', 'true');
+      sendBtn.innerHTML = `<span class="chat__cd">${sec}s</span>`;
+      if (!cdTimer) {
+        cdTimer = window.setInterval(() => paintCooldown(), 300);
+      }
+    } else {
+      if (cdTimer) {
+        window.clearInterval(cdTimer);
+        cdTimer = 0;
+      }
+      pillEl.classList.remove('is-cooldown');
+      if (sendBtn.classList.contains('is-cooldown')) {
+        sendBtn.classList.remove('is-cooldown');
+        sendBtn.removeAttribute('aria-disabled');
+        sendBtn.innerHTML = sendIconHtml;
+      }
+    }
+    paintBadgesAndPill(sec);
   }
 
-  function renderItem(m: ChatMessage): HTMLElement {
-    const mine = isMine(m);
+  function paintStatus(): void {
+    const solo = ctx.isSolo?.() ?? false;
+    const online = !solo && ctx.net.isOnline();
+    dotEl.dataset.state = online ? 'online' : 'offline';
+    soloBar.hidden = !solo || mode === 'bubble';
+  }
+
+  function applyMode(next: ChatScope, focusInput = false): void {
+    mode = next;
+    save('chat:mode', mode);
+    const isBubble = mode === 'bubble';
+    panelEl.classList.toggle('is-bubble-mode', isBubble);
+    tabGlobal.classList.toggle('is-active', !isBubble);
+    tabGlobal.setAttribute('aria-selected', String(!isBubble));
+    tabBubble.classList.toggle('is-active', isBubble);
+    tabBubble.setAttribute('aria-selected', String(isBubble));
+
+    listEl.hidden = isBubble;
+    quickEl.hidden = isBubble;
+    bubbleNoteEl.hidden = !isBubble;
+
+    inputEl.placeholder = isBubble
+      ? 'Nhắn tại chỗ (chỉ hiện trên đầu, không lưu)…'
+      : 'Nhắn Chat tổng (lưu lịch sử sân chùa)…';
+
+    if (!isBubble && opened) {
+      unread = 0;
+      lastPreview = '';
+      requestAnimationFrame(() => scrollToBottom());
+    }
+    paintStatus();
+    paintBadgesAndPill();
+    if (focusInput && opened) {
+      requestAnimationFrame(() => inputEl.focus());
+    }
+  }
+
+  function renderMsgEl(m: ChatMessage): HTMLElement {
+    const mine = isMineMsg(m);
     const row = document.createElement('div');
-    row.className = 'chat__msg' + (mine ? ' chat__msg--mine' : '');
+    row.className = 'chat-msg' + (mine ? ' is-me' : '');
     row.dataset.id = m.id;
     row.innerHTML = `
-      <div class="chat__meta">
-        <strong class="chat__author">${esc(mine ? `${m.name} (Bạn)` : m.name)}</strong>
-        <span class="chat__lvl">Cấp ${Math.max(1, Math.floor(m.level || 1))}</span>
-        <time class="chat__time">${fmtTime(m.ts || Date.now())}</time>
+      <div class="chat-msg__meta">
+        <span class="chat-msg__name">${esc(mine ? 'Bạn' : m.name)}</span>
+        <span class="chat-msg__lvl">Cấp ${Math.max(1, Math.floor(m.level || 1))}</span>
+        <time class="chat-msg__time">${esc(fmtTime(m.ts))}</time>
       </div>
-      <div class="chat__bubble">${esc(m.text)}</div>
+      <div class="chat-msg__bubble">${esc(m.text)}</div>
     `;
     return row;
   }
 
-  function appendMessage(m: ChatMessage, fromHistory = false): void {
-    if (!m || !m.id || seenIds.has(m.id)) return;
+  function rebuildList(): void {
+    listEl.querySelectorAll('.chat-msg').forEach((n) => n.remove());
+    emptyEl.hidden = messages.length > 0;
+    const frag = document.createDocumentFragment();
+    for (const m of messages) frag.append(renderMsgEl(m));
+    listEl.append(frag);
+    if (opened && mode === 'global') scrollToBottom();
+  }
+
+  function appendGlobalMessage(m: ChatMessage, fromHistory = false): void {
+    if (m.scope === 'bubble') return;
+    if (seenIds.has(m.id)) return;
+    const stick = isNearBottom();
     seenIds.add(m.id);
-    items.push(m);
-    if (items.length > MAX_ITEMS) {
-      const dropped = items.shift();
-      if (dropped) {
-        seenIds.delete(dropped.id);
-        listEl.querySelector(`[data-id="${CSS.escape(dropped.id)}"]`)?.remove();
+    messages.push(m);
+    if (messages.length > MAX_ITEMS) {
+      const removed = messages.splice(0, messages.length - MAX_ITEMS);
+      for (const r of removed) {
+        seenIds.delete(r.id);
+        listEl.querySelector(`.chat-msg[data-id="${CSS.escape(r.id)}"]`)?.remove();
       }
     }
     emptyEl.hidden = true;
-    const nearBottom = listEl.scrollHeight - listEl.scrollTop - listEl.clientHeight < 72;
-    listEl.append(renderItem(m));
-    if (opened && (nearBottom || isMine(m) || fromHistory)) {
-      listEl.scrollTop = listEl.scrollHeight;
+    listEl.append(renderMsgEl(m));
+
+    const mine = isMineMsg(m);
+    if (!fromHistory) {
+      if (opened && mode === 'global') {
+        if (stick || mine) scrollToBottom();
+      } else if (!mine) {
+        unread = Math.min(99, unread + 1);
+        lastPreview = `${m.name}: ${m.text}`;
+        paintBadgesAndPill();
+      }
     }
-    if (!opened && !fromHistory && !isMine(m)) {
-      unread++;
-      const preview = m.text.length > 20 ? m.text.slice(0, 19) + '…' : m.text;
-      pillText.textContent = `${m.name}: ${preview}`;
-      updateBadge();
+  }
+
+  function updateCounter(): void {
+    const len = [...inputEl.value].length;
+    if (len >= 70) {
+      countEl.hidden = false;
+      countEl.textContent = `${len}/${CHAT_MAX}`;
+    } else {
+      countEl.hidden = true;
     }
   }
 
@@ -190,39 +323,35 @@ export function createChatBox(
       ctx.toast(v.error, { kind: 'warn' });
       return false;
     }
-    const now = Date.now();
-    if (now - lastSendAt < CLIENT_COOLDOWN_MS) {
-      ctx.toast('Bạn nhắn hơi nhanh, xin chờ một chút nhé.');
+    const sec = remainCooldownSec();
+    if (sec > 0) {
+      ctx.toast(`Mỗi 20 giây mới chat được 1 lần. Xin chờ ${sec}s nữa nhé.`);
+      paintCooldown();
       return false;
     }
-    lastSendAt = now;
+    const now = Date.now();
+    save('chat:lastSendAt', now);
+    paintCooldown();
+
+    // Cả hai chế độ đều hiện bong bóng lời nói trên đầu nhân vật 3D
     ctx.world.say(v.text);
     ctx.progress.record('greet');
 
     if (ctx.net.isOnline()) {
-      ctx.net.sendChat(v.text);
-    } else {
-      appendMessage({
-        id: `local-${++localSeq}-${now}`,
-        senderId: 'me',
+      ctx.net.sendChat(v.text, mode);
+    } else if (mode === 'global') {
+      // Khi đang ngoại tuyến / một mình: "Chat tổng" vẫn lưu vào khung Trò chuyện sân chùa cục bộ
+      appendGlobalMessage({
+        id: `local-${now.toString(36)}`,
+        senderId: 'local-me',
         name: ctx.profile.name,
         level: ctx.progress.view().level,
         text: v.text,
         ts: now,
-        kind: 'chat',
+        scope: 'global',
       });
     }
     return true;
-  }
-
-  function updateCounter(): void {
-    const len = [...inputEl.value].length;
-    if (len >= 72) {
-      countEl.hidden = false;
-      countEl.textContent = `${len}/${CHAT_MAX}`;
-    } else {
-      countEl.hidden = true;
-    }
   }
 
   function syncViewport(): void {
@@ -242,22 +371,33 @@ export function createChatBox(
     }
   }
 
-  function open(focus = false): void {
+  function onOutside(e: Event): void {
+    const t = e.target as Node | null;
+    if (!t || panelEl.contains(t) || pillEl.contains(t)) return;
+    // Chỉ tự đóng khi chạm ngoài trên màn hình nhỏ hoặc khi đang ở chế độ gọn "Chat tại chỗ"
+    if (mode === 'bubble' || window.innerWidth < 1180) {
+      close();
+    }
+  }
+
+  function open(focus = true): void {
+    paintCooldown();
+    paintStatus();
     if (!opened) {
       opened = true;
-      unread = 0;
-      pillText.textContent = 'Trò chuyện';
-      updateBadge();
-      paintSolo();
       panelEl.inert = false;
       panelEl.classList.add('is-open');
       pillEl.classList.add('is-open');
       pillEl.setAttribute('aria-expanded', 'true');
+      if (mode === 'global') {
+        unread = 0;
+        lastPreview = '';
+        paintBadgesAndPill();
+        requestAnimationFrame(() => scrollToBottom());
+      }
       opts.onOpen?.();
       syncViewport();
-      requestAnimationFrame(() => {
-        listEl.scrollTop = listEl.scrollHeight;
-      });
+      document.addEventListener('pointerdown', onOutside, true);
     }
     if (focus) {
       requestAnimationFrame(() => inputEl.focus());
@@ -272,75 +412,108 @@ export function createChatBox(
     panelEl.inert = true;
     pillEl.classList.remove('is-open');
     pillEl.setAttribute('aria-expanded', 'false');
-    if (document.activeElement === inputEl) inputEl.blur();
-    updateBadge();
+    document.removeEventListener('pointerdown', onOutside, true);
+    if (document.activeElement && panelEl.contains(document.activeElement)) {
+      (document.activeElement as HTMLElement).blur();
+    }
+    paintCooldown();
   }
 
-  function toggle(focus = false): void {
+  function toggle(focus = true): void {
     if (opened) close();
     else open(focus);
   }
 
-  // ── Sự kiện DOM ──
   pillEl.addEventListener('click', () => {
-    const desktop = matchMedia('(hover: hover) and (pointer: fine)').matches;
-    open(desktop);
+    // Nếu đang có tin nhắn mới ở Chat tổng thì khi bấm mở sẽ ưu tiên mở tab Chat tổng để đọc ngay
+    if (unread > 0 && mode !== 'global') {
+      applyMode('global', false);
+    }
+    open( !matchMedia('(pointer: coarse)').matches );
   });
   closeBtn.addEventListener('click', () => close());
   presetBtn.addEventListener('click', () => {
     close();
     void ctx.openPanel('sayings');
   });
+  tabGlobal.addEventListener('click', () => applyMode('global', true));
+  tabBubble.addEventListener('click', () => applyMode('bubble', true));
   soloBtn.addEventListener('click', () => {
     ctx.setSolo?.(false);
-    paintSolo();
+    paintStatus();
   });
+
   quickEl.addEventListener('click', (e) => {
     const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-chip]');
-    if (!b || !b.dataset.chip) return;
+    if (!b?.dataset.chip) return;
     submitText(b.dataset.chip);
   });
+
   inputEl.addEventListener('input', updateCounter);
   formEl.addEventListener('submit', (e) => {
     e.preventDefault();
-    if (!inputEl.value.trim()) return;
+    if (!inputEl.value.trim()) {
+      if (mode === 'bubble') close();
+      return;
+    }
     if (submitText(inputEl.value)) {
       inputEl.value = '';
       updateCounter();
+      if (mode === 'bubble') {
+        // Chế độ "Chat tại chỗ" không lưu lịch sử → đóng gọn ngay để thấy bong bóng trên đầu nhân vật
+        close();
+      }
     }
   });
-  listEl.addEventListener('wheel', (e) => e.stopPropagation(), { passive: true });
 
-  const onKeyDown = (e: KeyboardEvent): void => {
+  panelEl.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === 'Escape' && opened) {
       e.stopPropagation();
       close();
     }
-  };
-  panelEl.addEventListener('keydown', onKeyDown);
+  });
 
   const vv = window.visualViewport;
   vv?.addEventListener('resize', syncViewport);
   vv?.addEventListener('scroll', syncViewport);
 
-  // ── Sự kiện mạng & bus ──
+  const offChat = ctx.net.on('chat', (msg) => {
+    // Chỉ "Chat tổng" mới lưu vào Trò chuyện sân chùa; "Chat tại chỗ" (scope === 'bubble') bỏ qua hoàn toàn
+    if (msg.scope === 'bubble') return;
+    appendGlobalMessage(msg, false);
+  });
+
   const offHistory = ctx.net.on('chatHistory', (list) => {
-    for (const m of list) appendMessage(m, true);
+    let changed = false;
+    for (const m of list) {
+      if (!m || m.scope === 'bubble' || seenIds.has(m.id)) continue;
+      seenIds.add(m.id);
+      messages.push(m);
+      changed = true;
+    }
+    if (!changed) return;
+    messages.sort((a, b) => a.ts - b.ts);
+    if (messages.length > MAX_ITEMS) {
+      const removed = messages.splice(0, messages.length - MAX_ITEMS);
+      for (const r of removed) seenIds.delete(r.id);
+    }
+    rebuildList();
   });
-  const offChat = ctx.net.on('chat', (m) => {
-    appendMessage(m, false);
-  });
-  const offSolo = ctx.bus.on('solo', () => paintSolo());
+
+  const offStatus = ctx.net.on('status', () => paintStatus());
+  const offSolo = ctx.bus.on('solo', () => paintStatus());
   const offPanel = ctx.bus.on('panel', ({ id }) => {
     if (id !== null) close();
+    else paintCooldown();
   });
   const offToggle = ctx.bus.on('chatToggle', ({ open: wantOpen, focus }) => {
     if (wantOpen === false) close();
-    else if (wantOpen === true) open(!!focus);
-    else toggle(!!focus);
+    else if (wantOpen === true) open(focus ?? true);
+    else toggle(focus ?? true);
   });
 
-  paintSolo();
+  applyMode(mode, false);
+  paintCooldown();
 
   return {
     pillEl,
@@ -350,11 +523,14 @@ export function createChatBox(
     close,
     toggle,
     destroy() {
-      offHistory();
+      if (cdTimer) window.clearInterval(cdTimer);
       offChat();
+      offHistory();
+      offStatus();
       offSolo();
       offPanel();
       offToggle();
+      document.removeEventListener('pointerdown', onOutside, true);
       vv?.removeEventListener('resize', syncViewport);
       vv?.removeEventListener('scroll', syncViewport);
       pillEl.remove();

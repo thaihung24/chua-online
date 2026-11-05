@@ -2,8 +2,7 @@
 import type http from 'node:http';
 import type { Duplex } from 'node:stream';
 import { WebSocketServer, WebSocket } from 'ws';
-import type { ChatMessage, Profile, RoomInfo } from '../src/core/contracts';
-import { phraseText } from '../src/content/phrases';
+import type { ChatMessage, ChatScope, Profile, RoomInfo } from '../src/core/contracts';
 import { BotColony } from '../src/core/bots';
 import { BOUNDS, SPAWN, COLOR_RE, clampLevel, isAnim, isPhrase, parseProfile, plausibleLevel, safeProfile, validateChatText, type Anim } from './validate';
 import { Bucket, clientIp, getCookie, randomHex } from './util';
@@ -11,7 +10,7 @@ import type { ServerOptions } from './config';
 
 const MAX_SPEED = 8; // m/s
 const SAY_SHOW_MS = 4500;
-const CHAT_SHOW_MS = 5500;
+const CHAT_SHOW_MS = 6500;
 const MAX_CHAT_LOG = 30;
 const TICK_MS = 200; // 5Hz
 const MAX_STRIKES = 30;
@@ -279,23 +278,12 @@ export class Hub {
       return this.strike(c, 1);
     }
     c.lastSayAt = now;
+    c.lastChatAt = now;
     c.say = m.phrase;
     c.sayUntil = now + SAY_SHOW_MS;
     c.frag = null;
     c.room.dirty = true;
     this.broadcast(c.room, { t: 'say', id: c.id, text: m.phrase }, c);
-    const text = phraseText(m.phrase) ?? m.phrase;
-    const msg: ChatMessage = {
-      id: `s-${randomHex(5)}`,
-      senderId: c.id,
-      name: c.profile.name,
-      level: c.level,
-      text,
-      ts: now,
-      kind: 'say',
-    };
-    this.pushChat(c.room, msg);
-    this.broadcast(c.room, { t: 'chat', msg });
     if (this.bots.size > 0) this.bots.notifyHumanGesture(c.x, c.z, now);
   }
 
@@ -306,12 +294,16 @@ export class Hub {
       this.notice(c, v.error);
       return this.strike(c, 1);
     }
+    const scope: ChatScope = m.scope === 'bubble' ? 'bubble' : 'global';
     const now = Date.now();
-    const cooldown = Math.min(this.opts.sayCooldownMs, 1500);
-    if (now - c.lastChatAt < cooldown) {
-      this.notice(c, 'Bạn nhắn hơi nhanh, xin chờ một chút nhé.');
-      return this.strike(c, 1);
+    const cooldown = this.opts.chatCooldownMs;
+    const elapsed = now - c.lastChatAt;
+    if (elapsed < cooldown) {
+      const waitSec = Math.max(1, Math.ceil((cooldown - elapsed) / 1000));
+      this.notice(c, `Mỗi 20 giây mới chat được 1 lần. Xin chờ ${waitSec} giây nữa nhé.`);
+      return this.strike(c, 0.5);
     }
+    c.lastSayAt = now;
     c.lastChatAt = now;
     c.say = v.text;
     c.sayUntil = now + CHAT_SHOW_MS;
@@ -324,9 +316,12 @@ export class Hub {
       level: c.level,
       text: v.text,
       ts: now,
-      kind: 'chat',
+      scope,
     };
-    this.pushChat(c.room, msg);
+    // Chỉ "Chat tổng" (global) mới lưu vào lịch sử Trò chuyện sân chùa; chế độ "Chat tại chỗ" (bubble) không lưu
+    if (scope === 'global') {
+      this.pushChat(c.room, msg);
+    }
     this.broadcast(c.room, { t: 'chat', msg });
     if (this.bots.size > 0) this.bots.notifyHumanGesture(c.x, c.z, now);
   }
