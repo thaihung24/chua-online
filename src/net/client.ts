@@ -2,7 +2,7 @@
  * Client mạng nhiều người: WebSocket `/ws` tự kết nối lại (backoff 1s→15s), throttle vị trí 100ms,
  * rơi về chế độ "một mình" (offline) êm ái nếu không kết nối được.
  */
-import type { NetApi, NetEvents, Profile, RemotePlayer, RoomInfo } from '@/core/contracts';
+import type { ChatMessage, NetApi, NetEvents, Profile, RemotePlayer, RoomInfo } from '@/core/contracts';
 import { createEmitter } from '@/core/bus';
 import { phraseText } from '@/content/phrases';
 import { API_ORIGIN, apiUrl } from './api';
@@ -35,6 +35,7 @@ export function createNet(): NetApi {
   let ws: WebSocket | null = null;
   let state: NetEvents['status']['state'] = 'offline';
   let room: RoomInfo | null = null;
+  let myId: string | null = null;
   let want: { profile: Profile; level: number } | null = null;
   let lastIdentity: { profile: Profile; level: number } | null = null;
   let attempt = 0;
@@ -107,6 +108,7 @@ export function createNet(): NetApi {
       case 'welcome': {
         const info = m.room as RoomInfo;
         if (!info || typeof info.id !== 'string') return;
+        myId = typeof m.id === 'string' ? m.id : null;
         room = info;
         attempt = 0;
         announcedOffline = false;
@@ -124,11 +126,26 @@ export function createNet(): NetApi {
       }
       case 'players': {
         const list = Array.isArray(m.list) ? (m.list as RemotePlayer[]) : [];
-        em.emit('players', list.map((p) => (p.say ? { ...p, say: phraseText(p.say) ?? undefined } : p)));
+        em.emit('players', list.map((p) => (p.say ? { ...p, say: phraseText(p.say) ?? p.say } : p)));
         break;
       }
       case 'say':
         if (typeof m.id === 'string' && typeof m.text === 'string') em.emit('say', { id: m.id, text: m.text });
+        break;
+      case 'chat': {
+        const msg = m.msg as ChatMessage | undefined;
+        if (msg && typeof msg.id === 'string' && typeof msg.text === 'string' && typeof msg.name === 'string') {
+          em.emit('chat', msg);
+        }
+        break;
+      }
+      case 'chatHistory':
+        if (Array.isArray(m.list)) {
+          em.emit(
+            'chatHistory',
+            (m.list as ChatMessage[]).filter((x) => x && typeof x.id === 'string' && typeof x.text === 'string'),
+          );
+        }
         break;
       case 'lantern':
         if (typeof m.id === 'string' && typeof m.color === 'string') em.emit('lantern', { id: m.id, color: m.color, by: String(m.by ?? '') });
@@ -237,7 +254,7 @@ export function createNet(): NetApi {
       const s = ws;
       ws = null;
       if (s) { s.onclose = null; s.onmessage = null; s.onerror = null; try { s.close(1000); } catch { /* bỏ qua */ } }
-      pending = null; lastSent = null; room = null;
+      pending = null; lastSent = null; room = null; myId = null;
       if (state === 'online') em.emit('players', []);
       if (state !== 'offline') setState('offline');
     },
@@ -260,6 +277,7 @@ export function createNet(): NetApi {
       else moveTimer = setTimeout(flushMove, wait);
     },
     sendSay(phraseId) { sendRaw({ t: 'say', phrase: phraseId }); },
+    sendChat(text) { sendRaw({ t: 'chat', text }); },
     sendLantern(color) { sendRaw({ t: 'lantern', color }); },
     sendProfile(profile, level) {
       lastIdentity = { profile, level };
@@ -267,6 +285,7 @@ export function createNet(): NetApi {
       sendRaw({ t: 'profile', profile, level });
     },
     room: () => room,
+    selfId: () => myId,
     isOnline: () => state === 'online',
   };
   return api;

@@ -106,6 +106,7 @@ export function createMoreMenu(ctx: AppContext, host: HTMLElement, opts: { onTog
         { key: 'wardrobe', label: 'Trang phục', icon: 'hanger', feature: 'wardrobe', run: panel('wardrobe') },
         { key: 'walkMed', label: 'Thiền hành', icon: 'footsteps', feature: 'walkMeditation', run: panel('walkMeditation') },
         { key: 'que', label: 'Xin quẻ', icon: 'sticks', feature: 'que', run: panel('que') },
+        { key: 'chat', label: 'Trò chuyện', icon: 'chat', run: () => ctx.bus.emit('chatToggle', { open: true, focus: true }), accent: true },
         { key: 'sayings', label: 'Lời chào', icon: 'hands', run: panel('sayings') },
         { key: 'journey', label: 'Hành trình', icon: 'sparkles', run: panel('journey') },
       ],

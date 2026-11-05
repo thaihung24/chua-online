@@ -1,9 +1,10 @@
 /** Kiểm tra dữ liệu vào: hồ sơ, tên, email, màu, câu chào. Dùng mô-đun của C1/C2 khi có. */
 import { OUTFIT_COLORS, TIERS, type Profile, type OutfitId, type TierDef } from '../src/core/contracts';
+import { CHAT_MAX, validateChatText } from '../src/core/profile';
 import { PHRASES } from '../src/content/phrases';
 import { BOUNDS, SPAWN } from '../src/world/layout';
 
-export { BOUNDS, SPAWN };
+export { BOUNDS, SPAWN, CHAT_MAX, validateChatText };
 
 const phraseIds = new Set(PHRASES.map((p) => p.id));
 export const isPhrase = (id: unknown): id is string => typeof id === 'string' && phraseIds.has(id);

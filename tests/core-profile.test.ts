@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { OUTFITS, OUTFIT_COLORS } from '@/core/contracts';
 import type { Profile } from '@/core/contracts';
 import { save } from '@/core/store';
-import { defaultProfile, hasProfile, loadProfile, nameChoices, normalizeName, randomName, sanitizeProfile, saveProfile, validateName } from '@/core/profile';
+import { defaultProfile, hasProfile, loadProfile, nameChoices, normalizeName, randomName, sanitizeProfile, saveProfile, validateChatText, validateName } from '@/core/profile';
 
 describe('profile: defaultProfile', () => {
   it('hợp lệ theo sanitizeProfile', () => {
@@ -150,5 +150,43 @@ describe('profile: lưu / tải', () => {
     expect(hasProfile()).toBe(false);
     save('profile', 'rác');
     expect(loadProfile()).toBeNull();
+  });
+});
+
+describe('profile: validateChatText', () => {
+  it('cho phép câu tiếng Việt tự nhiên, dấu câu, số và emoji', () => {
+    const ok = [
+      'A Di Đà Phật 🙏',
+      'Chào các bạn, chúc buổi sáng an lành!',
+      'Sân Chùa Rắn rộng lớn đẹp quá',
+      'Con đi lễ Phật và tụng kinh đây',
+      'Thắng đời 1:0 hẹ hẹ hẹ',
+    ];
+    for (const s of ok) {
+      const r = validateChatText(s);
+      expect(r.ok, s).toBe(true);
+    }
+  });
+
+  it('kiểm tra độ dài 1–100 ký tự và chuẩn hoá khoảng trắng', () => {
+    expect(validateChatText('')).toEqual({ ok: false, error: 'Vui lòng nhập lời nhắn.' });
+    expect(validateChatText('   \n\t  ').ok).toBe(false);
+    expect(validateChatText(null).ok).toBe(false);
+    const trimmed = validateChatText('  Xin   chào \n mọi người  ');
+    expect(trimmed).toEqual({ ok: true, text: 'Xin chào mọi người' });
+    expect(validateChatText('a'.repeat(100)).ok).toBe(true);
+    expect(validateChatText('a'.repeat(101)).ok).toBe(false);
+  });
+
+  it('chặn từ thô tục, liên kết và quảng cáo', () => {
+    const rev = (s: string) => [...s].reverse().join('');
+    for (const bad of [rev('lcv'), rev('tid'), rev('tav cus'), rev('nol iav')]) {
+      const r = validateChatText(`ê ${bad}!`);
+      expect(r.ok, bad).toBe(false);
+    }
+    for (const spam of ['https://example.com', 'www.abc.vn', 'kết bạn zalo 0909', 'vào casino nhận thưởng']) {
+      const r = validateChatText(spam);
+      expect(r.ok, spam).toBe(false);
+    }
   });
 });

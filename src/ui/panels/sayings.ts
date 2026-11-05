@@ -1,9 +1,10 @@
 /**
- * Panel "Lời chào" (hộp thoại): lưới câu chào soạn sẵn theo nhóm — chỉ chọn, không gõ tự do để giữ chùa thanh tịnh.
+ * Panel "Lời chào" (hộp thoại): lưới câu chào soạn sẵn theo nhóm + nút mở khung trò chuyện tự do.
  */
 import type { PanelDef } from '@/core/contracts';
 import { PHRASES, PHRASE_GROUPS } from '@/content/phrases';
 import { esc, h } from '@/ui/dom';
+import { icon } from '@/ui/icons';
 import { dialogHead } from '@/ui/pm-kit';
 
 export const panel: PanelDef = {
@@ -11,7 +12,14 @@ export const panel: PanelDef = {
   title: 'Lời chào',
   kind: 'dialog',
   mount(root, ctx) {
-    const body = h('div', { class: 'say-body' });
+    const openFreeChat = h('button', { type: 'button', class: 'btn btn--ghost btn--block' });
+    openFreeChat.innerHTML = `${icon('chat', { size: 18 })}<span>Mở khung gõ tin nhắn tự do</span>`;
+    openFreeChat.addEventListener('click', () => {
+      ctx.closePanel();
+      requestAnimationFrame(() => ctx.bus.emit('chatToggle', { open: true, focus: true }));
+    });
+
+    const body = h('div', { class: 'say-body' }, [openFreeChat]);
     const groups: string[] = [...PHRASE_GROUPS];
     for (const p of PHRASES) if (!groups.includes(p.group)) groups.push(p.group);
     for (const g of groups) {

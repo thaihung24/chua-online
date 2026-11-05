@@ -5,6 +5,7 @@
  */
 import { TIERS, type ActionId, type AppContext, type AudioSettings, type ProgressView, type RoomInfo, type UnlockFeature, type WorldEvents } from '@/core/contracts';
 import { isChantRadioOn, onChantRadioChange, startChantRadio, stopChantRadio } from './chant-radio';
+import { createChatBox } from './chat-box';
 import { esc, isTyping } from './dom';
 import { icon, type IconName } from './icons';
 import { createMoreMenu, FEATURE_LABEL, offeringBusyMsg } from './menu';
@@ -265,7 +266,7 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
   let sndOpen = false;
   function toggleSound(force?: boolean): void {
     sndOpen = force ?? !sndOpen;
-    if (sndOpen) menu.close();
+    if (sndOpen) { menu.close(); chat.close(); }
     sndPop.classList.toggle('is-on', sndOpen);
     sndPop.inert = !sndOpen;
     soundBtn.setAttribute('aria-expanded', String(sndOpen));
@@ -428,6 +429,7 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
   const onKeyDown = (e: KeyboardEvent): void => {
     if (e.key === 'Escape') {
       if (sndOpen) { toggleSound(false); soundBtn.focus(); }
+      else if (chat.isOpen()) { chat.close(); }
       else if (!panelOpen && !menu.isOpen() && banner.classList.contains('is-on')) {
         banner.classList.remove('is-on');
         window.setTimeout(() => { if (!banner.classList.contains('is-on')) banner.hidden = true; }, 320);
@@ -438,14 +440,20 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
     if (e.repeat || e.ctrlKey || e.metaKey || e.altKey || isTyping(e.target)) return;
     const isF = e.key === 'f' || e.key === 'F';
     const isEnter = e.key === 'Enter' && (document.activeElement === document.body || document.activeElement?.tagName === 'CANVAS');
-    if (!isF && !isEnter) return;
-    const acts = ctxActions();
-    if (acts.length) { e.preventDefault(); run(acts[primaryIndex(acts)]); }
+    if (isF) {
+      const acts = ctxActions();
+      if (acts.length) { e.preventDefault(); run(acts[primaryIndex(acts)]); }
+      return;
+    }
+    if (isEnter) {
+      e.preventDefault();
+      chat.open(true);
+    }
   };
   document.addEventListener('keydown', onKeyDown);
   const offPanel = ctx.bus.on('panel', ({ id }) => {
     panelOpen = id !== null;
-    if (panelOpen) { menu.close(); toggleSound(false); }
+    if (panelOpen) { menu.close(); toggleSound(false); chat.close(); }
     paintCtx();
   });
 
@@ -459,12 +467,18 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
     else ctx.world.standUp();
   });
 
-  // ── Thanh công phu
+  // ── Thanh công phu & hộp trò chuyện
   const menu = createMoreMenu(ctx, el, {
     anchor: moreBtn,
     onToggle: (o) => {
       moreBtn.setAttribute('aria-expanded', String(o));
-      if (o) toggleSound(false);
+      if (o) { toggleSound(false); chat.close(); }
+    },
+  });
+  const chat = createChatBox(ctx, el, {
+    onOpen: () => {
+      menu.close();
+      toggleSound(false);
     },
   });
   el.querySelector('.dock')!.addEventListener('click', (e) => {
@@ -537,6 +551,7 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
       document.removeEventListener('pointerdown', onOutsideSound, true);
       window.clearTimeout(bannerTimer); window.clearTimeout(holdTimer);
       menu.destroy();
+      chat.destroy();
       el.remove();
     },
   };

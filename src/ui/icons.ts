@@ -1,5 +1,5 @@
 /**
- * Bộ icon SVG nét (stroke) tự vẽ cho Chùa Liên Hoa — lưới 24×24, nét `currentColor`.
+ * Bộ icon SVG nét (stroke) tự vẽ cho Chùa Rắn — lưới 24×24, nét `currentColor`.
  * Dùng: `icon('lotus', { size: 20, class: 'x' })` → chuỗi SVG (chèn bằng innerHTML).
  * Màu lấy theo `color` của phần tử cha (thường là vàng đồng qua CSS).
  */
@@ -137,6 +137,9 @@ const PATHS = {
     '<path d="M4 10h16v10H4zM3 7h18v3H3zM12 7v13"/>' +
     '<path d="M12 7c-1-3.500-5-4-5-1.700C7 7 9 7 12 7zM12 7c1-3.500 5-4 5-1.700C17 7 15 7 12 7z"/>',
   mail: '<rect x="3" y="5.500" width="18" height="13" rx="2.500"/><path d="M3.800 7.500l8.200 6 8.200-6"/>',
+  chat:
+    '<path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v8A2.5 2.5 0 0 1 17.5 17H9l-4.2 3.4V17A2.5 2.5 0 0 1 4 14.5z"/>' +
+    dot(8.5, 10.5, 1) + dot(12, 10.5, 1) + dot(15.5, 10.5, 1),
   google: '<path d="M20.500 12.200h-8.200"/><path d="M20.300 12.200A8.300 8.300 0 1 1 17.800 6.300"/>',
   share: '<path d="M12 15V3.500M8 7.500l4-4 4 4"/><path d="M5 11.500v7.200c0 .7.600 1.300 1.300 1.300h11.400c.7 0 1.300-.6 1.300-1.300v-7.200"/>',
   send: '<path d="M21 3L10.500 13.500M21 3l-6.500 18-4-7.500L3 9.500z"/>',

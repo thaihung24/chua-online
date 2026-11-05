@@ -10,6 +10,7 @@ const PROFILE_KEY = 'profile';
 
 export const NAME_MIN = 2;
 export const NAME_MAX = 24;
+export const CHAT_MAX = 100;
 
 // ───────────────────────── Pháp danh ─────────────────────────
 const MALE_FIRST = ['Minh', 'Tuệ', 'Nhật', 'Như', 'Thiện', 'Đức', 'Quảng', 'Chánh', 'Giác', 'Hạnh', 'Trí', 'Thanh', 'Pháp', 'Tâm', 'Huệ', 'Từ', 'Định', 'Nguyên', 'Bảo', 'Đạt'];
@@ -90,6 +91,68 @@ export function validateName(name: string): string | null {
   if (containsWord(f, BANNED)) return 'Pháp danh có từ không phù hợp, xin chọn tên khác.';
   if (containsWord(f, ADS)) return 'Pháp danh không dùng để quảng cáo hay để lại liên hệ.';
   return null;
+}
+
+// ───────────────────────── Kiểm tra tin nhắn trò chuyện ─────────────────────────
+/** Từ tục viết tắt/không dấu không trùng từ tiếng Việt thông dụng (viết ngược). */
+const CHAT_BANNED_FOLDED_MASKED = [
+  'tid', 'md', 'mmd', 'mcd', 'lcv', 'lkv', 'mmc', 'tglc', 'mkd', 'lv', 'cc',
+  'tav cus', 'nan nohk', 'ohc co', 'ohc noc', 'ohc gnaht', 'ohc od',
+  'ugn od', 'ugn gnaht', 'ugn noc', 'em tid', 'am ud', 'em ud',
+  'nol iac', 'nol iav', 'cac noc', 'cac iav', 'ioub uad', 'em noc',
+];
+/** Từ tục có dấu tiếng Việt (viết ngược NFC để tránh trùng "các", "lớn", "buổi", "con đi", "đeo"). */
+const CHAT_BANNED_EXACT_MASKED = [
+  'n\u1ed3l', 'c\u1eb7c', 'i\u1ed3ub', 'o\u00e9\u0111', 't\u1ee9c', '\u0129\u0111', '\u1ee5\u0111', 't\u1ecb\u0111', 'y\u00e0m \u1eb9m', '\u00e1\u0111 \u1eb9m',
+];
+const CHAT_ADS_FOLDED_MASKED = [
+  'ptth', 'sptth', 'www', 'olaz', 'margelet', 'onisac', 'iacahn', 'iac ahn',
+  'tebuk', 'eniltoh', 'nab aum', 'iam neyuhk',
+];
+const CHAT_BANNED_FOLDED = unmask(CHAT_BANNED_FOLDED_MASKED);
+const CHAT_BANNED_EXACT = unmask(CHAT_BANNED_EXACT_MASKED);
+const CHAT_ADS_FOLDED = unmask(CHAT_ADS_FOLDED_MASKED);
+const URL_RE = /(?:https?:\/\/|www\.|\b[a-z0-9-]{2,}\.(?:com|net|org|vn|io|me|app|xyz|info|biz|club|top|vip|bet)\b)/i;
+
+/** Chuẩn hoá nội dung chat: NFC, bỏ ký tự điều khiển, gộp khoảng trắng. */
+export function normalizeChatText(raw: string): string {
+  return raw
+    .normalize('NFC')
+    .replace(/[\u0000-\u001F\u007F-\u009F]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/** Kiểm tra tin nhắn trò chuyện tự do (1–100 ký tự, lọc thô tục & quảng cáo/liên kết). */
+export function validateChatText(raw: unknown): { ok: true; text: string } | { ok: false; error: string } {
+  if (typeof raw !== 'string') return { ok: false, error: 'Vui lòng nhập lời nhắn.' };
+  const text = normalizeChatText(raw);
+  const len = [...text].length;
+  if (len < 1) return { ok: false, error: 'Vui lòng nhập lời nhắn.' };
+  if (len > CHAT_MAX) return { ok: false, error: `Lời nhắn dài tối đa ${CHAT_MAX} ký tự.` };
+
+  const lowerWords = ` ${text.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim()} `;
+  for (const w of CHAT_BANNED_EXACT) {
+    if (lowerWords.includes(` ${w} `)) {
+      return { ok: false, error: 'Lời nhắn có từ ngữ chưa phù hợp nơi cửa Phật.' };
+    }
+  }
+
+  const foldedTokens = text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[đĐ]/g, 'd')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+
+  if (foldedTokens && containsWord(foldedTokens, CHAT_BANNED_FOLDED)) {
+    return { ok: false, error: 'Lời nhắn có từ ngữ chưa phù hợp nơi cửa Phật.' };
+  }
+  if (URL_RE.test(text) || (foldedTokens && containsWord(foldedTokens, CHAT_ADS_FOLDED))) {
+    return { ok: false, error: 'Xin không gửi liên kết hoặc quảng cáo trong sân chùa.' };
+  }
+  return { ok: true, text };
 }
 
 // ───────────────────────── Hồ sơ ─────────────────────────

@@ -137,6 +137,43 @@ describe('say / lantern', () => {
     a.close(); b.close();
     await sleep(100);
   });
+
+  it('chat: gửi tin nhắn tự do cho phòng, hiện bong bóng snapshot, lưu chatHistory và chặn spam/liên kết', async () => {
+    const a = new Client(S.url); const b = new Client(S.url);
+    const wa = await a.hello(profileNamed('Minh Tâm'), 12);
+    await b.hello(profileNamed('Diệu Liên'), 8);
+
+    a.send({ t: 'chat', text: 'Chào các bạn ở Chùa Rắn nhé!' });
+    const ca = await a.waitFor((m) => m.t === 'chat' && m.msg?.senderId === wa.id);
+    const cb = await b.waitFor((m) => m.t === 'chat' && m.msg?.senderId === wa.id);
+    expect(ca.msg).toMatchObject({ senderId: wa.id, name: 'Minh Tâm', level: 12, text: 'Chào các bạn ở Chùa Rắn nhé!', kind: 'chat' });
+    expect(cb.msg.id).toBe(ca.msg.id);
+
+    // xuất hiện trong snapshot làm bong bóng trên đầu nhân vật
+    const snap = await b.waitFor((m) => players(m) && m.list[0]?.say === 'Chào các bạn ở Chùa Rắn nhé!');
+    expect(snap.list[0].id).toBe(wa.id);
+
+    // gửi quá nhanh → nhận notice
+    a.msgs.length = 0;
+    a.send({ t: 'chat', text: 'Nhắn liền tay' });
+    await a.waitFor((m) => m.t === 'notice');
+
+    // liên kết quảng cáo → bị từ chối kèm notice
+    await sleep(350);
+    a.msgs.length = 0;
+    a.send({ t: 'chat', text: 'vào https://spam.com nhận quà' });
+    const warn = await a.waitFor((m) => m.t === 'notice');
+    expect(warn.text).toMatch(/liên kết|quảng cáo/);
+
+    // người thứ 3 mới vào nhận được chatHistory
+    const c = new Client(S.url);
+    await c.hello(profileNamed('Huệ Quang'), 3);
+    const hist = await c.waitFor((m) => m.t === 'chatHistory');
+    expect(hist.list.some((x: any) => x.text === 'Chào các bạn ở Chùa Rắn nhé!')).toBe(true);
+
+    a.close(); b.close(); c.close();
+    await sleep(100);
+  });
 });
 
 describe('hồ sơ / giao thức / chống spam', () => {

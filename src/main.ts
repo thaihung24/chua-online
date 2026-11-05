@@ -420,6 +420,18 @@ function wireNet(
       if (q) { q.say = undefined; world.setRemotes(lastPlayers); }
     }, 4500));
   });
+  net.on('chat', (msg) => {
+    if (msg.kind === 'say' || msg.senderId === net.selfId?.()) return;
+    const p = lastPlayers.find((x) => x.id === msg.senderId);
+    if (!p) return;
+    p.say = msg.text;
+    world.setRemotes(lastPlayers);
+    window.clearTimeout(sayTimers.get(msg.senderId));
+    sayTimers.set(msg.senderId, window.setTimeout(() => {
+      const q = lastPlayers.find((x) => x.id === msg.senderId);
+      if (q) { q.say = undefined; world.setRemotes(lastPlayers); }
+    }, 5500));
+  });
   net.on('lantern', ({ id, color, by }) => {
     if (by === 'me') return;
     world.addLantern({ id, color, mine: false, pond: 'lotus' });

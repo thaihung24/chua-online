@@ -1,15 +1,18 @@
-/** Trung tâm WebSocket `/ws`: phòng, người chơi, di chuyển, lời chào, đèn, chống spam, snapshot 5Hz. */
+/** Trung tâm WebSocket `/ws`: phòng, người chơi, di chuyển, lời chào, trò chuyện, đèn, chống spam, snapshot 5Hz. */
 import type http from 'node:http';
 import type { Duplex } from 'node:stream';
 import { WebSocketServer, WebSocket } from 'ws';
-import type { Profile, RoomInfo } from '../src/core/contracts';
+import type { ChatMessage, Profile, RoomInfo } from '../src/core/contracts';
+import { phraseText } from '../src/content/phrases';
 import { BotColony } from '../src/core/bots';
-import { BOUNDS, SPAWN, COLOR_RE, clampLevel, isAnim, isPhrase, parseProfile, plausibleLevel, safeProfile, type Anim } from './validate';
+import { BOUNDS, SPAWN, COLOR_RE, clampLevel, isAnim, isPhrase, parseProfile, plausibleLevel, safeProfile, validateChatText, type Anim } from './validate';
 import { Bucket, clientIp, getCookie, randomHex } from './util';
 import type { ServerOptions } from './config';
 
 const MAX_SPEED = 8; // m/s
 const SAY_SHOW_MS = 4500;
+const CHAT_SHOW_MS = 5500;
+const MAX_CHAT_LOG = 30;
 const TICK_MS = 200; // 5Hz
 const MAX_STRIKES = 30;
 
@@ -30,6 +33,7 @@ interface Conn {
   say: string | null;
   sayUntil: number;
   lastSayAt: number;
+  lastChatAt: number;
   lastLanternAt: number;
   strikes: number;
   alive: boolean;
@@ -44,6 +48,7 @@ interface Room {
   label: string;
   kind: 'public' | 'private';
   members: Set<Conn>;
+  chatLog: ChatMessage[];
   dirty: boolean;
   createdAt: number;
   emptySince: number | null;
@@ -114,7 +119,7 @@ export class Hub {
     const c: Conn = {
       ws, id: randomHex(4), ip, email, hello: false, profile: safeProfile(null), level: 1, levelAt: now, streak: 0,
       room: null, x: SPAWN.x, z: SPAWN.z, ry: 0, anim: 'idle', hasPos: false, lastMoveAt: now,
-      say: null, sayUntil: 0, lastSayAt: 0, lastLanternAt: 0, strikes: 0, alive: true,
+      say: null, sayUntil: 0, lastSayAt: 0, lastChatAt: 0, lastLanternAt: 0, strikes: 0, alive: true,
       generic: new Bucket(40, 20), moves: new Bucket(6, 12), frag: null, connectedAt: now,
     };
     this.conns.add(c);
@@ -181,6 +186,7 @@ export class Hub {
     switch (t) {
       case 'move': return this.onMove(c, m);
       case 'say': return this.onSay(c, m);
+      case 'chat': return this.onChat(c, m);
       case 'lantern': return this.onLantern(c, m);
       case 'profile': return this.onProfile(c, m);
       case 'join': return this.onJoin(c, m);
@@ -259,6 +265,11 @@ export class Hub {
     }
   }
 
+  private pushChat(r: Room, msg: ChatMessage): void {
+    r.chatLog.push(msg);
+    if (r.chatLog.length > MAX_CHAT_LOG) r.chatLog.splice(0, r.chatLog.length - MAX_CHAT_LOG);
+  }
+
   private onSay(c: Conn, m: Record<string, unknown>): void {
     if (!c.room) return;
     if (!isPhrase(m.phrase)) return this.strike(c, 2);
@@ -273,6 +284,50 @@ export class Hub {
     c.frag = null;
     c.room.dirty = true;
     this.broadcast(c.room, { t: 'say', id: c.id, text: m.phrase }, c);
+    const text = phraseText(m.phrase) ?? m.phrase;
+    const msg: ChatMessage = {
+      id: `s-${randomHex(5)}`,
+      senderId: c.id,
+      name: c.profile.name,
+      level: c.level,
+      text,
+      ts: now,
+      kind: 'say',
+    };
+    this.pushChat(c.room, msg);
+    this.broadcast(c.room, { t: 'chat', msg });
+    if (this.bots.size > 0) this.bots.notifyHumanGesture(c.x, c.z, now);
+  }
+
+  private onChat(c: Conn, m: Record<string, unknown>): void {
+    if (!c.room) return;
+    const v = validateChatText(m.text);
+    if (!v.ok) {
+      this.notice(c, v.error);
+      return this.strike(c, 1);
+    }
+    const now = Date.now();
+    const cooldown = Math.min(this.opts.sayCooldownMs, 1500);
+    if (now - c.lastChatAt < cooldown) {
+      this.notice(c, 'Bạn nhắn hơi nhanh, xin chờ một chút nhé.');
+      return this.strike(c, 1);
+    }
+    c.lastChatAt = now;
+    c.say = v.text;
+    c.sayUntil = now + CHAT_SHOW_MS;
+    c.frag = null;
+    c.room.dirty = true;
+    const msg: ChatMessage = {
+      id: `c-${randomHex(5)}`,
+      senderId: c.id,
+      name: c.profile.name,
+      level: c.level,
+      text: v.text,
+      ts: now,
+      kind: 'chat',
+    };
+    this.pushChat(c.room, msg);
+    this.broadcast(c.room, { t: 'chat', msg });
     if (this.bots.size > 0) this.bots.notifyHumanGesture(c.x, c.z, now);
   }
 
@@ -293,7 +348,7 @@ export class Hub {
     const id = 'main-1';
     let r = this.rooms.get(id);
     if (!r) {
-      r = { id, label: 'Chùa Rắn', kind: 'public', members: new Set(), dirty: false, createdAt: Date.now(), emptySince: null, n: 1 };
+      r = { id, label: 'Chùa Rắn', kind: 'public', members: new Set(), chatLog: [], dirty: false, createdAt: Date.now(), emptySince: null, n: 1 };
       this.rooms.set(id, r);
     }
     return r;
@@ -330,6 +385,7 @@ export class Hub {
     c.anim = 'idle'; c.frag = null;
     this.sendWelcome(c);
     this.sendPlayers(c, target, Date.now());
+    if (target.chatLog.length > 0) this.send(c, { t: 'chatHistory', list: target.chatLog });
     this.broadcastCount(target);
   }
 

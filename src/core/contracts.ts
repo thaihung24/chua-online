@@ -216,10 +216,21 @@ export type UnlockFeature = 'flowers' | 'bell' | 'candle' | 'lantern' | 'today' 
 
 // ───────────────────────── Mạng nhiều người ─────────────────────────
 export interface RoomInfo { id: string; label: string; online: number; capacity: number; kind: 'public' | 'private' }
+export interface ChatMessage {
+  id: string;
+  senderId: string;
+  name: string;
+  level: number;
+  text: string;
+  ts: number;
+  kind?: 'chat' | 'say';
+}
 export interface NetEvents extends Record<string, unknown> {
   status: { state: 'offline' | 'connecting' | 'online'; room?: RoomInfo };
   players: RemotePlayer[];
   say: { id: string; text: string };
+  chat: ChatMessage;
+  chatHistory: ChatMessage[];
   lantern: { id: string; color: string; by: string };
   count: { online: number };
   notice: { text: string };
@@ -233,9 +244,11 @@ export interface NetApi extends Emitter<NetEvents> {
   createPrivateRoom(): Promise<RoomInfo | null>;
   sendMove(m: { x: number; z: number; ry: number; anim: RemotePlayer['anim'] }): void;
   sendSay(phraseId: string): void;
+  sendChat(text: string): void;
   sendLantern(color: string): void;
   sendProfile(profile: Profile, level: number): void;
   room(): RoomInfo | null;
+  selfId?(): string | null;
   isOnline(): boolean;
 }
 
@@ -271,6 +284,7 @@ export interface AppEvents extends Record<string, unknown> {
   offerings: { incenseUntil: number; flowersUntil: number; candleUntil: number };
   auth: { loggedIn: boolean; email?: string };
   solo: { solo: boolean };
+  chatToggle: { open?: boolean; focus?: boolean };
 }
 
 /** Mỗi panel ở src/ui/panels/<id>.ts export `panel`. */
