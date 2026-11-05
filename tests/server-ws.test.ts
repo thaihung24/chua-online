@@ -138,12 +138,12 @@ describe('say / lantern', () => {
     await sleep(100);
   });
 
-  it('chat: 2 cơ chế global (lưu chatHistory) & bubble (chỉ hiện trên đầu, không lưu), kèm chặn spam/liên kết', async () => {
+  it('chat: 2 cơ chế global & bubble; người vào sau KHÔNG xem được tin cũ trước lúc vào, chỉ nhận tin từ lúc vào', async () => {
     const a = new Client(S.url); const b = new Client(S.url);
     const wa = await a.hello(profileNamed('Minh Tâm'), 12);
     await b.hello(profileNamed('Diệu Liên'), 8);
 
-    // 1. Chat tổng (mặc định scope = 'global') → lưu vào lịch sử phòng
+    // 1. Chat tổng (mặc định scope = 'global') → người đang ở trong phòng nhận được
     a.send({ t: 'chat', text: 'Chào các bạn ở Chùa Rắn nhé!' });
     const ca = await a.waitFor((m) => m.t === 'chat' && m.msg?.senderId === wa.id);
     const cb = await b.waitFor((m) => m.t === 'chat' && m.msg?.senderId === wa.id);
@@ -160,7 +160,7 @@ describe('say / lantern', () => {
     const fastNotice = await a.waitFor((m) => m.t === 'notice');
     expect(fastNotice.text).toMatch(/20 giây/);
 
-    // 2. Chat trên đầu (scope = 'bubble') → hiện bong bóng nhưng KHÔNG lưu vào chatHistory
+    // 2. Chat tại chỗ (scope = 'bubble') → hiện bong bóng cho người đang có mặt
     await sleep(350);
     a.send({ t: 'chat', text: 'Câu nói thoáng qua trên đầu', scope: 'bubble' });
     const cbBubble = await b.waitFor((m) => m.t === 'chat' && m.msg?.text === 'Câu nói thoáng qua trên đầu');
@@ -175,14 +175,34 @@ describe('say / lantern', () => {
     const warn = await a.waitFor((m) => m.t === 'notice');
     expect(warn.text).toMatch(/liên kết|quảng cáo/);
 
-    // người thứ 3 mới vào nhận được chatHistory: có tin global, KHÔNG có tin bubble
+    // 3. Người thứ 3 mới vào sau (vd 12:20): KHÔNG nhận lịch sử cũ trước đó, chỉ nhận tin nhắn phát sinh TỪ LÚC đã vào
     const c = new Client(S.url);
     await c.hello(profileNamed('Huệ Quang'), 3);
-    const hist = await c.waitFor((m) => m.t === 'chatHistory');
-    expect(hist.list.some((x: any) => x.text === 'Chào các bạn ở Chùa Rắn nhé!')).toBe(true);
-    expect(hist.list.some((x: any) => x.text === 'Câu nói thoáng qua trên đầu')).toBe(false);
+    await sleep(120);
+    expect(c.msgs.some((m) => m.t === 'chatHistory' || m.t === 'chat')).toBe(false);
 
-    a.close(); b.close(); c.close();
+    await sleep(350);
+    b.send({ t: 'chat', text: 'Chào bạn Huệ Quang mới vào nhé!' });
+    const cc = await c.waitFor((m) => m.t === 'chat');
+    expect(cc.msg).toMatchObject({ name: 'Diệu Liên', text: 'Chào bạn Huệ Quang mới vào nhé!', scope: 'global' });
+
+    // 4. Người thứ 3 rời đi rồi kết nối lại sau (vd 15:30): không thấy tin lúc đi vắng, chỉ thấy tin từ lúc vào lại
+    c.close();
+    await sleep(350);
+    a.send({ t: 'chat', text: 'Tin nhắn lúc Huệ Quang đang vắng mặt' });
+    await b.waitFor((m) => m.t === 'chat' && m.msg?.text === 'Tin nhắn lúc Huệ Quang đang vắng mặt');
+
+    const c2 = new Client(S.url);
+    await c2.hello(profileNamed('Huệ Quang'), 3);
+    await sleep(120);
+    expect(c2.msgs.some((m) => m.t === 'chatHistory' || m.t === 'chat')).toBe(false);
+
+    await sleep(350);
+    b.send({ t: 'chat', text: 'Tin nhắn từ 15:30 về sau' });
+    const cc2 = await c2.waitFor((m) => m.t === 'chat');
+    expect(cc2.msg).toMatchObject({ text: 'Tin nhắn từ 15:30 về sau', scope: 'global' });
+
+    a.close(); b.close(); c2.close();
     await sleep(100);
   });
 

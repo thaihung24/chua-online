@@ -231,7 +231,6 @@ export interface NetEvents extends Record<string, unknown> {
   players: RemotePlayer[];
   say: { id: string; text: string };
   chat: ChatMessage;
-  chatHistory: ChatMessage[];
   lantern: { id: string; color: string; by: string };
   count: { online: number };
   notice: { text: string };

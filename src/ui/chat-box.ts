@@ -94,7 +94,7 @@ export function createChatBox(
       <button type="button" class="chat__solo-btn">Vào sân chung</button>
     </div>
     <div class="chat__list" role="log" aria-live="polite" aria-relevant="additions">
-      <p class="chat__empty">Chưa có tin nhắn trong sân chùa. Gửi lời chào hoan hỷ đầu tiên nhé!</p>
+      <p class="chat__empty">Chưa có tin nhắn kể từ lúc bạn vào sân chùa. Gửi lời chào hoan hỷ nhé!</p>
     </div>
     <p class="chat__bubble-note" hidden>
       Chỉ hiện bong bóng lời nói tại chỗ đang đứng · <strong>không lưu</strong> vào lịch sử sân chùa.
@@ -144,8 +144,21 @@ export function createChatBox(
   let cdTimer = 0;
   let unread = 0;
   let lastPreview = '';
+  let wasOnline = ctx.net.isOnline();
+  let activeSessionId: string | null = ctx.net.selfId?.() ?? null;
   const messages: ChatMessage[] = [];
   const seenIds = new Set<string>();
+
+  function clearMessages(): void {
+    if (messages.length === 0 && unread === 0 && !lastPreview) return;
+    messages.length = 0;
+    seenIds.clear();
+    unread = 0;
+    lastPreview = '';
+    listEl.querySelectorAll('.chat-msg').forEach((n) => n.remove());
+    emptyEl.hidden = false;
+    paintBadgesAndPill();
+  }
 
   function isMineMsg(m: ChatMessage): boolean {
     if (m.senderId === 'local-me') return true;
@@ -270,16 +283,7 @@ export function createChatBox(
     return row;
   }
 
-  function rebuildList(): void {
-    listEl.querySelectorAll('.chat-msg').forEach((n) => n.remove());
-    emptyEl.hidden = messages.length > 0;
-    const frag = document.createDocumentFragment();
-    for (const m of messages) frag.append(renderMsgEl(m));
-    listEl.append(frag);
-    if (opened && mode === 'global') scrollToBottom();
-  }
-
-  function appendGlobalMessage(m: ChatMessage, fromHistory = false): void {
+  function appendGlobalMessage(m: ChatMessage): void {
     if (m.scope === 'bubble') return;
     if (seenIds.has(m.id)) return;
     const stick = isNearBottom();
@@ -296,14 +300,12 @@ export function createChatBox(
     listEl.append(renderMsgEl(m));
 
     const mine = isMineMsg(m);
-    if (!fromHistory) {
-      if (opened && mode === 'global') {
-        if (stick || mine) scrollToBottom();
-      } else if (!mine) {
-        unread = Math.min(99, unread + 1);
-        lastPreview = `${m.name}: ${m.text}`;
-        paintBadgesAndPill();
-      }
+    if (opened && mode === 'global') {
+      if (stick || mine) scrollToBottom();
+    } else if (!mine) {
+      unread = Math.min(99, unread + 1);
+      lastPreview = `${m.name}: ${m.text}`;
+      paintBadgesAndPill();
     }
   }
 
@@ -478,30 +480,31 @@ export function createChatBox(
   vv?.addEventListener('scroll', syncViewport);
 
   const offChat = ctx.net.on('chat', (msg) => {
-    // Chỉ "Chat tổng" mới lưu vào Trò chuyện sân chùa; "Chat tại chỗ" (scope === 'bubble') bỏ qua hoàn toàn
+    // Chỉ lưu các tin "Chat tổng" kể từ lúc người chơi đang có mặt trong chùa; "Chat tại chỗ" bỏ qua hoàn toàn
     if (msg.scope === 'bubble') return;
-    appendGlobalMessage(msg, false);
+    appendGlobalMessage(msg);
   });
 
-  const offHistory = ctx.net.on('chatHistory', (list) => {
-    let changed = false;
-    for (const m of list) {
-      if (!m || m.scope === 'bubble' || seenIds.has(m.id)) continue;
-      seenIds.add(m.id);
-      messages.push(m);
-      changed = true;
+  const offStatus = ctx.net.on('status', (s) => {
+    if (s.state === 'online') {
+      const sid = ctx.net.selfId?.() ?? null;
+      // Mỗi phiên kết nối lại vào sân chùa (vd rời đi rồi quay lại lúc 15:30) đều bắt đầu khung chat mới tinh
+      if (activeSessionId && sid && sid !== activeSessionId) {
+        clearMessages();
+      }
+      activeSessionId = sid;
+      wasOnline = true;
+    } else if (wasOnline) {
+      // Vừa rời phòng / mất kết nối → xoá lịch sử phiên cũ
+      wasOnline = false;
+      clearMessages();
     }
-    if (!changed) return;
-    messages.sort((a, b) => a.ts - b.ts);
-    if (messages.length > MAX_ITEMS) {
-      const removed = messages.splice(0, messages.length - MAX_ITEMS);
-      for (const r of removed) seenIds.delete(r.id);
-    }
-    rebuildList();
+    paintStatus();
   });
-
-  const offStatus = ctx.net.on('status', () => paintStatus());
-  const offSolo = ctx.bus.on('solo', () => paintStatus());
+  const offSolo = ctx.bus.on('solo', ({ solo }) => {
+    if (solo) clearMessages();
+    paintStatus();
+  });
   const offPanel = ctx.bus.on('panel', ({ id }) => {
     if (id !== null) close();
     else paintCooldown();
@@ -525,7 +528,6 @@ export function createChatBox(
     destroy() {
       if (cdTimer) window.clearInterval(cdTimer);
       offChat();
-      offHistory();
       offStatus();
       offSolo();
       offPanel();

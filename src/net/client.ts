@@ -139,14 +139,6 @@ export function createNet(): NetApi {
         }
         break;
       }
-      case 'chatHistory':
-        if (Array.isArray(m.list)) {
-          em.emit(
-            'chatHistory',
-            (m.list as ChatMessage[]).filter((x) => x && typeof x.id === 'string' && typeof x.text === 'string'),
-          );
-        }
-        break;
       case 'lantern':
         if (typeof m.id === 'string' && typeof m.color === 'string') em.emit('lantern', { id: m.id, color: m.color, by: String(m.by ?? '') });
         break;

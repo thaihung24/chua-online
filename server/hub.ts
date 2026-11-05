@@ -11,7 +11,6 @@ import type { ServerOptions } from './config';
 const MAX_SPEED = 8; // m/s
 const SAY_SHOW_MS = 4500;
 const CHAT_SHOW_MS = 6500;
-const MAX_CHAT_LOG = 30;
 const TICK_MS = 200; // 5Hz
 const MAX_STRIKES = 30;
 
@@ -47,7 +46,6 @@ interface Room {
   label: string;
   kind: 'public' | 'private';
   members: Set<Conn>;
-  chatLog: ChatMessage[];
   dirty: boolean;
   createdAt: number;
   emptySince: number | null;
@@ -264,11 +262,6 @@ export class Hub {
     }
   }
 
-  private pushChat(r: Room, msg: ChatMessage): void {
-    r.chatLog.push(msg);
-    if (r.chatLog.length > MAX_CHAT_LOG) r.chatLog.splice(0, r.chatLog.length - MAX_CHAT_LOG);
-  }
-
   private onSay(c: Conn, m: Record<string, unknown>): void {
     if (!c.room) return;
     if (!isPhrase(m.phrase)) return this.strike(c, 2);
@@ -318,10 +311,7 @@ export class Hub {
       ts: now,
       scope,
     };
-    // Chỉ "Chat tổng" (global) mới lưu vào lịch sử Trò chuyện sân chùa; chế độ "Chat tại chỗ" (bubble) không lưu
-    if (scope === 'global') {
-      this.pushChat(c.room, msg);
-    }
+    // Không lưu lịch sử trên máy chủ cho người vào sau; chỉ phát trực tiếp tới những ai đang có mặt trong sân chùa
     this.broadcast(c.room, { t: 'chat', msg });
     if (this.bots.size > 0) this.bots.notifyHumanGesture(c.x, c.z, now);
   }
@@ -343,7 +333,7 @@ export class Hub {
     const id = 'main-1';
     let r = this.rooms.get(id);
     if (!r) {
-      r = { id, label: 'Chùa Rắn', kind: 'public', members: new Set(), chatLog: [], dirty: false, createdAt: Date.now(), emptySince: null, n: 1 };
+      r = { id, label: 'Chùa Rắn', kind: 'public', members: new Set(), dirty: false, createdAt: Date.now(), emptySince: null, n: 1 };
       this.rooms.set(id, r);
     }
     return r;
@@ -380,7 +370,6 @@ export class Hub {
     c.anim = 'idle'; c.frag = null;
     this.sendWelcome(c);
     this.sendPlayers(c, target, Date.now());
-    if (target.chatLog.length > 0) this.send(c, { t: 'chatHistory', list: target.chatLog });
     this.broadcastCount(target);
   }
 
