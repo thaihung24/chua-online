@@ -43,7 +43,7 @@ export const panel: PanelDef = {
 
     const body = h('div', { class: 'stack' });
     if (standalone) {
-      body.append(h('div', { class: 'notice', html: `${icon('check', { size: 18 })} Bạn đang dùng Chùa Bình Thạnh dưới dạng ứng dụng rồi. A Di Đà Phật.` }));
+      body.append(h('div', { class: 'notice', html: `${icon('check', { size: 18 })} Bạn đang dùng Chùa Rắn dưới dạng ứng dụng rồi. A Di Đà Phật.` }));
     } else {
       if (ev) {
         const b = h('button', { type: 'button', class: 'btn btn--gold btn--lg btn--block', html: `${icon('download', { size: 20 })}Cài ứng dụng ngay` });

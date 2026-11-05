@@ -21,6 +21,6 @@
     }
   ],
   "rewrites": [
-    { "source": "/((?!assets/|icons/|music/|manifest\\.webmanifest|favicon\\.svg|og\\.png|robots\\.txt|sitemap\\.xml|sw\\.js|offline\\.html|seo-).*)", "destination": "/index.html" }
+    { "source": "/((?!assets/|icons/|music/|manifest\\.webmanifest|favicon\\.svg|og[^/]*\\.png|robots\\.txt|sitemap\\.xml|sw\\.js|offline\\.html|seo-).*)", "destination": "/index.html" }
   ]
 }

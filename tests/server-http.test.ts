@@ -20,11 +20,11 @@ describe('cơ bản', () => {
     expect(r.headers.get('content-security-policy')).toContain("default-src 'self'");
   });
 
-  it('lobby chỉ có duy nhất một phòng chung Chùa Bình Thạnh và chặn tạo phòng riêng', async () => {
+  it('lobby chỉ có duy nhất một phòng chung Chùa Rắn và chặn tạo phòng riêng', async () => {
     const l = await http.get('/api/lobby');
     expect(Array.isArray(l.json)).toBe(true);
     expect(l.json).toHaveLength(1);
-    expect(l.json[0]).toMatchObject({ id: 'main-1', label: 'Chùa Bình Thạnh', kind: 'public', online: 0 });
+    expect(l.json[0]).toMatchObject({ id: 'main-1', label: 'Chùa Rắn', kind: 'public', online: 0 });
     const p = await http.post('/api/rooms');
     expect(p.status).toBe(403);
     const l2 = await http.get('/api/lobby');
@@ -195,7 +195,7 @@ describe('bạn đạo', () => {
     const c = new Client(S.url, b.cookie);
     await c.hello(profileNamed('Bình An'), 2);
     pres = (await a.get('/api/friends/presence')).json;
-    expect(pres.friends[0]).toMatchObject({ online: true, room: { id: 'main-1', label: 'Chùa Bình Thạnh' } });
+    expect(pres.friends[0]).toMatchObject({ online: true, room: { id: 'main-1', label: 'Chùa Rắn' } });
     c.close();
     await sleep(100);
 

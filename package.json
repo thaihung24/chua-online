@@ -1,9 +1,9 @@
 {
-  "name": "chua-binh-thanh",
+  "name": "chua-ran",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Chùa Bình Thạnh — chùa online 3D: đi chùa, thắp hương, tụng kinh, thiền, cùng mọi người.",
+  "description": "Chùa Rắn — chùa online 3D: đi chùa, thắp hương, tụng kinh, thiền, cùng mọi người.",
   "scripts": {
     "dev": "concurrently -k -n web,api \"vite\" \"tsx watch server/index.ts\"",
     "dev:web": "vite",

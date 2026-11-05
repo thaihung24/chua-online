@@ -1,8 +1,8 @@
-# Chùa Liên Hoa — Chùa online 3D miễn phí
+# Chùa Rắn — Chùa online 3D miễn phí
 
 Ứng dụng web **chùa online 3D nhiều người dùng** (TypeScript + Three.js + WebAudio tổng hợp + Node/Express + WebSocket), giao diện tiếng Việt tôn nghiêm và ấm áp: dạo khuôn viên chùa, lễ Phật, thắp hương, dâng hoa, thắp nến, thỉnh chuông, quét lá bồ đề, lần tràng hạt 108 hạt, tụng kinh gõ mõ, ngồi thiền định, thiền hành, thả đèn hoa đăng, xin quẻ tu tập, treo nguyện cây bồ đề, xem lịch âm Việt Nam và cùng công phu trực tuyến chung trong một không gian chùa duy nhất.
 
-> Lưu ý: **Chùa Liên Hoa** là dự án phần mềm độc lập nhằm tạo không gian tịnh tâm trực tuyến miễn phí, không phải ngôi chùa thật và không thuộc bất kỳ cơ sở hay tổ chức tôn giáo nào.
+> Lưu ý: **Chùa Rắn** là dự án phần mềm độc lập nhằm tạo không gian tịnh tâm trực tuyến miễn phí, không phải ngôi chùa thật và không thuộc bất kỳ cơ sở hay tổ chức tôn giáo nào.
 
 ## Tính năng chính
 

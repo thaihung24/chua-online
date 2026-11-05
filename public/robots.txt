@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://chualienhoa.vn/sitemap.xml
+Sitemap: https://chua-online-psi.vercel.app/sitemap.xml

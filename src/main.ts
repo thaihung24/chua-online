@@ -59,7 +59,7 @@ async function boot(): Promise<void> {
     });
     lastPlayers = localBots.toRemotePlayers(phraseText);
     world.setRemotes(lastPlayers);
-    shellRef?.hud.setRoom({ id: 'main-1', label: 'Chùa Bình Thạnh', online: localBots.size + 1, capacity: 10_000, kind: 'public' });
+    shellRef?.hud.setRoom({ id: 'main-1', label: 'Chùa Rắn', online: localBots.size + 1, capacity: 10_000, kind: 'public' });
     localBotTimer = window.setInterval(() => {
       if (!localBots || soloMode || net.isOnline()) { stopLocalBots(); return; }
       if (localBots.step(0.2, Date.now())) {

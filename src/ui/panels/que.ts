@@ -97,7 +97,7 @@ export const panel: PanelDef = {
 
     // ── Thẻ quẻ ──
     function shareText(q: Que): string {
-      return `Quẻ số ${q.no} — ${q.title}\n${q.poem.join('\n')}\n\n${q.meaning}\n(Lời nhắc tu tập — không phải bói toán · Chùa Bình Thạnh)`;
+      return `Quẻ số ${q.no} — ${q.title}\n${q.poem.join('\n')}\n\n${q.meaning}\n(Lời nhắc tu tập — không phải bói toán · Chùa Rắn)`;
     }
     async function share(q: Que): Promise<void> {
       const text = shareText(q);

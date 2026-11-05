@@ -112,7 +112,7 @@ async function drawCard(ctx: AppContext): Promise<HTMLCanvasElement> {
   c.textAlign = 'center';
   c.fillStyle = '#f7dc9c';
   c.font = font(SERIF, 46);
-  spaced(c, 'CHÙA BÌNH THẠNH', W / 2, 232, 9);
+  spaced(c, 'CHÙA RẮN', W / 2, 232, 9);
   c.fillStyle = 'rgba(245,234,217,.7)';
   c.font = font(SANS, 28, 400);
   c.fillText('Lên chùa mọi lúc, mọi nơi', W / 2, 276);
@@ -200,8 +200,8 @@ export const panel: PanelDef = {
       msg,
     );
 
-    const url = location.origin + '/';
-    const file = (): File | null => (blob ? new File([blob], 'chua-binh-thanh.png', { type: 'image/png' }) : null);
+    const url = location.origin + '/?chua=ran';
+    const file = (): File | null => (blob ? new File([blob], 'chua-ran.png', { type: 'image/png' }) : null);
     const say = (t: string, ok = true): void => { msg.className = 'pm-msg ' + (ok ? 'pm-msg--ok' : 'pm-msg--err'); msg.textContent = t; };
 
     void drawCard(ctx)
@@ -224,10 +224,10 @@ export const panel: PanelDef = {
 
     shareBtn.addEventListener('click', async () => {
       const f = file();
-      const text = `${ctx.profile.name} đang ở Cấp ${ctx.progress.view().level} trên Chùa Bình Thạnh. Cùng lên chùa online nhé!`;
+      const text = `${ctx.profile.name} đang ở Cấp ${ctx.progress.view().level} trên Chùa Rắn. Cùng lên chùa online nhé!`;
       try {
-        if (f && navigator.canShare?.({ files: [f] })) await navigator.share({ files: [f], title: 'Chùa Bình Thạnh', text, url });
-        else if (navigator.share) await navigator.share({ title: 'Chùa Bình Thạnh', text, url });
+        if (f && navigator.canShare?.({ files: [f] })) await navigator.share({ files: [f], title: 'Chùa Rắn', text, url });
+        else if (navigator.share) await navigator.share({ title: 'Chùa Rắn', text, url });
         else { say('Thiết bị chưa hỗ trợ chia sẻ trực tiếp — bạn bấm Tải ảnh hoặc Sao chép liên kết nhé.', false); return; }
         say('Đã mở chia sẻ. A Di Đà Phật.');
       } catch (e) {
@@ -236,7 +236,7 @@ export const panel: PanelDef = {
     });
     dlBtn.addEventListener('click', () => {
       if (!blob) return;
-      const a = h('a', { href: URL.createObjectURL(blob), download: `chua-binh-thanh-${ctx.profile.name.replace(/\s+/g, '-').toLowerCase()}.png` });
+      const a = h('a', { href: URL.createObjectURL(blob), download: `chua-ran-${ctx.profile.name.replace(/\s+/g, '-').toLowerCase()}.png` });
       document.body.append(a);
       a.click();
       a.remove();

@@ -177,7 +177,7 @@ function ogHtml() {
       </div>
       <div class="body">
         <div class="eyebrow">Không gian tịnh tâm trực tuyến</div>
-        <h1>Chùa Bình Thạnh</h1>
+        <h1>Chùa Rắn</h1>
         <p class="sub">Chùa online 3D miễn phí · Lên chùa mọi lúc, mọi nơi</p>
         <div class="pills">
           <span class="pill">Niệm Phật</span>
@@ -200,6 +200,7 @@ async function main() {
       { file: path.join(ICONS, 'maskable-512.png'), w: 512, h: 512, html: iconHtml({ size: 512, maskable: true }), omitBackground: false },
       { file: path.join(ICONS, 'apple-touch-icon.png'), w: 180, h: 180, html: iconHtml({ size: 180, maskable: false }), omitBackground: false },
       { file: path.join(PUB, 'og.png'), w: 1200, h: 630, html: ogHtml(), omitBackground: false },
+      { file: path.join(PUB, 'og-chua-ran.png'), w: 1200, h: 630, html: ogHtml(), omitBackground: false },
     ];
     for (const j of jobs) {
       await page.setViewport({ width: j.w, height: j.h, deviceScaleFactor: 1, isMobile: false });

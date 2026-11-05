@@ -250,6 +250,7 @@ describe('public/ và scripts/build-seo.ts', () => {
       'favicon.svg',
       'manifest.webmanifest',
       'og.png',
+      'og-chua-ran.png',
       'robots.txt',
       'offline.html',
       'sw.js',
@@ -263,7 +264,7 @@ describe('public/ và scripts/build-seo.ts', () => {
       expect(st.size, `Tệp rỗng: public/${rel}`).toBeGreaterThan(50);
     }
     const manifest = JSON.parse(await fs.readFile(path.join(pub, 'manifest.webmanifest'), 'utf-8'));
-    expect(manifest.name).toBe('Chùa Bình Thạnh');
+    expect(manifest.name).toBe('Chùa Rắn');
     expect(manifest.display).toBe('standalone');
     expect(manifest.background_color).toBe('#140d08');
     expect(manifest.lang).toBe('vi');

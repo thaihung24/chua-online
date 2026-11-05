@@ -1,8 +1,8 @@
-// Service Worker tối giản cho Chùa Bình Thạnh:
+// Service Worker tối giản cho Chùa Rắn:
 // - Cache-first cho /assets/* và /icons/*
 // - Network-first cho điều hướng HTML (rơi về cache hoặc /offline.html khi mất mạng)
 // - Không bao giờ lưu /api/* hoặc /ws
-const CACHE_NAME = 'chua-binh-thanh-v2';
+const CACHE_NAME = 'chua-ran-v3';
 const PRECACHE = ['/offline.html', '/favicon.svg', '/manifest.webmanifest'];
 
 self.addEventListener('install', (event) => {

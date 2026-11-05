@@ -262,7 +262,7 @@ export function registerApi(app: Express, ctx: ApiCtx): { sweep(): void } {
   });
   app.get('/api/lobby', (_req, res) => { res.json(hub.lobby()); });
   app.post('/api/rooms', (_req, res) => {
-    fail(res, 403, 'Chùa Bình Thạnh dùng chung một không gian duy nhất cho tất cả mọi người, không tạo phòng riêng.');
+    fail(res, 403, 'Chùa Rắn dùng chung một không gian duy nhất cho tất cả mọi người, không tạo phòng riêng.');
   });
 
   // ── Bảng xếp hạng ──

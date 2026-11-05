@@ -65,7 +65,7 @@ export function createOnboarding(ctx: AppContext): Onboarding {
         card.setAttribute('aria-labelledby', 'ob-gate-title');
         card.innerHTML = `
           <div class="ob-lotus" aria-hidden="true">${icon('lotus', { size: 44 })}</div>
-          <h1 class="ob-title" id="ob-gate-title" tabindex="-1" data-autofocus>Chào mừng đến Chùa Bình Thạnh</h1>
+          <h1 class="ob-title" id="ob-gate-title" tabindex="-1" data-autofocus>Chào mừng đến Chùa Rắn</h1>
           <p class="ob-lead">Đăng nhập để giữ nhân vật, cấp, nhiệm vụ và chuỗi giữ lửa trên mọi máy.</p>
           ${ORNAMENT}
           <div class="ob-actions">

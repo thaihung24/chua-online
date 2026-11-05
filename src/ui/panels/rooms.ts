@@ -33,7 +33,7 @@ export const panel: PanelDef = {
       const count = room?.online ?? (DEFAULT_BOT_COUNT + 1);
       status.className = 'rooms-status' + (!solo ? ' is-on' : '');
       status.innerHTML = !solo
-        ? `<span class="hud-dot" data-state="online"></span><span>Đang ở <b>Sân chùa chung (${esc(room?.label ?? 'Chùa Bình Thạnh')})</b> · ${count} người đang có mặt</span>`
+        ? `<span class="hud-dot" data-state="online"></span><span>Đang ở <b>Sân chùa chung (${esc(room?.label ?? 'Chùa Rắn')})</b> · ${count} người đang có mặt</span>`
         : `<span class="hud-dot" data-state="offline"></span><span>Bạn đang tịnh tâm một mình trong chùa</span>`;
     };
     paintStatus();
@@ -63,7 +63,7 @@ export const panel: PanelDef = {
       const count = r?.online ?? ctx.net.room()?.online ?? (DEFAULT_BOT_COUNT + 1);
       const b = h('button', { type: 'button', class: 'room-row' + (here ? ' is-here' : '') });
       b.innerHTML = `<span class="room-row__ic">${icon('lotus', { size: 22 })}</span>
-        <span class="room-row__main"><b>Sân chùa chung · Chùa Bình Thạnh</b><small>Mọi người vào chùa đều cùng hiện diện tại đây</small></span>
+        <span class="room-row__main"><b>Sân chùa chung · Chùa Rắn</b><small>Mọi người vào chùa đều cùng hiện diện tại đây</small></span>
         <span class="room-row__count">${here ? `<span class="pm-pill">Đang ở đây · ${count}</span>` : `${count} <small>người</small>`}</span>`;
       b.addEventListener('click', () => {
         if (here) { ctx.closePanel(); return; }
