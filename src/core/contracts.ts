@@ -247,6 +247,7 @@ export interface NetApi extends Emitter<NetEvents> {
   sendChat(text: string, scope?: ChatScope): void;
   sendLantern(color: string): void;
   sendProfile(profile: Profile, level: number): void;
+  sendAuth?(token: string | null): void;
   room(): RoomInfo | null;
   selfId?(): string | null;
   isOnline(): boolean;

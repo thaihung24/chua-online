@@ -8,6 +8,8 @@ export interface UserRec {
   email: string;
   salt: string;
   hash: string;
+  googleSub?: string;
+  authProvider?: 'password' | 'google' | 'both';
   profile: Profile;
   createdAt: number;
   /** Trạng thái tiến độ đồng bộ (JSON ≤ 16KB). */

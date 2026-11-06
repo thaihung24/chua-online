@@ -464,30 +464,51 @@ function wireProgress(ctx: AppContext, shell: ReturnType<typeof createShell>): v
   refresh();
 }
 
-/** Đăng nhập sẵn có → đồng bộ tiến độ hai chiều (không bao giờ hạ cấp). */
+/** Đăng nhập sẵn có → đồng bộ tiến độ & hồ sơ hai chiều (không bao giờ hạ cấp). */
 function wireAccount(ctx: AppContext, setLoggedIn: (v: boolean) => void): void {
-  const { progress, bus } = ctx;
+  const { progress, bus, net } = ctx;
   let timer = 0;
   let loggedIn = false;
+  let internalEmit = false;
   const push = () => {
     window.clearTimeout(timer);
     timer = window.setTimeout(() => {
       if (loggedIn) { const v = progress.view(); void api.progressSync.put(progress.exportState(), ctx.profile, { level: v.level, streak: v.streak }); }
     }, 4000);
   };
-  const pull = async () => {
+  const pull = async (emitAuth: boolean) => {
     const me = await api.auth.me();
     loggedIn = me.ok && !!me.data.user;
     setLoggedIn(loggedIn);
-    bus.emit('auth', { loggedIn, email: me.ok ? me.data.user?.email : undefined });
+    net.sendAuth?.(loggedIn ? api.getAuthToken() : null);
+    if (emitAuth) {
+      internalEmit = true;
+      try {
+        bus.emit('auth', { loggedIn, email: me.ok ? me.data.user?.email : undefined });
+      } finally {
+        internalEmit = false;
+      }
+    }
     if (!loggedIn) return;
     const got = await api.progressSync.get();
-    if (got.ok && got.data?.state) progress.importState(got.data.state);
+    if (got.ok && got.data) {
+      if (got.data.state) progress.importState(got.data.state);
+      if (got.data.profile?.name && JSON.stringify(got.data.profile) !== JSON.stringify(ctx.profile)) {
+        ctx.setProfile(got.data.profile);
+      }
+    }
     push();
   };
   progress.onChange(push);
-  bus.on('auth', (a) => { loggedIn = a.loggedIn; setLoggedIn(a.loggedIn); if (a.loggedIn) void pull(); });
-  void pull();
+  bus.on('profile', push);
+  bus.on('auth', (a) => {
+    if (internalEmit) return;
+    loggedIn = a.loggedIn;
+    setLoggedIn(a.loggedIn);
+    net.sendAuth?.(a.loggedIn ? api.getAuthToken() : null);
+    if (a.loggedIn) void pull(false);
+  });
+  void pull(true);
 }
 
 function registerServiceWorker(): void {

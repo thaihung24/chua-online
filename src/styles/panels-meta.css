@@ -127,6 +127,47 @@ a.pm-row:hover { color: var(--gold-strong); background: rgba(224, 178, 92, 0.08)
 .acc-pw .input { padding-right: 48px; }
 .acc-eye { position: absolute; right: 2px; top: 0; width: 46px; height: 100%; display: grid; place-items: center; color: var(--text-muted); border-radius: 12px; }
 .acc-eye:hover { color: var(--gold-strong); }
+.btn--google {
+  --_bg: linear-gradient(180deg, #fffdf9, #f3ead8);
+  --_fg: #1f1710;
+  --_bd: rgba(255, 244, 224, 0.75);
+  min-height: 48px;
+  gap: 10px;
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+}
+.btn--google:hover:not(:disabled) {
+  --_bg: linear-gradient(180deg, #ffffff, #f8f0e0);
+  border-color: #ffffff;
+  box-shadow: 0 8px 22px rgba(243, 201, 115, 0.22);
+}
+.btn--google:disabled { opacity: 0.68; cursor: wait; }
+.btn-google__badge {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14);
+  display: grid;
+  place-items: center;
+}
+.google-ic { display: block; flex: none; }
+.pm-pill .google-ic { width: 13px; height: 13px; background: #fff; border-radius: 50%; padding: 1.5px; }
+.acc-or {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 2px 0;
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+}
+.acc-or::before, .acc-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
 .pm-done { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; padding: 14px 6px 6px; }
 .pm-done__ic { width: 72px; height: 72px; display: grid; place-items: center; border-radius: 50%; color: var(--lotus); background: radial-gradient(circle, rgba(235, 169, 187, 0.22), rgba(235, 169, 187, 0.04)); border: 1px solid rgba(235, 169, 187, 0.4); }
 .pm-done .btn { margin-top: 8px; min-width: 160px; }

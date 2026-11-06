@@ -3,10 +3,11 @@
  * Mọi hàm trả `{ok:true,data}` hoặc `{ok:false,error}` (tiếng Việt), KHÔNG ném lỗi; timeout 8 giây.
  */
 import type { Profile } from '@/core/contracts';
+import { load, remove, save } from '@/core/store';
 
 export type ApiResult<T> = { ok: true; data: T } | { ok: false; error: string };
 
-export interface AuthUser { email: string; profile: Profile; createdAt: number }
+export interface AuthUser { email: string; profile: Profile; createdAt: number; authProvider?: 'password' | 'google' | 'both' }
 export interface RankRow { rank: number; name: string; level: number; tier: number; tierName?: string; streak: number }
 export interface FriendBrief { code: string; name: string; level: number; online: boolean }
 export interface FriendsMe { code: string; friends: FriendBrief[]; incoming: FriendBrief[]; outgoing: FriendBrief[] }
@@ -30,6 +31,18 @@ export function apiUrl(path: string): string {
   return API_ORIGIN && path.startsWith('/') ? `${API_ORIGIN}${path}` : path;
 }
 
+const AUTH_TOKEN_KEY = 'auth:token';
+
+export function getAuthToken(): string | null {
+  const t = load<string | null>(AUTH_TOKEN_KEY, null);
+  return typeof t === 'string' && /^[0-9a-f]{64}$/i.test(t) ? t : null;
+}
+
+export function setAuthToken(token: string | null | undefined): void {
+  if (typeof token === 'string' && /^[0-9a-f]{64}$/i.test(token)) save(AUTH_TOKEN_KEY, token.toLowerCase());
+  else remove(AUTH_TOKEN_KEY);
+}
+
 const STATUS_TEXT: Record<number, string> = {
   400: 'Thông tin chưa hợp lệ, bạn kiểm tra lại nhé.',
   401: 'Bạn cần đăng nhập để dùng tính năng này.',
@@ -47,10 +60,15 @@ export async function call<T>(method: 'GET' | 'POST' | 'PUT', url: string, body?
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), TIMEOUT_MS);
   try {
+    const tok = getAuthToken();
+    const headers: Record<string, string> = method === 'GET'
+      ? { Accept: 'application/json' }
+      : { Accept: 'application/json', 'Content-Type': 'application/json' };
+    if (tok) headers.Authorization = `Bearer ${tok}`;
     const res = await fetch(apiUrl(url), {
       method,
       credentials: API_ORIGIN ? 'include' : 'same-origin',
-      headers: method === 'GET' ? { Accept: 'application/json' } : { Accept: 'application/json', 'Content-Type': 'application/json' },
+      headers,
       body: method === 'GET' ? undefined : JSON.stringify(body ?? {}),
       signal: ctl.signal,
     });
@@ -75,13 +93,34 @@ export async function call<T>(method: 'GET' | 'POST' | 'PUT', url: string, body?
 }
 
 export const auth = {
-  register: (email: string, password: string, profile: Profile): Promise<ApiResult<{ user: AuthUser }>> =>
-    call('POST', '/api/auth/register', { email, password, profile }),
-  login: (email: string, password: string): Promise<ApiResult<{ user: AuthUser }>> =>
-    call('POST', '/api/auth/login', { email, password }),
-  logout: (): Promise<ApiResult<Record<string, never>>> => call('POST', '/api/auth/logout', {}),
+  config: (): Promise<ApiResult<{ googleClientId: string | null }>> =>
+    call('GET', '/api/auth/config'),
+  async register(email: string, password: string, profile: Profile): Promise<ApiResult<{ user: AuthUser; token?: string }>> {
+    const r = await call<{ user: AuthUser; token?: string }>('POST', '/api/auth/register', { email, password, profile });
+    if (r.ok && r.data.token) setAuthToken(r.data.token);
+    return r;
+  },
+  async login(email: string, password: string): Promise<ApiResult<{ user: AuthUser; token?: string }>> {
+    const r = await call<{ user: AuthUser; token?: string }>('POST', '/api/auth/login', { email, password });
+    if (r.ok && r.data.token) setAuthToken(r.data.token);
+    return r;
+  },
+  async google(payload: { idToken?: string; accessToken?: string; profile: Profile }): Promise<ApiResult<{ user: AuthUser; token?: string; isNew?: boolean }>> {
+    const r = await call<{ user: AuthUser; token?: string; isNew?: boolean }>('POST', '/api/auth/google', payload);
+    if (r.ok && r.data.token) setAuthToken(r.data.token);
+    return r;
+  },
+  async logout(): Promise<ApiResult<Record<string, never>>> {
+    const r = await call<Record<string, never>>('POST', '/api/auth/logout', {});
+    setAuthToken(null);
+    return r;
+  },
   /** `data.user` là null nếu chưa đăng nhập. */
-  me: (): Promise<ApiResult<{ user: AuthUser | null }>> => call('GET', '/api/auth/me'),
+  async me(): Promise<ApiResult<{ user: AuthUser | null }>> {
+    const r = await call<{ user: AuthUser | null }>('GET', '/api/auth/me');
+    if (r.ok && !r.data.user && getAuthToken()) setAuthToken(null);
+    return r;
+  },
 };
 
 export const rank = (kind: 'level' | 'streak'): Promise<ApiResult<{ rows: RankRow[] }>> =>

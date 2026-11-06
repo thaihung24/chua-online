@@ -16,13 +16,13 @@ const COMPRESSIBLE = new Set(['.html', '.js', '.mjs', '.css', '.json', '.webmani
 
 export const CSP = [
   "default-src 'self'",
-  "script-src 'self'",
-  "style-src 'self' 'unsafe-inline'",
+  "script-src 'self' https://accounts.google.com",
+  "style-src 'self' 'unsafe-inline' https://accounts.google.com",
   "img-src 'self' data: blob: https:",
   "media-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  "connect-src 'self' ws: wss:",
-  "frame-src https://www.youtube.com https://www.youtube-nocookie.com",
+  "connect-src 'self' ws: wss: https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com",
+  "frame-src https://accounts.google.com https://www.youtube.com https://www.youtube-nocookie.com",
   "worker-src 'self' blob:",
   "manifest-src 'self'",
   "object-src 'none'",

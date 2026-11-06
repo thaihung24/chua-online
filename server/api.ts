@@ -7,9 +7,9 @@ import path from 'node:path';
 import express, { type Express, type NextFunction, type Request, type Response } from 'express';
 import type { Hub } from './hub';
 import type { Db, UserRec, FriendRec } from './db';
-import { ROOT, type ServerOptions } from './config';
+import { ROOT, type GoogleIdentity, type ServerOptions } from './config';
 import { Limiter, clientIp, getCookie, randomCode, randomHex, safeEqual, sha256 } from './util';
-import { clampLevel, parseProfile, plausibleLevel, tierOf, validEmail, validState } from './validate';
+import { clampLevel, parseProfile, plausibleLevel, safeProfile, tierOf, validEmail, validState } from './validate';
 
 const scrypt = promisify(crypto.scrypt) as (pw: string, salt: Buffer, len: number) => Promise<Buffer>;
 const SESSION_MS = 30 * 24 * 3600 * 1000;
@@ -19,6 +19,61 @@ const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 export interface ApiCtx { opts: ServerOptions; db: Db; hub: Hub; bannedIps: Set<string>; startedAt: number }
 
 const fail = (res: Response, status: number, error: string): void => { res.status(status).json({ ok: false, error }); };
+
+async function defaultVerifyGoogleToken(
+  payload: { idToken?: string; accessToken?: string },
+  clientId: string,
+): Promise<GoogleIdentity | null> {
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), 8000);
+  try {
+    if (typeof payload.idToken === 'string' && payload.idToken.length >= 20 && payload.idToken.length <= 4096) {
+      const r = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(payload.idToken)}`, { signal: ctl.signal });
+      if (!r.ok) return null;
+      const d = (await r.json()) as Record<string, unknown>;
+      const iss = d.iss;
+      const verified = d.email_verified === true || d.email_verified === 'true';
+      const expOk = Number(d.exp) * 1000 > Date.now();
+      if (d.aud !== clientId || (iss !== 'accounts.google.com' && iss !== 'https://accounts.google.com') || !verified || !expOk) return null;
+      if (typeof d.sub !== 'string' || !d.sub || typeof d.email !== 'string' || !validEmail(d.email.trim())) return null;
+      return {
+        sub: d.sub,
+        email: d.email.trim().toLowerCase(),
+        name: typeof d.name === 'string' ? d.name : undefined,
+        picture: typeof d.picture === 'string' ? d.picture : undefined,
+      };
+    }
+    if (typeof payload.accessToken === 'string' && payload.accessToken.length >= 16 && payload.accessToken.length <= 4096) {
+      const [tiRes, uiRes] = await Promise.all([
+        fetch(`https://oauth2.googleapis.com/tokeninfo?access_token=${encodeURIComponent(payload.accessToken)}`, { signal: ctl.signal }),
+        fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${payload.accessToken}` },
+          signal: ctl.signal,
+        }),
+      ]);
+      if (!tiRes.ok) return null;
+      const ti = (await tiRes.json()) as Record<string, unknown>;
+      const audOk = ti.aud === clientId || ti.azp === clientId;
+      const verified = ti.email_verified === true || ti.email_verified === 'true';
+      if (!audOk || !verified || !(Number(ti.expires_in) > 0)) return null;
+      const ui = uiRes.ok ? ((await uiRes.json()) as Record<string, unknown>) : {};
+      const sub = typeof ui.sub === 'string' && ui.sub ? ui.sub : typeof ti.sub === 'string' ? ti.sub : '';
+      const rawEmail = typeof ui.email === 'string' && ui.email ? ui.email : typeof ti.email === 'string' ? ti.email : '';
+      if (!sub || !rawEmail || !validEmail(rawEmail.trim())) return null;
+      return {
+        sub,
+        email: rawEmail.trim().toLowerCase(),
+        name: typeof ui.name === 'string' ? ui.name : undefined,
+        picture: typeof ui.picture === 'string' ? ui.picture : undefined,
+      };
+    }
+    return null;
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
 
 export function resolveSessionEmail(db: Db, token: string | null): string | null {
   if (!token || token.length > 128) return null;
@@ -74,7 +129,7 @@ export function registerApi(app: Express, ctx: ApiCtx): { sweep(): void } {
         : (allowed.includes(reqOrigin) ? reqOrigin : allowed[0] ?? '');
       if (allowOrigin) res.setHeader('Access-Control-Allow-Origin', allowOrigin);
       if (allowOrigin !== '*') res.setHeader('Access-Control-Allow-Credentials', 'true');
-      res.setHeader('Access-Control-Allow-Headers', 'content-type,x-admin-token');
+      res.setHeader('Access-Control-Allow-Headers', 'content-type,authorization,x-admin-token');
       res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,OPTIONS');
       res.setHeader('Vary', 'Origin');
       if (req.method === 'OPTIONS') { res.status(204).end(); return; }
@@ -99,7 +154,17 @@ export function registerApi(app: Express, ctx: ApiCtx): { sweep(): void } {
   app.use('/api', express.json({ limit: '32kb', strict: true }));
   app.use('/api', (req, _res, next) => { if (!req.body || typeof req.body !== 'object') req.body = {}; next(); });
 
+  const extractBearer = (hdr: unknown): string | null => {
+    if (typeof hdr !== 'string') return null;
+    const m = /^Bearer\s+([0-9a-f]{64})$/i.exec(hdr.trim());
+    return m ? m[1].toLowerCase() : null;
+  };
   const sessionOf = (req: Request): { email: string; token: string } | null => {
+    const bearer = extractBearer(req.headers.authorization);
+    if (bearer) {
+      const bEmail = resolveSessionEmail(db, bearer);
+      if (bEmail) return { email: bEmail, token: bearer };
+    }
     const token = getCookie(req.headers.cookie, 'sid');
     const email = resolveSessionEmail(db, token);
     return email && token ? { email, token } : null;
@@ -119,7 +184,7 @@ export function registerApi(app: Express, ctx: ApiCtx): { sweep(): void } {
       : `sid=; HttpOnly; SameSite=${sameSite}; Path=/; Max-Age=0${secure}`;
     res.setHeader('Set-Cookie', v);
   };
-  const newSession = (req: Request, res: Response, email: string): void => {
+  const newSession = (req: Request, res: Response, email: string): string => {
     const token = randomHex(32);
     const now = Date.now();
     db.data.sessions[sha256(token)] = { email, created: now, expires: now + SESSION_MS };
@@ -128,8 +193,9 @@ export function registerApi(app: Express, ctx: ApiCtx): { sweep(): void } {
     while (mine.length > MAX_SESSIONS_PER_USER) { const old = mine.shift(); if (old) delete db.data.sessions[old[0]]; }
     db.touch();
     setCookie(req, res, token);
+    return token;
   };
-  const publicUser = (u: UserRec) => ({ email: u.email, profile: u.profile, createdAt: u.createdAt });
+  const publicUser = (u: UserRec) => ({ email: u.email, profile: u.profile, createdAt: u.createdAt, authProvider: u.authProvider });
 
   const hashPw = async (pw: string, salt: Buffer): Promise<string> => (await scrypt(pw, salt, 64)).toString('hex');
   const DUMMY_SALT = crypto.randomBytes(16);
@@ -286,6 +352,10 @@ export function registerApi(app: Express, ctx: ApiCtx): { sweep(): void } {
   });
 
   // ── Tài khoản ──
+  app.get('/api/auth/config', (_req, res) => {
+    res.json({ ok: true, googleClientId: opts.googleClientId || null });
+  });
+
   app.post('/api/auth/register', async (req, res) => {
     const a = ip(req);
     const h = registerLimiter.hit(a);
@@ -302,15 +372,15 @@ export function registerApi(app: Express, ctx: ApiCtx): { sweep(): void } {
     const salt = crypto.randomBytes(16);
     const hash = await hashPw(password, salt);
     if (db.data.users[email]) return fail(res, 409, 'Email này đã được đăng ký, bạn hãy đăng nhập nhé.');
-    const u: UserRec = { email, salt: salt.toString('hex'), hash, profile: p.profile, createdAt: Date.now() };
+    const u: UserRec = { email, salt: salt.toString('hex'), hash, authProvider: 'password', profile: p.profile, createdAt: Date.now() };
     db.data.users[email] = u;
     let code = '';
     const used = new Set(Object.values(db.data.friends).map((f) => f.code));
     do { code = randomCode(6, CODE_ALPHABET); } while (used.has(code));
     db.data.friends[email] = { code, friends: [], incoming: [], outgoing: [] };
     db.touch();
-    newSession(req, res, email);
-    res.status(201).json({ ok: true, user: publicUser(u) });
+    const token = newSession(req, res, email);
+    res.status(201).json({ ok: true, user: publicUser(u), token });
   });
 
   app.post('/api/auth/login', async (req, res) => {
@@ -327,14 +397,73 @@ export function registerApi(app: Express, ctx: ApiCtx): { sweep(): void } {
     const salt = u ? Buffer.from(u.salt, 'hex') : DUMMY_SALT;
     const hash = await hashPw(password, salt);
     const expect = u ? u.hash : await dummyHashP;
-    const ok = u !== undefined && crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(expect, 'hex'));
+    if (u && u.authProvider === 'google') {
+      loginFails.hit(k1);
+      return fail(res, 401, 'Tài khoản này đăng nhập bằng Google. Bạn hãy bấm "Tiếp tục với Google" nhé.');
+    }
+    const bufA = Buffer.from(hash, 'hex');
+    const bufB = Buffer.from(expect, 'hex');
+    const ok = u !== undefined && bufA.length === bufB.length && crypto.timingSafeEqual(bufA, bufB);
     if (!ok || !u) {
       loginFails.hit(k1); loginFails.hit(k2);
       return fail(res, 401, 'Email hoặc mật khẩu chưa đúng.');
     }
     loginFails.reset(k2);
-    newSession(req, res, email);
-    res.json({ ok: true, user: publicUser(u) });
+    const token = newSession(req, res, email);
+    res.json({ ok: true, user: publicUser(u), token });
+  });
+
+  app.post('/api/auth/google', async (req, res) => {
+    if (!opts.googleClientId) {
+      return fail(res, 503, 'Máy chủ chưa cấu hình GOOGLE_CLIENT_ID cho tính năng đăng nhập Google.');
+    }
+    const a = ip(req);
+    const k1 = `ip:${a}`;
+    const b1 = loginFails.blocked(k1);
+    if (b1.blocked) return tooMany(res, b1.retryAfter, 'Thao tác sai quá nhiều lần, xin thử lại sau ít phút.');
+    const body = req.body as Record<string, unknown>;
+    const idToken = typeof body.idToken === 'string' ? body.idToken.trim() : undefined;
+    const accessToken = typeof body.accessToken === 'string' ? body.accessToken.trim() : undefined;
+    if (!idToken && !accessToken) return fail(res, 400, 'Thiếu thông tin xác thực từ Google.');
+
+    const verify = opts.verifyGoogleToken ?? defaultVerifyGoogleToken;
+    const ident = await verify({ idToken, accessToken }, opts.googleClientId);
+    if (!ident || !validEmail(ident.email)) {
+      loginFails.hit(k1);
+      return fail(res, 401, 'Xác thực Google không thành công hoặc phiên đã hết hạn, bạn thử lại nhé.');
+    }
+
+    const email = ident.email.trim().toLowerCase();
+    let u = Object.values(db.data.users).find((x) => x.googleSub && x.googleSub === ident.sub) ?? db.data.users[email];
+    let isNew = false;
+
+    if (u) {
+      u.googleSub = ident.sub;
+      u.authProvider = u.authProvider === 'google' ? 'google' : 'both';
+    } else {
+      isNew = true;
+      const parsed = parseProfile(body.profile);
+      const profile = parsed && !parsed.nameError
+        ? parsed.profile
+        : safeProfile({
+            ...(body.profile && typeof body.profile === 'object' ? (body.profile as Record<string, unknown>) : {}),
+            name: ident.name || 'Phật tử',
+          });
+      const salt = crypto.randomBytes(16).toString('hex');
+      const hash = crypto.randomBytes(64).toString('hex');
+      u = { email, salt, hash, googleSub: ident.sub, authProvider: 'google', profile, createdAt: Date.now() };
+      db.data.users[email] = u;
+      if (!db.data.friends[email]) {
+        let code = '';
+        const used = new Set(Object.values(db.data.friends).map((f) => f.code));
+        do { code = randomCode(6, CODE_ALPHABET); } while (used.has(code));
+        db.data.friends[email] = { code, friends: [], incoming: [], outgoing: [] };
+      }
+    }
+
+    db.touch();
+    const token = newSession(req, res, u.email);
+    res.status(isNew ? 201 : 200).json({ ok: true, user: publicUser(u), token, isNew });
   });
 
   app.post('/api/auth/logout', (req, res) => {

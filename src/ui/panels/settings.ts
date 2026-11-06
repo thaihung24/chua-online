@@ -88,8 +88,8 @@ export const panel: PanelDef = {
 
     // ── Nhân vật & tài khoản
     const wardrobeLocked = !ctx.progress.isUnlocked('wardrobe');
-    const accountRow = linkRow('mail', 'Tài khoản', ctx.isLoggedIn() ? 'Đã đăng nhập · tiến độ được lưu trên mạng' : 'Đăng nhập để giữ nhân vật trên mọi máy', () => void ctx.openPanel('account'));
-    dis.add(ctx.bus.on('auth', (a) => { accountRow.querySelector('small')!.textContent = a.loggedIn ? 'Đã đăng nhập · tiến độ được lưu trên mạng' : 'Đăng nhập để giữ nhân vật trên mọi máy'; }));
+    const accountRow = linkRow('mail', 'Tài khoản', ctx.isLoggedIn() ? 'Đã đăng nhập · tiến độ được lưu trên mạng' : 'Đăng nhập Google hoặc Email để giữ nhân vật trên mọi máy', () => void ctx.openPanel('account'));
+    dis.add(ctx.bus.on('auth', (a) => { accountRow.querySelector('small')!.textContent = a.loggedIn ? 'Đã đăng nhập · tiến độ được lưu trên mạng' : 'Đăng nhập Google hoặc Email để giữ nhân vật trên mọi máy'; }));
     section('Nhân vật & tài khoản', [
       linkRow('user', 'Đổi nhân vật', `${ctx.profile.name} · chọn lại pháp danh, áo và màu`, () => void changeCharacter(ctx)),
       linkRow('hanger', 'Trang phục', wardrobeLocked ? `Mở ở cấp ${ctx.progress.unlockLevel('wardrobe')}` : 'Phụ kiện đã mở khoá', () => {

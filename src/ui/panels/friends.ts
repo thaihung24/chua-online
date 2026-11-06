@@ -26,7 +26,7 @@ export const panel: PanelDef = {
         icon: 'users',
         title: 'Đăng nhập để kết bạn đạo',
         text: text ?? 'Tài khoản giúp chùa nhớ bạn đạo của bạn và cho bạn thấy họ đang ở phòng nào.',
-        action: { label: 'Đăng nhập bằng email', onClick: () => void ctx.openPanel('account') },
+        action: { label: 'Đăng nhập tài khoản', onClick: () => void ctx.openPanel('account') },
       }));
     }
 

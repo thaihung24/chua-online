@@ -109,6 +109,7 @@ export function createMoreMenu(ctx: AppContext, host: HTMLElement, opts: { onTog
         { key: 'chat', label: 'Trò chuyện', icon: 'chat', run: () => ctx.bus.emit('chatToggle', { open: true, focus: true }), accent: true },
         { key: 'sayings', label: 'Lời chào', icon: 'hands', run: panel('sayings') },
         { key: 'journey', label: 'Hành trình', icon: 'sparkles', run: panel('journey') },
+        { key: 'account', label: 'Tài khoản', icon: 'user', run: panel('account'), accent: true },
       ],
     },
   ];

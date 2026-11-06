@@ -97,6 +97,105 @@ describe('tài khoản', () => {
   });
 });
 
+describe('đăng nhập Google + Bearer token (không cần cookie)', () => {
+  it('trả 503 khi chưa cấu hình GOOGLE_CLIENT_ID', async () => {
+    const cfg = await http.get('/api/auth/config');
+    expect(cfg.status).toBe(200);
+    expect(cfg.json).toEqual({ ok: true, googleClientId: null });
+    const g = await http.post('/api/auth/google', { accessToken: 'tok-abc', profile: PROFILE });
+    expect(g.status).toBe(503);
+  });
+
+  it('tạo tài khoản Google mới, liên kết tài khoản email cũ và đồng bộ qua Bearer token + WS', async () => {
+    const gs = await startTest({
+      googleClientId: 'test-client-id.apps.googleusercontent.com',
+      verifyGoogleToken: async ({ accessToken, idToken }) => {
+        const tok = accessToken || idToken;
+        if (tok === 'valid-new-google') {
+          return { sub: 'gsub-1001', email: 'GoogleUser@Gmail.com', name: 'An Nhiên' };
+        }
+        if (tok === 'valid-link-existing') {
+          return { sub: 'gsub-2002', email: 'existing@example.com', name: 'Tâm An' };
+        }
+        return null;
+      },
+    });
+    try {
+      const h = new Http(gs.url);
+      const cfg = await h.get('/api/auth/config');
+      expect(cfg.json).toEqual({ ok: true, googleClientId: 'test-client-id.apps.googleusercontent.com' });
+
+      expect((await h.post('/api/auth/google', { profile: PROFILE })).status).toBe(400);
+      expect((await h.post('/api/auth/google', { accessToken: 'bad-token', profile: PROFILE })).status).toBe(401);
+
+      // 1) Đăng nhập Google lần đầu → tạo user mới + trả session token
+      const created = await h.post('/api/auth/google', { accessToken: 'valid-new-google', profile: profileNamed('Sen Trắng') });
+      expect(created.status).toBe(201);
+      expect(created.json).toMatchObject({
+        ok: true,
+        isNew: true,
+        user: { email: 'googleuser@gmail.com', authProvider: 'google', profile: { name: 'Sen Trắng' } },
+      });
+      const token = created.json.token as string;
+      expect(token).toMatch(/^[0-9a-f]{64}$/);
+
+      // 2) Thử đăng nhập mật khẩu trên tài khoản thuần Google → báo dùng nút Google
+      const pwTry = await new Http(gs.url).post('/api/auth/login', { email: 'googleuser@gmail.com', password: 'matkhau-bat-ky' });
+      expect(pwTry.status).toBe(401);
+      expect(pwTry.json.error).toMatch(/Google/);
+
+      // 3) Client không gửi cookie (như Safari/iPhone khác domain) vẫn đồng bộ được nhờ Authorization: Bearer
+      const noCookie = new Http(gs.url);
+      const authHdr = { authorization: `Bearer ${token}` };
+      const me = await noCookie.get('/api/auth/me', authHdr);
+      expect(me.json.user).toMatchObject({ email: 'googleuser@gmail.com', authProvider: 'google' });
+
+      const put = await noCookie.req('PUT', '/api/progress', { state: { v: 1, xp: 320, level: 5, streak: 3 }, profile: profileNamed('Sen Vàng') }, authHdr);
+      expect(put.status).toBe(200);
+      const got = await noCookie.get('/api/progress', authHdr);
+      expect(got.json).toMatchObject({ ok: true, state: { v: 1, xp: 320, level: 5, streak: 3 }, profile: { name: 'Sen Vàng' } });
+
+      const fm = await noCookie.get('/api/friends/me', authHdr);
+      expect(fm.status).toBe(200);
+      expect(fm.json.code).toMatch(/^[A-Z2-9]{6}$/);
+
+      // 4) Tài khoản email/mật khẩu có sẵn → đăng nhập Google cùng email sẽ tự liên kết, giữ nguyên tiến độ & mật khẩu
+      const existing = new Http(gs.url);
+      await existing.post('/api/auth/register', { email: 'existing@example.com', password: 'matkhau-cu-123', profile: profileNamed('Tịnh Tâm') });
+      await existing.put('/api/progress', { state: { v: 1, xp: 888, level: 11 }, profile: profileNamed('Tịnh Tâm') });
+      await existing.post('/api/friends/invite', { code: fm.json.code });
+      await noCookie.post('/api/friends/accept', { code: (await existing.get('/api/friends/me')).json.code }, authHdr);
+
+      const linked = await new Http(gs.url).post('/api/auth/google', { accessToken: 'valid-link-existing', profile: profileNamed('Tên Mới Bỏ Qua') });
+      expect(linked.status).toBe(200);
+      expect(linked.json).toMatchObject({
+        ok: true,
+        isNew: false,
+        user: { email: 'existing@example.com', authProvider: 'both', profile: { name: 'Tịnh Tâm' } },
+      });
+      const linkedHdr = { authorization: `Bearer ${linked.json.token}` };
+      const keptProg = await new Http(gs.url).get('/api/progress', linkedHdr);
+      expect(keptProg.json.state.xp).toBe(888);
+      expect((await new Http(gs.url).post('/api/auth/login', { email: 'existing@example.com', password: 'matkhau-cu-123' })).status).toBe(200);
+
+      // 5) WS không có cookie nhưng truyền token trong hello → hiện diện bạn đạo nhận diện đúng tài khoản
+      const wsNoCookie = new Client(gs.url);
+      await wsNoCookie.open();
+      wsNoCookie.send({ t: 'hello', profile: profileNamed('Sen Vàng'), level: 5, token });
+      await wsNoCookie.waitFor((m) => m.t === 'welcome');
+      const pres = await new Http(gs.url).get('/api/friends/presence', linkedHdr);
+      expect(pres.json.friends[0]).toMatchObject({ online: true, room: { id: 'main-1', label: 'Chùa Rắn' } });
+      wsNoCookie.close();
+
+      // 6) Đăng xuất qua Bearer token xoá phiên ngay
+      expect((await noCookie.post('/api/auth/logout', {}, authHdr)).json.ok).toBe(true);
+      expect((await noCookie.get('/api/auth/me', authHdr)).json.user).toBeNull();
+    } finally {
+      await gs.close();
+    }
+  });
+});
+
 describe('tiến độ + bảng xếp hạng', () => {
   it('cần đăng nhập; lưu và đọc lại; từ chối state sai', async () => {
     const h = new Http(S.url);

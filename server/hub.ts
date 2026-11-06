@@ -186,8 +186,24 @@ export class Hub {
       case 'chat': return this.onChat(c, m);
       case 'lantern': return this.onLantern(c, m);
       case 'profile': return this.onProfile(c, m);
+      case 'auth': return this.onAuth(c, m);
       case 'join': return this.onJoin(c, m);
       default: return this.strike(c, 2);
+    }
+  }
+
+  private setConnEmail(c: Conn, email: string | null): void {
+    if (c.email === email) return;
+    if (c.email) {
+      const oldSet = this.byEmail.get(c.email);
+      oldSet?.delete(c);
+      if (oldSet && oldSet.size === 0) this.byEmail.delete(c.email);
+    }
+    c.email = email;
+    if (email) {
+      let s = this.byEmail.get(email);
+      if (!s) this.byEmail.set(email, (s = new Set()));
+      s.add(c);
     }
   }
 
@@ -211,10 +227,21 @@ export class Hub {
 
   private onHello(c: Conn, m: Record<string, unknown>): void {
     if (c.hello) return this.strike(c, 2);
+    if (!c.email && typeof m.token === 'string') {
+      const em = this.hooks.resolveSession(m.token);
+      if (em) this.setConnEmail(c, em);
+    }
     this.applyProfile(c, m.profile, m.level, m.streak, true);
     c.hello = true;
     const want = typeof m.room === 'string' ? m.room : undefined;
     this.placeInRoom(c, want, true);
+  }
+
+  private onAuth(c: Conn, m: Record<string, unknown>): void {
+    const tok = typeof m.token === 'string' && m.token ? m.token : null;
+    const em = tok ? this.hooks.resolveSession(tok) : null;
+    this.setConnEmail(c, em);
+    if (em) this.hooks.onUserStats({ email: em, name: c.profile.name, level: c.level, streak: c.streak });
   }
 
   private onProfile(c: Conn, m: Record<string, unknown>): void {

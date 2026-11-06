@@ -5,6 +5,13 @@ import { readFileSync } from 'node:fs';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
+export interface GoogleIdentity {
+  sub: string;
+  email: string;
+  name?: string;
+  picture?: string;
+}
+
 export interface ServerOptions {
   port: number;
   host: string;
@@ -14,6 +21,10 @@ export interface ServerOptions {
   trustProxy: number;
   adminToken: string;
   corsOrigin: string;
+  /** OAuth 2.0 Client ID của Google (Web application). */
+  googleClientId: string;
+  /** Hook xác thực token Google (dùng mặc định gọi Google API; cho phép mock trong test). */
+  verifyGoogleToken?: (payload: { idToken?: string; accessToken?: string }, clientId: string) => Promise<GoogleIdentity | null>;
   /** Cookie `Secure` (đặt khi chạy sau HTTPS). */
   cookieSecure: boolean;
   /** Thời gian cache bảng xếp hạng (ms). */
@@ -65,6 +76,7 @@ export function loadOptions(over: Partial<ServerOptions> = {}): ServerOptions {
     trustProxy: num(env.TRUST_PROXY, 0),
     adminToken: env.ADMIN_TOKEN ?? '',
     corsOrigin: env.CORS_ORIGIN ?? '',
+    googleClientId: (env.GOOGLE_CLIENT_ID ?? env.VITE_GOOGLE_CLIENT_ID ?? '').trim(),
     cookieSecure: env.COOKIE_SECURE === '1' || env.COOKIE_SECURE === 'true',
     rankTtlMs: 60_000,
     privateRoomTtlMs: 10 * 60_000,

@@ -5,7 +5,7 @@
 import type { ChatMessage, ChatScope, NetApi, NetEvents, Profile, RemotePlayer, RoomInfo } from '@/core/contracts';
 import { createEmitter } from '@/core/bus';
 import { phraseText } from '@/content/phrases';
-import { API_ORIGIN, apiUrl } from './api';
+import { API_ORIGIN, apiUrl, getAuthToken } from './api';
 
 const CONNECT_TIMEOUT_MS = 6000;
 const MOVE_INTERVAL_MS = 100;
@@ -196,7 +196,8 @@ export function createNet(): NetApi {
     }, CONNECT_TIMEOUT_MS);
     sock.onopen = () => {
       if (ws !== sock || !want) return;
-      sock.send(JSON.stringify({ t: 'hello', profile: want.profile, level: want.level }));
+      const tok = getAuthToken();
+      sock.send(JSON.stringify(tok ? { t: 'hello', profile: want.profile, level: want.level, token: tok } : { t: 'hello', profile: want.profile, level: want.level }));
     };
     sock.onmessage = (ev) => { if (ws === sock) onMessage(ev.data); };
     sock.onclose = () => {
@@ -275,6 +276,9 @@ export function createNet(): NetApi {
       lastIdentity = { profile, level };
       if (want) want = { profile, level };
       sendRaw({ t: 'profile', profile, level });
+    },
+    sendAuth(token) {
+      sendRaw({ t: 'auth', token: token ?? null });
     },
     room: () => room,
     selfId: () => myId,
