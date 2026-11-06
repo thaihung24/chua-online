@@ -44,5 +44,7 @@ export function createNullWorld(): World {
       return null;
     },
     getPlayer: () => ({ x: 0, z: 0, ry: 0 }),
+    getChickenState: () => ({ lostCount: 0, carrying: false, hintSpot: null, totalInCoop: 5 }),
+    goToLostChicken: () => false,
   };
 }

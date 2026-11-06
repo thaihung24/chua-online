@@ -31,6 +31,8 @@ export interface AnimCtx {
   seed: number;
   /** đang cầm chổi (đi mang chổi) */
   carryBroom: boolean;
+  /** đang ôm chú gà thất lạc trước ngực để đưa về chuồng */
+  carryChicken: boolean;
   /** độ mượt (1/giây) hoạt cảnh muốn dùng */
   smooth: number;
 }
@@ -61,6 +63,7 @@ function idle(p: Pose, c: AnimCtx): void {
   p[P.ROLL] = Math.sin(c.time * 0.9 + c.seed) * 0.012;
   p[P.LH_Y] += b * 0.006; p[P.RH_Y] += b * 0.006;
   p[P.LH_X] += Math.sin(c.time * 1.1) * 0.006; p[P.RH_X] -= Math.sin(c.time * 1.1) * 0.006;
+  if (c.carryChicken) chickenCarry(p, c, 0);
 }
 
 function walk(p: Pose, c: AnimCtx): void {
@@ -78,7 +81,8 @@ function walk(p: Pose, c: AnimCtx): void {
   p[P.LH_Z] = 0.02 - s * 0.14; p[P.RH_Z] = 0.02 + s * 0.14;
   p[P.LH_Y] = 0.05 + Math.max(0, s) * 0.03; p[P.RH_Y] = 0.05 + Math.max(0, -s) * 0.03;
   p[P.LH_X] = 0.2; p[P.RH_X] = 0.2;
-  if (c.carryBroom) broomCarry(p, c, 0.15);
+  if (c.carryChicken) chickenCarry(p, c, 1);
+  else if (c.carryBroom) broomCarry(p, c, 0.15);
 }
 
 function pray(p: Pose, c: AnimCtx): void {
@@ -154,6 +158,15 @@ function broomCarry(p: Pose, c: AnimCtx, lead: number): void {
   handR(p, 0.13, 0.04, 0.2);
   p[P.AIM_X] = 0.2 + s * 0.08; p[P.AIM_Y] = -0.22; p[P.AIM_Z] = 0.5 + lead;
   p[P.RH_Z] = 0.2 + s * 0.02;
+}
+
+function chickenCarry(p: Pose, c: AnimCtx, walking: number): void {
+  // hai tay nâng niu chú gà ấm trước ngực
+  const bob = walking ? Math.abs(Math.sin(c.phase)) * 0.012 : Math.sin(c.time * 2.4 + c.seed) * 0.008;
+  hands(p, 0.088, 0.135 + bob, 0.255);
+  p[P.YAW] *= 0.35;
+  p[P.PITCH] = walking ? 0.09 : 0.05;
+  p[P.H_PITCH] = 0.14;
 }
 
 function seatBase(p: Pose, c: AnimCtx): void {
@@ -274,7 +287,8 @@ export const ANIMS: Record<Anim, (p: Pose, c: AnimCtx) => void> = {
 
 // ───────────────────────── Cử chỉ ngắn ─────────────────────────
 export type GestureId =
-  | 'incense' | 'flowers' | 'candle' | 'bell' | 'lantern' | 'que' | 'release' | 'loc' | 'wish' | 'grabBroom';
+  | 'incense' | 'flowers' | 'candle' | 'bell' | 'lantern' | 'que' | 'release' | 'loc' | 'wish' | 'grabBroom'
+  | 'feedChicken' | 'catchChicken' | 'returnChicken';
 
 type K3 = [number, number, number];
 interface Key { t: number; r: K3; l?: K3; pitch?: number; head?: number; headYaw?: number; root?: number; prop?: number }
@@ -286,8 +300,8 @@ interface GestureDef {
   keys: Key[];
   prop?: { name: PropName; mount: 'R' | 'L' | 'mid'; from: number; to: number };
   shake?: Shake;
-  /** sau cử chỉ: dạng cầm chổi */
-  after?: 'broom';
+  /** sau cử chỉ: dạng cầm vật trên tay ('broom' | 'chicken' | 'none') */
+  after?: 'broom' | 'chicken' | 'none';
 }
 
 export const GESTURES: Record<GestureId, GestureDef> = {
@@ -407,6 +421,42 @@ export const GESTURES: Record<GestureId, GestureDef> = {
       { t: 1.0, r: [0.1, 0.07, 0.3], pitch: 0.2, head: 0.15 },
     ],
     after: 'broom',
+  },
+  feedChicken: {
+    dur: 2.5, cue: 1.05,
+    prop: { name: 'grainBowl', mount: 'L', from: 0, to: 2.2 },
+    keys: [
+      { t: 0, r: [0.1, 0.14, 0.22], l: [0.11, 0.12, 0.24], pitch: 0.05, head: 0.12 },
+      { t: 0.55, r: [0.05, 0.18, 0.24], l: [0.11, 0.13, 0.25], pitch: 0.1, head: 0.18 },
+      { t: 1.05, r: [0.16, 0.1, 0.42], l: [0.11, 0.13, 0.25], pitch: 0.2, head: 0.24 },
+      { t: 1.45, r: [0.05, 0.18, 0.24], l: [0.11, 0.13, 0.25], pitch: 0.12, head: 0.18 },
+      { t: 1.95, r: [0.18, 0.08, 0.4], l: [0.11, 0.13, 0.25], pitch: 0.2, head: 0.22 },
+      { t: 2.5, r: [0.12, 0.05, 0.1], l: [0.12, 0.05, 0.1], pitch: 0, head: 0 },
+    ],
+  },
+  catchChicken: {
+    dur: 1.55, cue: 0.72,
+    prop: { name: 'chicken', mount: 'mid', from: 0.72, to: 1.55 },
+    keys: [
+      { t: 0, r: [0.12, 0.08, 0.18], pitch: 0.08, head: 0.15 },
+      { t: 0.45, r: [0.11, -0.02, 0.34], pitch: 0.34, head: 0.28, root: -0.1 },
+      { t: 0.72, r: [0.09, -0.05, 0.38], pitch: 0.4, head: 0.3, root: -0.13 },
+      { t: 1.15, r: [0.088, 0.135, 0.26], pitch: 0.08, head: 0.16, root: -0.02 },
+      { t: 1.55, r: [0.088, 0.135, 0.255], pitch: 0.05, head: 0.14, root: 0 },
+    ],
+    after: 'chicken',
+  },
+  returnChicken: {
+    dur: 1.85, cue: 0.92,
+    prop: { name: 'chicken', mount: 'mid', from: 0, to: 0.92 },
+    keys: [
+      { t: 0, r: [0.088, 0.135, 0.255], pitch: 0.06, head: 0.14 },
+      { t: 0.55, r: [0.09, 0.1, 0.36], pitch: 0.22, head: 0.2 },
+      { t: 0.92, r: [0.11, 0.04, 0.42], pitch: 0.3, head: 0.22 },
+      { t: 1.38, r: [0.028, 0.205, 0.205], pitch: 0.1, head: 0.2 },
+      { t: 1.85, r: [0.12, 0.05, 0.1], pitch: 0, head: 0 },
+    ],
+    after: 'none',
   },
 };
 

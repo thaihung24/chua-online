@@ -46,22 +46,36 @@ export const OUTFIT_COLORS: Record<OutfitId, { name: string; hex: string }[]> = 
 };
 
 // ───────────────────────── Khuôn viên ─────────────────────────
-export type SpotId = 'yard' | 'bodhi' | 'meditate' | 'quanam' | 'well' | 'hall';
+export type SpotId = 'yard' | 'bodhi' | 'meditate' | 'quanam' | 'well' | 'hall' | 'coop';
 
 /** Hành động nhân vật có hoạt cảnh riêng. */
 export type ActionId =
-  | 'pray'      // chắp tay
-  | 'bow'       // lạy Phật
-  | 'sweep'     // quét lá
-  | 'incense'   // thắp hương (cắm vào lư)
-  | 'flowers'   // dâng hoa lên bàn thờ
-  | 'candle'    // thắp nến
-  | 'bell'      // thỉnh chuông
-  | 'lantern'   // thả đèn hoa đăng
-  | 'que'       // lắc ống xăm
-  | 'release'   // phóng sinh
-  | 'loc'       // hái lộc
-  | 'wish';     // treo nguyện lên cây bồ đề
+  | 'pray'          // chắp tay
+  | 'bow'           // lạy Phật
+  | 'sweep'         // quét lá
+  | 'incense'       // thắp hương (cắm vào lư)
+  | 'flowers'       // dâng hoa lên bàn thờ
+  | 'candle'        // thắp nến
+  | 'bell'          // thỉnh chuông
+  | 'lantern'       // thả đèn hoa đăng
+  | 'que'           // lắc ống xăm
+  | 'release'       // phóng sinh
+  | 'loc'           // hái lộc
+  | 'wish'          // treo nguyện lên cây bồ đề
+  | 'feedChicken'   // cho đàn gà sau chùa ăn thóc
+  | 'catchChicken'  // bắt chú gà sổng chuồng thất lạc
+  | 'returnChicken'; // thả gà thất lạc về lại chuồng
+
+export interface ChickenState {
+  /** Số gà đang sổng chuồng thất lạc ngoài khuôn viên chùa. */
+  lostCount: number;
+  /** Người chơi đang ôm chú gà thất lạc trên tay để đưa về chuồng. */
+  carrying: boolean;
+  /** Gợi ý khu vực chú gà thất lạc gần nhất (ví dụ "gần Cây bồ đề"). */
+  hintSpot: string | null;
+  /** Tổng số gà hiện đang ở yên trong chuồng sau chùa. */
+  totalInCoop: number;
+}
 
 export type SeatKind = 'chant' | 'meditate' | 'sit';
 
@@ -106,6 +120,8 @@ export interface WorldEvents extends Record<string, unknown> {
   travel: { label: string | null };
   /** Bắt đầu hoạt cảnh một hành động (sau khi đã tới nơi) — để hiện bong bóng trên đầu. */
   actionStart: { action: ActionId };
+  /** Trạng thái đàn gà & gà sổng chuồng thất lạc (để HUD cập nhật trực tiếp). */
+  chicken: ChickenState;
 }
 
 export interface World extends Emitter<WorldEvents> {
@@ -143,6 +159,10 @@ export interface World extends Emitter<WorldEvents> {
   screenshot(): Promise<Blob | null>;
   /** Vị trí hiện tại của người chơi. */
   getPlayer(): { x: number; z: number; ry: number };
+  /** Trạng thái đàn gà & gà thất lạc hiện tại. */
+  getChickenState(): ChickenState;
+  /** Tự tìm đường tới chú gà thất lạc gần nhất (trả false nếu không có gà thất lạc). */
+  goToLostChicken(): boolean;
 }
 
 // ───────────────────────── Âm thanh ─────────────────────────
@@ -153,7 +173,7 @@ export interface AudioSettings {
   chant: boolean; // giọng niệm Phật & nhạc nền chung
   ambientVolume: number; // 0..1
 }
-export type Sfx = 'mo' | 'bell' | 'bellBig' | 'bead' | 'incense' | 'flower' | 'candle' | 'lantern' | 'bow' | 'click' | 'chime' | 'levelUp' | 'sweep' | 'que' | 'splash' | 'ribbon';
+export type Sfx = 'mo' | 'bell' | 'bellBig' | 'bead' | 'incense' | 'flower' | 'candle' | 'lantern' | 'bow' | 'click' | 'chime' | 'levelUp' | 'sweep' | 'que' | 'splash' | 'ribbon' | 'cluck';
 export interface MusicTrack { name: string; url: string }
 export interface AudioApi {
   /** Phải gọi trong cử chỉ người dùng đầu tiên (mở AudioContext). */
@@ -178,7 +198,8 @@ export interface AudioApi {
 export type ActivityKind =
   | 'visit' | 'pray' | 'bow' | 'incense' | 'flowers' | 'candle' | 'bell' | 'lantern' | 'que'
   | 'beadsRound' | 'chantDone' | 'meditateSeconds' | 'sitSeconds' | 'sweepRound' | 'walkSpot'
-  | 'release' | 'loc' | 'wish' | 'listenSeconds' | 'communitySeconds' | 'today' | 'greet' | 'quanam' | 'mindfulSeconds' | 'beads';
+  | 'release' | 'loc' | 'wish' | 'listenSeconds' | 'communitySeconds' | 'today' | 'greet' | 'quanam' | 'mindfulSeconds'
+  | 'chickenRescue' | 'chickenFeed' | 'beads';
 
 export interface TierDef { id: number; name: string; minLevel: number; color: string; accent: string }
 export const TIERS: TierDef[] = [

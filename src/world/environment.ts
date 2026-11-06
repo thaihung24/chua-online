@@ -9,6 +9,7 @@ import * as THREE from 'three';
 import { Batch, createShared, disposeTree, TAU } from './env/core';
 import { buildBellTower } from './env/bell';
 import { buildBodhi } from './env/bodhi';
+import { buildCoop, type CoopPart } from './env/coop';
 import { buildCourtyard } from './env/courtyard';
 import { buildGardens } from './env/gardens';
 import { createGround } from './env/ground';
@@ -22,7 +23,15 @@ import { SkyRig } from './env/sky';
 export interface Environment {
   /** Nhóm gốc đã chứa toàn bộ khuôn viên + trời. W2 add nhân vật vào scene riêng (cùng scene). */
   readonly group: THREE.Group;
-  update(dt: number, elapsed: number, camera: THREE.Camera): void;
+  /** Khu vườn & chuồng gà sau chùa + quản lý gà sổng chuồng thất lạc. */
+  readonly coop: CoopPart;
+  update(
+    dt: number,
+    elapsed: number,
+    camera: THREE.Camera,
+    playerPos?: { x: number; z: number },
+    isFree?: (x: number, z: number) => boolean,
+  ): void;
   getNight(): number;
   setTimeOfDay(mode: 'auto' | 'day' | 'night'): void;
   setOfferings(o: { incenseUntil?: number; flowersUntil?: number; candleUntil?: number }): void;
@@ -30,7 +39,9 @@ export interface Environment {
   setWishRibbons(count: number): void;
   /** Hiệu ứng tức thời. at = vị trí thế giới (mặc định theo kind). */
   playEffect(
-    kind: 'incense' | 'flowers' | 'candle' | 'bell' | 'release' | 'loc' | 'lanternLaunch' | 'splash' | 'ribbon' | 'lotusBloom',
+    kind:
+      | 'incense' | 'flowers' | 'candle' | 'bell' | 'release' | 'loc'
+      | 'lanternLaunch' | 'splash' | 'ribbon' | 'lotusBloom' | 'chickenFeed',
     at?: { x: number; z: number },
   ): void;
   /** Lá đa / lá bồ đề rụng trên sân (quét được). */
@@ -92,9 +103,10 @@ export async function createEnvironment(opts: {
   await nextTick();
   const bodhi = buildBodhi(mats, shared, haloSpecs, sparks, campusCast, campusFlat);
 
-  onProgress?.(0.88, 'Đang bày sân thiền & giếng ngọc…');
+  onProgress?.(0.88, 'Đang bày sân thiền & vườn gà sau chùa…');
   await nextTick();
   const gardens = buildGardens(mats, shared, sky, mats.textures.glow, haloSpecs, sparks, campusCast, campusFlat);
+  const coop = buildCoop(mats, haloSpecs, sparks, campusCast, campusFlat);
 
   campusCast.build(group, 'campus-cast');
   campusFlat.build(group, 'campus-flat');
@@ -113,6 +125,7 @@ export async function createEnvironment(opts: {
     ponds.group,
     bodhi.group,
     gardens.group,
+    coop.group,
     smoke.points,
     sparks.points,
     halos.points,
@@ -151,6 +164,7 @@ export async function createEnvironment(opts: {
 
   return {
     group,
+    coop,
     groundPickMesh: ground.pick,
     getNight: () => sky.getNight(),
     setTimeOfDay: (mode) => sky.setMode(mode),
@@ -252,10 +266,20 @@ export async function createEnvironment(opts: {
           ponds.triggerLotusBloom(at);
           break;
         }
+        case 'chickenFeed': {
+          coop.triggerFeed();
+          break;
+        }
       }
     },
 
-    update(dt: number, elapsed: number, camera: THREE.Camera): void {
+    update(
+      dt: number,
+      elapsed: number,
+      camera: THREE.Camera,
+      playerPos?: { x: number; z: number },
+      isFree?: (x: number, z: number) => boolean,
+    ): void {
       const clampedDt = Math.min(dt, 0.12);
       shared.uTime.value = elapsed;
       if ((camera as THREE.PerspectiveCamera).isPerspectiveCamera) {
@@ -276,6 +300,7 @@ export async function createEnvironment(opts: {
       ponds.update(clampedDt, elapsed, night, lightsOn);
       bodhi.update(clampedDt, elapsed, night, lightsOn);
       gardens.update(clampedDt, elapsed, night, lightsOn);
+      coop.update(clampedDt, elapsed, night, lightsOn, playerPos, isFree);
 
       smoke.update(clampedDt, elapsed);
       sparks.update(clampedDt, elapsed);
@@ -301,6 +326,7 @@ export async function createEnvironment(opts: {
       ponds.dispose();
       bodhi.dispose();
       gardens.dispose();
+      coop.dispose();
       smoke.dispose();
       sparks.dispose();
       halos.dispose();

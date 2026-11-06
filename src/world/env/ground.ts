@@ -3,13 +3,13 @@
  * tường rào quanh chùa, mặt phẳng raycast chạm-để-đi.
  */
 import * as THREE from 'three';
-import { BOUNDS, CUSHION_CENTER, LOTUS_POND, RELEASE_POND, SPOTS, WELL } from '@/world/layout';
+import { BOUNDS, CHICKEN_COOP, CUSHION_CENTER, LOTUS_POND, RELEASE_POND, SPOTS, WELL } from '@/world/layout';
 import { Batch, rng, xf } from './core';
 import type { Mats } from './materials';
 import { groundMaskTexture } from './textures';
 
-export const GROUND_EXT = { x0: -48, x1: 48, z0: -42, z1: 46 };
-export const WALL = { x0: -42.4, x1: 42.4, z0: -36.4, z1: 40.4, h: 2.5 };
+export const GROUND_EXT = { x0: -48, x1: 48, z0: -61, z1: 46 };
+export const WALL = { x0: -42.4, x1: 42.4, z0: -55.4, z1: 40.4, h: 2.5 };
 export const ZEN_RADIUS = 5.85;
 
 export interface GroundPart { group: THREE.Group; pick: THREE.Mesh; dispose(): void }
@@ -40,6 +40,10 @@ function drawMask(ctx: CanvasRenderingContext2D, px: (x: number, z: number) => [
   line([[4.6, 14], [12.2, 14]], 3.2);                     // → hồ phóng sinh
   line([[-24, -4], [-25, 2], [-24, 5], [-20, 9.5]], 2.2); // vòng quanh bồ đề qua cầu đá
   line([[4.6, 22], [8.0, 22]], 2.2);                      // → giá chổi
+  // hai lối đá uốn vòng hai bên hông Chánh điện dẫn ra khu vườn & chuồng gà sau chùa
+  line([[-14, -15.5], [-16.6, -21], [-16.6, -35.8], [-10.8, -41.6], [0, -42.4]], 2.4);
+  line([[14, -15.5], [17.4, -21], [17.4, -35.8], [10.8, -41.6], [0, -42.4]], 2.4);
+  ctx.beginPath(); { const [a, b] = px(0, -42.4); ctx.ellipse(a, b, 5.2 * sc, 2.7 * sc, 0, 0, 7); ctx.fill(); }
   // vòng đá quanh bể Quan Âm & bục
   ctx.beginPath(); { const [a, b] = px(28.5, -13); ctx.ellipse(a, b, 6.2 * sc, 4.2 * sc, 0, 0, 7); ctx.fill(); }
   ctx.beginPath(); { const [a, b] = px(SPOTS.well.pos.x, SPOTS.well.pos.z); ctx.ellipse(a, b, 4.2 * sc, 4.2 * sc, 0, 0, 7); ctx.fill(); }
@@ -48,8 +52,9 @@ function drawMask(ctx: CanvasRenderingContext2D, px: (x: number, z: number) => [
   ctx.globalCompositeOperation = 'lighter';
   ctx.fillStyle = '#00ff00';
   ctx.beginPath(); { const [a, b] = px(CUSHION_CENTER.x, CUSHION_CENTER.z); ctx.ellipse(a, b, ZEN_RADIUS * sc, ZEN_RADIUS * sc, 0, 0, 7); ctx.fill(); }
-  // B = đất / đáy ao & lòng suối từ Giếng ngọc về Ao sen
+  // B = đất / đáy ao, nền đất vườn gà sau chùa & lòng suối từ Giếng ngọc về Ao sen
   ctx.fillStyle = '#0000ff'; ctx.strokeStyle = '#0000ff';
+  R(CHICKEN_COOP.cx - 5.4, CHICKEN_COOP.cz - 4.0, CHICKEN_COOP.cx + 5.4, CHICKEN_COOP.gateZ + 0.3);
   for (const p of [LOTUS_POND, RELEASE_POND]) {
     ctx.beginPath(); const [a, b] = px(p.cx, p.cz); ctx.ellipse(a, b, (p.rx + 0.9) * sc, (p.rz + 0.9) * sc, 0, 0, 7); ctx.fill();
   }

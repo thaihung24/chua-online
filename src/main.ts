@@ -27,6 +27,7 @@ const ACTION_BUBBLE: Partial<Record<ActionId, string>> = {
   pray: '🙏 Chắp tay', bow: '🙇 Lạy Phật', sweep: '🧹 Quét lá', incense: '🪔 Thắp hương', flowers: '🌸 Dâng hoa',
   candle: '🕯️ Thắp nến', bell: '🔔 Thỉnh chuông', lantern: '🏮 Thả đèn hoa đăng', que: '🎋 Xin quẻ',
   release: '🐟 Phóng sinh', loc: '🍃 Hái lộc', wish: '🎗️ Treo nguyện',
+  feedChicken: '🌾 Cho gà ăn thóc', catchChicken: '🐔 Bắt gà thất lạc', returnChicken: '🏡 Thả gà về chuồng',
 };
 
 async function boot(): Promise<void> {
@@ -219,6 +220,7 @@ function wireWorld(
   const sfx: Partial<Record<ActionId, Parameters<typeof audio.play>[0]>> = {
     incense: 'incense', flowers: 'flower', candle: 'candle', bell: 'bellBig', bow: 'bow',
     lantern: 'lantern', que: 'que', release: 'splash', loc: 'chime', wish: 'ribbon', sweep: 'sweep',
+    feedChicken: 'cluck', catchChicken: 'cluck', returnChicken: 'cluck',
   };
 
   const reward = (kind: Parameters<typeof progress.record>[0], amount = 1, meta?: Parameters<typeof progress.record>[2]) => {
@@ -279,6 +281,18 @@ function wireWorld(
         reward('loc');
         ctx.toast('Đã hái lộc. Chúc bạn một ngày an lành.', { kind: 'good' });
         break;
+      case 'feedChicken':
+        reward('chickenFeed');
+        ctx.toast('Đã rải thóc vàng cho đàn gà sau chùa.', { kind: 'good' });
+        break;
+      case 'catchChicken':
+        ctx.toast('Đã ôm được chú gà lạc! Hãy đưa về chuồng sau chùa.', { kind: 'info', ms: 2600 });
+        break;
+      case 'returnChicken':
+        audio.play('chime', { volume: 0.55 });
+        reward('chickenRescue');
+        ctx.toast('Đã đưa gà về chuồng bình an · +18 tinh tấn!', { kind: 'good', ms: 2600 });
+        break;
       default:
         break; // lantern/que/wish: panel tương ứng đã ghi tiến độ
     }
@@ -298,6 +312,14 @@ function wireWorld(
   world.on('nearby', (n) => shell.hud.setNearby(n));
   world.on('night', ({ value }) => audio.setNight(value));
   world.on('travel', ({ label }) => shell.hud.setTravel(label));
+  let prevLostCount = 0;
+  world.on('chicken', (st) => {
+    shell.hud.setChicken(st);
+    if (st.lostCount > prevLostCount && !st.carrying) {
+      audio.play('cluck', { volume: 0.72 });
+    }
+    prevLostCount = st.lostCount;
+  });
   world.on('actionStart', ({ action }) => {
     const b = ACTION_BUBBLE[action];
     if (b) world.say(b);

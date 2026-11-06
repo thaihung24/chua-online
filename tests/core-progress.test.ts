@@ -121,7 +121,7 @@ describe('progress: bảng tinh tấn, giới hạn ngày, trần', () => {
     const expected: [ActivityKind, number][] = [
       ['pray', 3], ['bow', 6], ['incense', 12], ['flowers', 10], ['candle', 8], ['bell', 4], ['lantern', 15], ['que', 10],
       ['beadsRound', 20], ['chantDone', 25], ['sweepRound', 12], ['release', 15], ['loc', 10], ['wish', 10], ['today', 5],
-      ['greet', 2], ['quanam', 8],
+      ['greet', 2], ['quanam', 8], ['chickenRescue', 18], ['chickenFeed', 10],
     ];
     for (const [k, xp] of expected) {
       const c = make({ start: day(2025, 6, 20) });
@@ -259,7 +259,7 @@ describe('progress: bảng tinh tấn, giới hạn ngày, trần', () => {
     const kinds: ActivityKind[] = [
       'visit', 'pray', 'bow', 'incense', 'flowers', 'candle', 'bell', 'lantern', 'que', 'beadsRound', 'chantDone', 'meditateSeconds',
       'sitSeconds', 'sweepRound', 'walkSpot', 'release', 'loc', 'wish', 'listenSeconds', 'communitySeconds', 'today', 'greet', 'quanam',
-      'mindfulSeconds', 'beads',
+      'mindfulSeconds', 'beads', 'chickenRescue', 'chickenFeed',
     ];
     for (const k of kinds) expect(XP_TABLE[k], k).toBeTruthy();
   });
@@ -494,8 +494,8 @@ describe('progress: việc hôm nay', () => {
     expect(seen.size).toBeGreaterThan(4);
   });
 
-  it('cấp 1 chỉ có việc dễ (hương/lạy/tràng hạt/chào)', () => {
-    const easy = new Set(['incense', 'bow', 'beadsRound', 'greet']);
+  it('cấp 1 chỉ có việc dễ (hương/lạy/tràng hạt/chào/bắt gà)', () => {
+    const easy = new Set(['incense', 'bow', 'beadsRound', 'greet', 'chicken']);
     for (let i = 0; i < 40; i++) {
       const day = `2025-07-${String(1 + (i % 28)).padStart(2, '0')}`;
       for (const t of pickTasks(`${day}#${i}`, 1)) {
@@ -514,7 +514,7 @@ describe('progress: việc hôm nay', () => {
     }
     const high = new Set<string>();
     for (let i = 0; i < 200; i++) for (const t of pickTasks(`k${i}`, 20)) high.add(t.id);
-    expect(high.size).toBe(14);
+    expect(high.size).toBe(15);
   });
 
   it('việc "Đi dạo" có điểm đến và nhãn đúng, nút "Đi" là SpotId', () => {
@@ -532,7 +532,7 @@ describe('progress: việc hôm nay', () => {
     }
     expect(found).toBeTruthy();
     expect(found!.label.startsWith('Đi dạo tới ')).toBe(true);
-    expect(['yard', 'bodhi', 'meditate', 'well', 'hall']).toContain(found!.action);
+    expect(['yard', 'bodhi', 'meditate', 'well', 'hall', 'coop']).toContain(found!.action);
   });
 
   it('làm đủ 3 việc: +30 mỗi việc và +30 khi xong cả ba (ngoài trần)', () => {
@@ -691,6 +691,27 @@ describe('progress: dấu ấn', () => {
       got = c.p.record('bow', 1).stamp ?? got;
     }
     expect(got).toContain('bow-108');
+  });
+
+  it('nuôi & bắt gà thất lạc: cộng tinh tấn và cấp dấu ấn Hộ Trì Viên Cầm / Mục Cầm Tịnh Tâm', () => {
+    const c = make();
+    const r1 = c.p.record('chickenFeed');
+    expect(r1.xp).toBeGreaterThanOrEqual(10);
+    c.adv(5000);
+    const r2 = c.p.record('chickenRescue');
+    expect(r2.xp).toBeGreaterThanOrEqual(18);
+    expect(r2.stamp).toContain('first-chicken');
+
+    let stamp27: string[] | undefined;
+    for (let d = 0; d < 7; d++) {
+      c.adv(DAY_MS);
+      for (let k = 0; k < 5; k++) {
+        c.adv(5000);
+        const res = c.p.record('chickenRescue');
+        if (res.stamp?.includes('chicken-27')) stamp27 = res.stamp;
+      }
+    }
+    expect(stamp27).toContain('chicken-27');
   });
 });
 

@@ -3,7 +3,7 @@
  * chuỗi giữ lửa, "Nghe niệm Phật", banner thông báo, thẻ góp ý, nút ngữ cảnh (phím F/Enter),
  * thanh công phu bên dưới (+ hàng Tụng kinh/Thiền/Đứng dậy khi đang ngồi) và menu "Thêm".
  */
-import { TIERS, type ActionId, type AppContext, type AudioSettings, type ProgressView, type RoomInfo, type UnlockFeature, type WorldEvents } from '@/core/contracts';
+import { TIERS, type ActionId, type AppContext, type AudioSettings, type ChickenState, type ProgressView, type RoomInfo, type UnlockFeature, type WorldEvents } from '@/core/contracts';
 import { isChantRadioOn, onChantRadioChange, startChantRadio, stopChantRadio } from './chant-radio';
 import { createChatBox } from './chat-box';
 import { esc, isTyping } from './dom';
@@ -26,6 +26,8 @@ export interface Hud {
   setListening(on: boolean): void;
   /** Viên "Đang đến … · Dừng" khi nhân vật tự đi tới một điểm (null = ẩn). */
   setTravel(label: string | null): void;
+  /** Cập nhật trạng thái đàn gà / báo gà thất lạc trên HUD. */
+  setChicken(st: ChickenState): void;
   /** Dòng gợi ý điều khiển ở giữa màn hình (null = ẩn dần). */
   hint(text: string | null): void;
   /** Ẩn/hiện toàn bộ HUD (vd khi chụp ảnh). */
@@ -48,6 +50,9 @@ const ACTION_UI: Record<CtxAction, { label: string; icon: IconName; feature?: Un
   release: { label: 'Phóng sinh', icon: 'fish', feature: 'release' },
   loc: { label: 'Hái lộc', icon: 'leaf', feature: 'loc' },
   wish: { label: 'Treo nguyện', icon: 'ribbon' },
+  feedChicken: { label: 'Cho gà ăn', icon: 'grain' },
+  catchChicken: { label: 'Bắt gà thất lạc', icon: 'chicken' },
+  returnChicken: { label: 'Thả gà vào chuồng', icon: 'chicken' },
   sit: { label: 'Ngồi xuống', icon: 'cushion' },
 };
 
@@ -83,7 +88,18 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
     </div>
     <div class="hud__chips">
       <button type="button" class="hud-chip hud-chip--flame glass is-dim" id="hud-streak" hidden>${icon('flame', { size: 19 })}<span class="hud-chip__n">0</span></button>
-      <button type="button" class="hud-chip hud-chip--listen glass" id="hud-listen" aria-pressed="false" aria-label="Nghe niệm Phật (nhấn giữ để mở danh sách)"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>Nghe niệm Phật</span></button>
+      <div class="listen-pill glass" id="hud-listen-wrap">
+        <button type="button" class="hud-chip hud-chip--listen" id="hud-listen" aria-pressed="false" aria-label="Nghe niệm Phật (bấm để bật hoặc tắt)"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>Nghe niệm Phật</span></button>
+        <button type="button" class="listen-pill__more" id="hud-listen-more" aria-label="Chọn giọng niệm Phật hoặc tiếng gõ mõ" title="Chọn giọng niệm / tiếng mõ">${icon('chevron-down', { size: 15 })}</button>
+      </div>
+    </div>
+    <div class="chicken-alert glass glass--strong" id="hud-chicken" role="status" aria-live="polite" hidden>
+      <span class="chicken-alert__badge" aria-hidden="true">${icon('chicken', { size: 20 })}</span>
+      <span class="chicken-alert__body">
+        <b class="chicken-alert__title"></b>
+        <small class="chicken-alert__sub"></small>
+      </span>
+      <button type="button" class="chicken-alert__act"></button>
     </div>
     <div class="travel glass glass--strong" id="hud-travel" role="status" aria-live="polite" hidden>
       <span class="travel__steps" aria-hidden="true">${icon('footsteps', { size: 18 })}</span>
@@ -126,7 +142,13 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
   const lvlHint = q<HTMLElement>('.lvl-btn__hint');
   const lvlArc = q<SVGCircleElement>('.lvl-btn__arc');
   const streakBtn = q<HTMLButtonElement>('#hud-streak');
+  const listenWrap = q<HTMLElement>('#hud-listen-wrap');
   const listenBtn = q<HTMLButtonElement>('#hud-listen');
+  const listenMoreBtn = q<HTMLButtonElement>('#hud-listen-more');
+  const chickenEl = q<HTMLElement>('#hud-chicken');
+  const chickenTitle = q<HTMLElement>('.chicken-alert__title');
+  const chickenSub = q<HTMLElement>('.chicken-alert__sub');
+  const chickenAct = q<HTMLButtonElement>('.chicken-alert__act');
   const banner = q<HTMLElement>('#hud-banner');
   const ctxBox = q<HTMLElement>('#hud-ctx');
   const seatRow = q<HTMLElement>('#hud-seat');
@@ -157,6 +179,47 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
       travelHideTimer = window.setTimeout(() => { if (!travelling) travelEl.hidden = true; }, 260);
     }
     paintCtx();
+  }
+
+  // ── Trạng thái gà sổng chuồng / ôm gà thất lạc
+  let chickenState: ChickenState = ctx.world.getChickenState();
+  let chickenHideTimer = 0;
+  chickenAct.addEventListener('click', () => {
+    if (chickenState.carrying) {
+      void ctx.world.perform('returnChicken');
+      return;
+    }
+    if (!ctx.world.goToLostChicken()) {
+      ctx.world.goTo('coop');
+    }
+  });
+  function setChicken(st: ChickenState): void {
+    chickenState = st;
+    quest.setChicken(st);
+    menu.refresh();
+    window.clearTimeout(chickenHideTimer);
+    if (!st.carrying && st.lostCount <= 0) {
+      chickenEl.classList.remove('is-on');
+      chickenHideTimer = window.setTimeout(() => {
+        if (!chickenState.carrying && chickenState.lostCount <= 0) chickenEl.hidden = true;
+      }, 240);
+      return;
+    }
+    if (st.carrying) {
+      chickenEl.dataset.mode = 'carry';
+      chickenTitle.textContent = 'Đang ôm gà thất lạc';
+      chickenSub.textContent = 'Đưa về chuồng sau chùa · +18 tinh tấn';
+      chickenAct.textContent = 'Về chuồng';
+    } else {
+      chickenEl.dataset.mode = 'lost';
+      chickenTitle.textContent = st.lostCount > 1 ? `Đang có ${st.lostCount} gà thất lạc!` : 'Đang có gà thất lạc!';
+      chickenSub.textContent = st.hintSpot
+        ? `Thấp thoáng ${st.hintSpot} · bắt về tích công đức`
+        : 'Tìm bắt về chuồng sau chùa tích công đức';
+      chickenAct.textContent = 'Đi tìm';
+    }
+    chickenEl.hidden = false;
+    requestAnimationFrame(() => chickenEl.classList.add('is-on'));
   }
 
   // ── Gợi ý điều khiển
@@ -293,6 +356,7 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
   listenBtn.addEventListener('pointerleave', endHold);
   listenBtn.addEventListener('pointercancel', endHold);
   listenBtn.addEventListener('contextmenu', (e) => { e.preventDefault(); void ctx.openPanel('listen'); });
+  listenMoreBtn.addEventListener('click', () => void ctx.openPanel('listen'));
   listenBtn.addEventListener('click', () => {
     if (held) { held = false; return; }
     if (listening) {
@@ -539,14 +603,16 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
     setListening(on) {
       listening = on;
       listenBtn.setAttribute('aria-pressed', String(on));
+      listenWrap.classList.toggle('is-playing', on);
     },
     setVisible(v) { el.style.display = v ? '' : 'none'; },
     setTravel,
+    setChicken,
     hint,
     destroy() {
       offStatus(); offCount(); offPlayers(); offSolo(); offAudio(); offRadio(); offProgress(); offLevelUp(); offPanel();
       quest.destroy();
-      window.clearTimeout(travelHideTimer); window.clearTimeout(hintTimer);
+      window.clearTimeout(travelHideTimer); window.clearTimeout(chickenHideTimer); window.clearTimeout(hintTimer);
       document.removeEventListener('keydown', onKeyDown);
       document.removeEventListener('pointerdown', onOutsideSound, true);
       window.clearTimeout(bannerTimer); window.clearTimeout(holdTimer);
@@ -559,6 +625,7 @@ export function createHud(ctx: AppContext, root: HTMLElement): Hud {
     const v = ctx.progress.view();
     setLevel(v);
     setStreak(v.streak, v.litToday);
+    setChicken(ctx.world.getChickenState());
   } catch {
     setLevel({ level: 1, tier: TIERS[0], xp: 0, xpIntoLevel: 0, xpForNext: 50, frac: 0, streak: 0, best: 0, litToday: false, restDays: 0, tasks: [], tasksDone: 0, practiceToday: 0, practiceCap: 200, stamps: [] });
   }

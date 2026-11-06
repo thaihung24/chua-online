@@ -7,7 +7,8 @@ import { ball, box, merge, paint, tube, xf, type V3 } from './geo';
 import { lotusBloomGeoms } from './accessories';
 
 export type PropName =
-  | 'incense' | 'flowers' | 'taper' | 'lantern' | 'tube' | 'bowl' | 'twig' | 'ribbon' | 'broom' | 'mallet' | 'beads' | 'lotusHeld';
+  | 'incense' | 'flowers' | 'taper' | 'lantern' | 'tube' | 'bowl' | 'twig' | 'ribbon' | 'broom' | 'mallet' | 'beads' | 'lotusHeld'
+  | 'chicken' | 'grainBowl';
 
 /** Chiều dài từ chỗ cầm tới mũi chổi (m). */
 export const BROOM_LEN = 0.46;
@@ -118,6 +119,37 @@ function build(name: PropName): PropGeo {
       S.push(...lotusMerged(1.25, [0.01, 0.25, 0]));
       S.push(ball(0.045, '#5fa14d', [-0.04, 0.09, 0], [1.6, 0.3, 1.1], [8, 6], [0, 0, 0.5]));
       break;
+    case 'grainBowl': {
+      const basket = paint(new THREE.SphereGeometry(0.095, 14, 8, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), '#c89e58');
+      S.push(xf(basket, [0, 0.03, 0], undefined, [1, 0.78, 1]));
+      S.push(xf(paint(new THREE.TorusGeometry(0.095, 0.009, 5, 16), '#8b6234'), [0, 0.03, 0], [Math.PI / 2, 0, 0]));
+      S.push(ball(0.082, '#f0c246', [0, 0.025, 0], [1, 0.36, 1], [10, 7]));
+      for (let i = 0; i < 6; i++) {
+        const a = (i / 6) * Math.PI * 2;
+        S.push(ball(0.014, '#ffe074', [Math.cos(a) * 0.042, 0.052, Math.sin(a) * 0.042], [1.2, 0.6, 0.9], [6, 5]));
+      }
+      break;
+    }
+    case 'chicken': {
+      // Chú gà mơ vàng tròn trịa nằm gọn trong vòng tay nhân vật (+z = hướng trước ngực)
+      S.push(ball(0.115, '#e5a83b', [0, 0.055, 0], [0.95, 0.84, 1.22], [12, 9]));
+      // Hai cánh khép ấm hai bên
+      S.push(ball(0.068, '#b86c22', [-0.092, 0.058, -0.01], [0.38, 0.72, 1.15], [9, 7]));
+      S.push(ball(0.068, '#b86c22', [0.092, 0.058, -0.01], [0.38, 0.72, 1.15], [9, 7]));
+      // Đuôi cong phía sau (-z)
+      S.push(xf(paint(new THREE.ConeGeometry(0.042, 0.14, 6), '#4e2e18'), [0, 0.12, -0.13], [-0.65, 0, 0]));
+      // Cổ & đầu gà ngẩng lên phía trước (+z)
+      S.push(tube([0, 0.08, 0.08], [0, 0.165, 0.115], 0.052, 0.042, '#f0be52', 8));
+      S.push(ball(0.064, '#f0be52', [0, 0.185, 0.125], [0.95, 0.95, 1.02], [10, 8]));
+      // Mào gà 3 khía đỏ tươi + tích gà + mỏ vàng cam + đôi mắt đen
+      S.push(ball(0.022, '#d92b28', [0, 0.248, 0.142], [0.55, 1.1, 0.85], [7, 6]));
+      S.push(ball(0.02, '#d92b28', [0, 0.242, 0.115], [0.55, 0.95, 0.8], [7, 6]));
+      S.push(ball(0.016, '#d92b28', [0, 0.142, 0.168], [0.65, 0.95, 0.65], [6, 5]));
+      S.push(xf(paint(new THREE.ConeGeometry(0.022, 0.06, 6), '#f2a428'), [0, 0.18, 0.205], [Math.PI / 2, 0, 0]));
+      S.push(ball(0.012, '#1b1614', [-0.048, 0.196, 0.152], 1, [6, 5]));
+      S.push(ball(0.012, '#1b1614', [0.048, 0.196, 0.152], 1, [6, 5]));
+      break;
+    }
   }
   return { solid: S.length ? merge(S) : null, glow: G.length ? merge(G) : null };
 }

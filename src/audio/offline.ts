@@ -19,7 +19,7 @@ export interface RenderSpec {
 const SFX_LIST: [Sfx, number][] = [
   ['mo', 1.2], ['bell', 10], ['bellBig', 14], ['bead', 1], ['incense', 3], ['flower', 4], ['candle', 2.5],
   ['lantern', 4], ['bow', 2], ['click', 1], ['chime', 8], ['levelUp', 7], ['sweep', 2.5], ['que', 2.5],
-  ['splash', 2.5], ['ribbon', 2.5],
+  ['splash', 2.5], ['ribbon', 2.5], ['cluck', 1.5],
 ];
 
 export const SPECS: RenderSpec[] = [

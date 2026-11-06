@@ -33,9 +33,9 @@ export interface AvatarRig extends LabelTarget {
   playGesture(id: GestureId, opts?: { color?: string; onCue?: () => void }): Promise<void>;
   cancelGesture(): void;
   isGesturing(): boolean;
-  /** Cầm chổi khi đi (hoặc bỏ). */
-  setCarry(p: 'broom' | null): void;
-  getCarry(): 'broom' | null;
+  /** Cầm chổi hoặc ôm gà khi đi (hoặc bỏ). */
+  setCarry(p: 'broom' | 'chicken' | null): void;
+  getCarry(): 'broom' | 'chicken' | null;
   /** Vị trí thế giới của mũi chổi. */
   broomTip(out: THREE.Vector3): THREE.Vector3;
   /** Tốc độ di chuyển (m/s) để chỉnh nhịp bước. */
@@ -357,11 +357,11 @@ export function createAvatar(profile: Profile, level: number): AvatarRig {
   let phase = 0;
   let moveSpeed = 3.6;
   let seatLift = 0;
-  let carry: 'broom' | null = null;
+  let carry: 'broom' | 'chicken' | null = null;
   const cur = new Float32Array(P.N);
   const tgt = new Float32Array(P.N);
   standBase(cur);
-  const ctx: AnimCtx = { t: 0, time: 0, phase: 0, seed, carryBroom: false, smooth: 12 };
+  const ctx: AnimCtx = { t: 0, time: 0, phase: 0, seed, carryBroom: false, carryChicken: false, smooth: 12 };
   const handPos = [new THREE.Vector3(), new THREE.Vector3()];
 
   // đạo cụ
@@ -442,7 +442,8 @@ export function createAvatar(profile: Profile, level: number): AvatarRig {
     }
     const rightBusy = out.length > 0 && out[0].mount !== 'L';
     if (!rightBusy) {
-      if (anim === 'sweep' || anim === 'doze' || carry === 'broom') out.push({ name: 'broom', mount: 'R' });
+      if (carry === 'chicken') out.push({ name: 'chicken', mount: 'mid' });
+      else if (anim === 'sweep' || anim === 'doze' || carry === 'broom') out.push({ name: 'broom', mount: 'R' });
       else if (anim === 'chant') out.push({ name: 'mallet', mount: 'R' });
       else if (look.acc === 'lotus-hand' && anim !== 'bow' && anim !== 'beads') out.push({ name: 'lotusHeld', mount: 'R' });
     }
@@ -476,6 +477,11 @@ export function createAvatar(profile: Profile, level: number): AvatarRig {
         g.position.z += 0.0;
       } else if (w.name === 'lotusHeld') {
         g.rotation.set(0.22, 0, 0);
+      } else if (w.name === 'chicken') {
+        g.position.y += Math.sin(time * 4.2 + seed) * 0.008;
+        g.rotation.set(0.06, 0.36 + Math.sin(time * 2.2 + seed) * 0.07, 0);
+      } else if (w.name === 'grainBowl') {
+        g.rotation.set(0.08, 0, 0);
       } else {
         g.rotation.set(cur[P.PROP_PITCH] * 0.6 + 0.12, 0, 0);
         if (w.name === 'bowl') g.rotation.set(0.0, 0, 0);
@@ -543,6 +549,7 @@ export function createAvatar(profile: Profile, level: number): AvatarRig {
     ctx.t = animT;
     ctx.time = time;
     ctx.carryBroom = carry === 'broom';
+    ctx.carryChicken = carry === 'chicken';
     ctx.smooth = 12;
     if (anim === 'walk') phase += dt * Math.max(5, Math.min(13, 2.6 * moveSpeed));
     ctx.phase = phase;
@@ -554,6 +561,8 @@ export function createAvatar(profile: Profile, level: number): AvatarRig {
       if (!gesture.cued && gesture.t >= gd.cue) {
         gesture.cued = true;
         if (gd.after === 'broom') carry = 'broom';
+        else if (gd.after === 'chicken') carry = 'chicken';
+        else if (gd.after === 'none') carry = null;
         try { gesture.onCue?.(); } catch (e) { console.error(e); }
       }
       if (gesture.t >= gd.dur) finishGesture();

@@ -29,6 +29,7 @@ export const SFX_PRIORITY: Record<Sfx, { dur: number; high: boolean }> = {
   que: { dur: 1.6, high: false },
   splash: { dur: 1.2, high: false },
   ribbon: { dur: 1.3, high: false },
+  cluck: { dur: 0.55, high: false },
 };
 
 type Fn = (e: Engine, t: number, o: SfxCtx) => void;
@@ -273,14 +274,45 @@ const ribbon: Fn = (e, t, o) => {
   v.tone('sine', 2637 * o.pitch, t + 0.2, 0.025 * o.vol, { attack: 0.01, tau: 0.4 });
 };
 
+// ───────── Tiếng gà cục tác ấm áp ─────────
+const cluck: Fn = (e, t, o) => {
+  const r = e.rnd;
+  const v = new Voice(e, o.bus, { send: 0.16, pan: (r() - 0.5) * 0.25 });
+  const bp1 = e.ctx.createBiquadFilter();
+  bp1.type = 'bandpass';
+  bp1.frequency.value = 820 * o.pitch;
+  bp1.Q.value = 2.1;
+  bp1.connect(v.out);
+  const bp2 = e.ctx.createBiquadFilter();
+  bp2.type = 'bandpass';
+  bp2.frequency.value = 1680 * o.pitch;
+  bp2.Q.value = 2.4;
+  bp2.connect(v.out);
+
+  const chirp = (dt: number, fStart: number, fEnd: number, amp: number, tau: number): void => {
+    const tt = t + dt;
+    v.tone('triangle', fEnd * o.pitch, tt, amp * o.vol, {
+      attack: 0.004, tau, fromFreq: fStart * o.pitch, glideTau: 0.016, dest: bp1,
+    });
+    v.tone('sawtooth', fEnd * o.pitch, tt, amp * 0.52 * o.vol, {
+      attack: 0.004, tau: tau * 0.85, fromFreq: fStart * o.pitch, glideTau: 0.016, dest: bp2,
+    });
+    v.noise(tt, amp * 0.16 * o.vol, { type: 'bandpass', freq: 1450 * o.pitch, q: 1.8, attack: 0.002, tau: 0.01 });
+  };
+  // "cục - cục - tác!"
+  chirp(0, 440 + r() * 25, 375, 0.34, 0.026);
+  chirp(0.095 + r() * 0.015, 465 + r() * 25, 395, 0.38, 0.028);
+  chirp(0.205 + r() * 0.02, 415, 585 + r() * 35, 0.44, 0.052);
+};
+
 const TABLE: Record<Sfx, Fn> = {
-  mo, bell, bellBig, bead, incense, flower, candle, lantern, bow, click, chime, levelUp, sweep, que, splash, ribbon,
+  mo, bell, bellBig, bead, incense, flower, candle, lantern, bow, click, chime, levelUp, sweep, que, splash, ribbon, cluck,
 };
 
 /** Cân bằng độ lớn giữa các âm (đo bằng peak sau khi xuất WAV). */
 const TRIM: Record<Sfx, number> = {
   mo: 0.72, bell: 1, bellBig: 1, bead: 0.95, incense: 1.8, flower: 0.9, candle: 2, lantern: 0.9,
-  bow: 1, click: 1, chime: 1.6, levelUp: 0.55, sweep: 1.9, que: 0.8, splash: 1.9, ribbon: 2,
+  bow: 1, click: 1, chime: 1.6, levelUp: 0.55, sweep: 1.9, que: 0.8, splash: 1.9, ribbon: 2, cluck: 0.9,
 };
 
 export function synthSfx(e: Engine, s: Sfx, t: number, o: SfxCtx): void {

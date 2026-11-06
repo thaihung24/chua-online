@@ -39,7 +39,15 @@ export function offeringBusyMsg(ctx: AppContext, a: string): string | null {
   return null;
 }
 
-const SPOT_ICON: Record<SpotId, IconName> = { yard: 'lotus', bodhi: 'tree', meditate: 'meditate', quanam: 'sparkle', well: 'pin', hall: 'home' };
+const SPOT_ICON: Record<SpotId, IconName> = {
+  yard: 'lotus',
+  bodhi: 'tree',
+  meditate: 'meditate',
+  quanam: 'sparkle',
+  well: 'pin',
+  hall: 'home',
+  coop: 'chicken',
+};
 
 export interface MoreMenu {
   el: HTMLElement;
@@ -101,6 +109,32 @@ export function createMoreMenu(ctx: AppContext, host: HTMLElement, opts: { onTog
       title: 'Khám phá',
       items: [
         { key: 'walk', label: 'Đi dạo ›', icon: 'footsteps', run: () => showWalk() },
+        {
+          key: 'chicken',
+          label: 'Bắt gà lạc',
+          icon: 'chicken',
+          accent: true,
+          dyn: () => {
+            const st = ctx.world.getChickenState();
+            if (st.carrying) return { label: 'Thả gà về', icon: 'chicken' };
+            if (st.lostCount > 0) return { label: `Bắt gà (${st.lostCount})`, icon: 'chicken' };
+            return { label: 'Chuồng gà', icon: 'chicken' };
+          },
+          run: () => {
+            const st = ctx.world.getChickenState();
+            if (st.carrying) {
+              void ctx.world.perform('returnChicken');
+              return;
+            }
+            if (st.lostCount > 0 && ctx.world.goToLostChicken()) {
+              ctx.toast(`Đang đi tìm chú gà thất lạc${st.hintSpot ? ` (${st.hintSpot})` : ''}…`);
+              return;
+            }
+            ctx.world.goTo('coop');
+            ctx.toast('Đàn gà đang yên trong chuồng · Đang đi tới chuồng gà sau chùa…');
+          },
+        },
+        { key: 'feedChicken', label: 'Cho gà ăn', icon: 'grain', run: perform('feedChicken') },
         { key: 'today', label: 'Hôm nay', icon: 'calendar', feature: 'today', run: panel('today') },
         { key: 'dharma', label: 'Pháp thoại', icon: 'scroll', feature: 'dharma', run: panel('dharma') },
         { key: 'wardrobe', label: 'Trang phục', icon: 'hanger', feature: 'wardrobe', run: panel('wardrobe') },

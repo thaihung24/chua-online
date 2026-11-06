@@ -82,6 +82,38 @@
 .qc__dots i { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid rgba(243, 201, 115, 0.6); transition: background 0.3s, box-shadow 0.3s; }
 .qc__dots i.on { background: var(--gold-strong); box-shadow: 0 0 6px rgba(243, 201, 115, 0.7); }
 
+/* ───────── Lối đi nhanh trong thẻ Việc hôm nay ───────── */
+.qc__quick {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; margin: 8px 0 0;
+}
+.qc__spot {
+  position: relative; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 9px;
+  border-radius: 11px; font-size: 0.76rem; font-weight: 650; color: var(--glass-ink); text-align: left;
+  background: rgba(255, 244, 224, 0.055); border: 1px solid rgba(255, 240, 215, 0.13);
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease), transform var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.qc__spot .icon { color: var(--gold-strong); flex: none; }
+.qc__spot span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.qc__spot:hover { background: rgba(224, 178, 92, 0.16); border-color: rgba(243, 201, 115, 0.48); color: var(--glass-active); }
+.qc__spot:active { transform: scale(0.95); }
+.qc__spot.is-alert {
+  background: linear-gradient(145deg, rgba(228, 112, 58, 0.24), rgba(224, 178, 92, 0.12));
+  border-color: rgba(246, 168, 96, 0.65); color: #ffe8c6;
+}
+.qc__spot.is-carry {
+  background: linear-gradient(145deg, rgba(95, 181, 154, 0.26), rgba(224, 178, 92, 0.12));
+  border-color: rgba(126, 216, 180, 0.65); color: #e8fff5;
+}
+.qc__spot-dot {
+  width: 7px; height: 7px; margin-left: auto; border-radius: 50%; flex: none;
+  background: #ff944d; box-shadow: 0 0 8px rgba(255, 148, 77, 0.85);
+  animation: hud-ping 2s ease-in-out infinite;
+}
+.qc__spot.is-carry .qc__spot-dot {
+  background: #7ed8a8; box-shadow: 0 0 8px rgba(126, 216, 168, 0.85);
+}
+.qc__spot-dot[hidden] { display: none; }
+
 .qc__lotus { display: flex; align-items: center; gap: 8px; margin: 8px 2px 0; font-size: 0.76rem; color: var(--glass-muted); }
 .qc__lotus b { color: var(--glass-ink); }
 .qc__lotuses { display: inline-flex; gap: 1px; }
@@ -94,6 +126,60 @@
 .qc__soon .icon { color: var(--gold); flex: none; }
 .qc__soon li.is-live { color: var(--glass-active); font-weight: 700; }
 .qc__soon li.is-live .icon { animation: hud-flicker 2s ease-in-out infinite; }
+
+/* ───────── Thẻ báo gà sổng chuồng / ôm gà thất lạc ───────── */
+.chicken-alert {
+  position: absolute; top: calc(var(--safe-top) + 150px); left: 50%; z-index: 13;
+  display: flex; align-items: center; gap: 10px;
+  width: min(374px, calc(100vw - 24px)); min-height: 52px; padding: 6px 7px 6px 9px; border-radius: 999px;
+  opacity: 0; transform: translate(-50%, -8px) scale(0.97); pointer-events: none;
+  transition: opacity 0.24s var(--ease), transform 0.26s var(--ease), border-color 0.25s, box-shadow 0.25s;
+}
+.chicken-alert[hidden] { display: none !important; }
+.chicken-alert.is-on { opacity: 1; transform: translate(-50%, 0) scale(1); pointer-events: auto; }
+.hud:has(.more.is-on) .chicken-alert { opacity: 0; pointer-events: none; }
+.chicken-alert[data-mode='lost'] {
+  border-color: rgba(247, 174, 96, 0.72);
+  background: linear-gradient(145deg, rgba(226, 108, 52, 0.22), rgba(224, 178, 92, 0.08) 58%), rgba(28, 16, 9, 0.88);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.46), 0 0 22px rgba(243, 152, 74, 0.24);
+}
+.chicken-alert[data-mode='carry'] {
+  border-color: rgba(126, 216, 176, 0.72);
+  background: linear-gradient(145deg, rgba(78, 168, 138, 0.24), rgba(224, 178, 92, 0.08) 58%), rgba(22, 20, 13, 0.88);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.46), 0 0 22px rgba(110, 205, 168, 0.24);
+}
+.chicken-alert__badge {
+  width: 36px; height: 36px; flex: none; border-radius: 50%; display: grid; place-items: center;
+  background: radial-gradient(circle at 50% 35%, rgba(255, 220, 148, 0.3), rgba(224, 128, 60, 0.14));
+  border: 1px solid rgba(255, 214, 146, 0.5); color: #ffd98e;
+}
+.chicken-alert[data-mode='lost'] .chicken-alert__badge .icon {
+  animation: chicken-hop 1.35s var(--ease) infinite;
+}
+.chicken-alert[data-mode='carry'] .chicken-alert__badge {
+  background: radial-gradient(circle at 50% 35%, rgba(154, 236, 198, 0.3), rgba(78, 168, 138, 0.14));
+  border-color: rgba(154, 236, 198, 0.55); color: #b8f5d8;
+}
+@keyframes chicken-hop {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  28% { transform: translateY(-2.5px) rotate(-6deg); }
+  56% { transform: translateY(0) rotate(5deg); }
+}
+.chicken-alert__body { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.24; }
+.chicken-alert__title { font-size: 0.83rem; font-weight: 800; color: var(--glass-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chicken-alert__sub { font-size: 0.72rem; color: var(--glass-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chicken-alert__act {
+  flex: none; min-height: 36px; padding: 0 14px; border-radius: 999px; font-size: 0.78rem; font-weight: 800;
+  color: #2a1806; background: linear-gradient(180deg, #f9d889, #da9e3e);
+  border: 1px solid rgba(255, 240, 198, 0.8); box-shadow: 0 3px 10px rgba(0, 0, 0, 0.34);
+  transition: transform var(--dur) var(--ease), filter var(--dur) var(--ease);
+}
+.chicken-alert[data-mode='carry'] .chicken-alert__act {
+  color: #0f261c; background: linear-gradient(180deg, #9ef0c8, #58b892);
+  border-color: rgba(214, 255, 234, 0.82);
+}
+.chicken-alert__act:hover { filter: brightness(1.07); }
+.chicken-alert__act:active { transform: scale(0.94); }
 
 /* ───────── Viên "Đang đến … · Dừng" ───────── */
 .travel {
@@ -120,12 +206,23 @@
 
 @media (min-width: 900px) {
   .hud__chips { right: max(var(--safe-right), 20px); top: calc(var(--safe-top) + 74px); }
+  .chicken-alert {
+    top: calc(var(--safe-top) + 15px); width: max-content; max-width: min(440px, calc(100vw - 440px));
+    padding-right: 8px;
+  }
+  .hud:has(.banner.is-on) .chicken-alert {
+    top: calc(var(--safe-top) + 148px);
+  }
   .travel { top: calc(var(--safe-top) + 84px); bottom: auto; transform: translate(-50%, -10px) scale(0.96); }
   .travel.is-on { transform: translate(-50%, 0) scale(1); }
   .hint { top: calc(var(--safe-top) + 140px); bottom: auto; }
 }
 @media (max-width: 899px) {
   .hud--quest .banner { top: calc(var(--safe-top) + 172px); }
+  .hud:has(.qc:not(.is-collapsed)) .chicken-alert,
+  .hud:has(.banner.is-on) .chicken-alert {
+    top: auto; bottom: calc(var(--safe-bottom) + 150px);
+  }
 }
 @media (max-width: 430px) {
   .dock { padding: 5px; gap: 0; }
@@ -144,5 +241,5 @@
   .qc__soon, .qc__lotus { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .qc, .qc__check.is-pop, .qc__task.is-just, .qc__lotuses i.on, .travel__steps, .qc__bar.is-gain::after, .qc__soon li.is-live .icon { animation: none !important; }
+  .qc, .qc__check.is-pop, .qc__task.is-just, .qc__lotuses i.on, .travel__steps, .qc__bar.is-gain::after, .qc__soon li.is-live .icon, .chicken-alert__badge .icon, .qc__spot-dot { animation: none !important; }
 }

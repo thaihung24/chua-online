@@ -5,10 +5,10 @@
 import './world.css';
 import * as THREE from 'three';
 import { createEmitter } from '@/core/bus';
-import type { ActionId, Profile, RemotePlayer, SeatKind, SpotId, World, WorldEvents } from '@/core/contracts';
+import type { ActionId, ChickenState, Profile, RemotePlayer, SeatKind, SpotId, World, WorldEvents } from '@/core/contracts';
 import { createEnvironment, type Environment } from './environment';
 import {
-  BOUNDS, CUSHION_CENTER, CUSHION_COUNT, CUSHION_RADIUS, cushionSlot,
+  BOUNDS, CHICKEN_COOP, CUSHION_CENTER, CUSHION_COUNT, CUSHION_RADIUS, cushionSlot,
   INTERACTABLES, LOTUS_POND, RELEASE_POND, SPAWN, SPAWN_FACE, SPOTS, WELL,
   type Interactable, type InteractableId, type Vec2,
 } from './layout';
@@ -16,7 +16,7 @@ import { createAvatar, disposeAvatarCaches, LabelLayer, type AvatarRig, type Ges
 import { CameraRig } from './player/camera';
 import { createInput, type InputApi } from './player/input';
 import { Mover } from './player/mover';
-import { nearestFree } from './nav';
+import { isFree, nearestFree } from './nav';
 
 export { createAvatar, LabelLayer, type AvatarRig } from './avatar';
 
@@ -41,6 +41,7 @@ const INTERACTABLE_ACTIONS: Record<InteractableId, ActionId[]> = {
   que: ['que'],
   quanamStatue: ['pray', 'bow'],
   well: ['pray'],
+  chickenCoop: ['feedChicken'],
 };
 
 /** Điểm đứng đẹp và điểm nhìn thật cho từng điểm tương tác (tránh đứng đè lên vật thể hoặc quay lưng vào hồ/chuông). */
@@ -57,6 +58,7 @@ const INTERACT_APPROACH: Record<InteractableId, { stand: Vec2; look: Vec2; stopR
   quanamStatue: { stand: { x: 28, z: -13.3 }, look: { x: 28.5, z: -16.8 }, stopR: 2.5 },
   well: { stand: { x: -26, z: -22 }, look: { x: WELL.x, z: WELL.z }, stopR: 2.4 },
   que: { stand: { x: -4.2, z: -14.45 }, look: { x: -4.15, z: -15.55 }, stopR: 1.9 },
+  chickenCoop: { stand: { x: 0, z: -42.5 }, look: { x: CHICKEN_COOP.cx, z: CHICKEN_COOP.cz }, stopR: 2.8 },
 };
 
 /** Lộ trình dạo quét lá quanh sân trước & trục chính khi người chơi không tự lái. */
@@ -286,11 +288,41 @@ export function createWorld(): World {
   let sweepState: SweepState | null = null;
 
   let nearbyAcc = 0.15;
-  let lastNearbyId: InteractableId | null | undefined = undefined;
+  let lastNearbySig = '';
   let wasMoving = false;
   let moveCooldown = 0;
   let lastNight = -1;
   let nightCooldown = 0;
+
+  // ── Trạng thái đàn gà & gà sổng chuồng thất lạc ──
+  let carriedChickenPlumage: number | null = null;
+  let escapeCooldown = 9.5;
+  let chickenCheckAcc = 0;
+  let lastChickenSig = '';
+
+  function currentChickenState(): ChickenState {
+    if (!env) {
+      return { lostCount: 0, carrying: carriedChickenPlumage !== null, hintSpot: null, totalInCoop: 5 };
+    }
+    const lost = env.coop.getLostChickens();
+    const near = env.coop.nearestLostChicken(mover.x, mover.z);
+    return {
+      lostCount: lost.length,
+      carrying: carriedChickenPlumage !== null,
+      hintSpot: near?.hint ?? lost[0]?.hint ?? null,
+      totalInCoop: env.coop.residentCount(),
+    };
+  }
+
+  function syncChickenState(force = false): void {
+    const st = currentChickenState();
+    const sig = `${st.lostCount}|${st.carrying ? 1 : 0}|${st.hintSpot ?? ''}|${st.totalInCoop}`;
+    if (force || sig !== lastChickenSig) {
+      lastChickenSig = sig;
+      nearbyAcc = 0.2;
+      emitter.emit('chicken', st);
+    }
+  }
 
   function pixelRatioFor(q: Quality): number {
     const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
@@ -336,7 +368,7 @@ export function createWorld(): World {
     const s = sweepState;
     if (!s) return;
     sweepState = null;
-    playerRig?.setCarry(null);
+    if (playerRig?.getCarry() === 'broom') playerRig.setCarry(null);
     fixedAnim = null;
     mover.speed = 3.6;
     s.done();
@@ -384,6 +416,17 @@ export function createWorld(): World {
     }
     if (hitRemoteId) {
       emitter.emit('tapRemote', { id: hitRemoteId });
+      return;
+    }
+
+    // 1b. Kiểm tra chạm trực tiếp vào chú gà sổng chuồng thất lạc
+    const hitChicken = env.coop.pickLostChicken(raycaster.ray, 1.15);
+    if (hitChicken) {
+      if (carriedChickenPlumage !== null) {
+        playerRig?.say('Đưa chú gà đang ôm về chuồng sau chùa trước nhé!');
+      } else {
+        void world.perform('catchChicken', { payload: { chickenId: hitChicken.id } });
+      }
       return;
     }
 
@@ -462,6 +505,9 @@ export function createWorld(): World {
       case 'loc':
       case 'wish': return 'bodhiTree';
       case 'sweep': return 'broomRack';
+      case 'feedChicken':
+      case 'catchChicken':
+      case 'returnChicken': return 'chickenCoop';
     }
   }
 
@@ -682,19 +728,49 @@ export function createWorld(): World {
     });
     updateRemotes(dt, camRig.camera.position);
     targetRing?.update(dt);
-    env.update(dt, elapsed, camRig.camera);
+    env.update(dt, elapsed, camRig.camera, { x: mover.x, z: mover.z }, isFree);
 
-    // 4. Sự kiện nearby (mỗi 150ms, chỉ phát khi đổi id)
+    // 3b. Chu kỳ gà sổng chuồng thất lạc & đồng bộ HUD
+    if (carriedChickenPlumage === null && env.coop.getLostChickens().length === 0) {
+      escapeCooldown -= dt;
+      if (escapeCooldown <= 0) {
+        const spawned = env.coop.spawnLostChicken(isFree);
+        escapeCooldown = spawned ? 50 + Math.random() * 24 : 10;
+        syncChickenState(true);
+      }
+    }
+    chickenCheckAcc += dt;
+    if (chickenCheckAcc >= 0.4) {
+      chickenCheckAcc = 0;
+      syncChickenState(false);
+    }
+
+    // 4. Sự kiện nearby (mỗi 150ms, phát khi đổi điểm hoặc danh sách hành động)
     nearbyAcc += dt;
     if (nearbyAcc >= 0.15) {
       nearbyAcc = 0;
-      const hit = nearestInteractable(mover.x, mover.z);
-      const nextId = hit ? hit.id : null;
-      if (nextId !== lastNearbyId) {
-        lastNearbyId = nextId;
-        emitter.emit('nearby', hit
-          ? { id: hit.id, label: hit.label, actions: [...INTERACTABLE_ACTIONS[hit.id]] }
-          : { id: null, label: null, actions: [] });
+      const nearLost = carriedChickenPlumage === null ? env.coop.nearestLostChicken(mover.x, mover.z, 2.75) : null;
+      let nextNearby: { id: string | null; label: string | null; actions: ActionId[] };
+      if (nearLost) {
+        nextNearby = { id: 'lostChicken', label: 'Chú gà thất lạc', actions: ['catchChicken'] };
+      } else {
+        const hit = nearestInteractable(mover.x, mover.z);
+        if (!hit) {
+          nextNearby = { id: null, label: null, actions: [] };
+        } else if (hit.id === 'chickenCoop') {
+          nextNearby = {
+            id: hit.id,
+            label: hit.label,
+            actions: carriedChickenPlumage !== null ? ['returnChicken', 'feedChicken'] : ['feedChicken'],
+          };
+        } else {
+          nextNearby = { id: hit.id, label: hit.label, actions: [...INTERACTABLE_ACTIONS[hit.id]] };
+        }
+      }
+      const sig = `${nextNearby.id ?? ''}|${nextNearby.actions.join(',')}`;
+      if (sig !== lastNearbySig) {
+        lastNearbySig = sig;
+        emitter.emit('nearby', nextNearby);
       }
     }
 
@@ -865,6 +941,7 @@ export function createWorld(): World {
       rafId = requestAnimationFrame(loop);
 
       emitter.emit('loading', { progress: 1, status: 'Đã vào chùa' });
+      syncChickenState(true);
       emitter.emit('ready', undefined);
     },
 
@@ -937,6 +1014,90 @@ export function createWorld(): World {
         return;
       }
 
+      // ── Bắt chú gà thất lạc & đưa về chuồng sau chùa ──
+      if (action === 'catchChicken' && carriedChickenPlumage !== null) {
+        action = 'returnChicken';
+      }
+
+      if (action === 'catchChicken') {
+        if (!env) return;
+        const reqId = (opts?.payload as { chickenId?: string } | undefined)?.chickenId;
+        let target = (reqId ? env.coop.getLostChickens().find((c) => c.id === reqId) : null)
+          ?? env.coop.nearestLostChicken(mover.x, mover.z);
+        if (!target) {
+          // Nếu người chơi bấm từ thẻ Việc hôm nay khi chưa có gà sổng, sinh ngay 1 chú để trải nghiệm liền mạch
+          target = env.coop.spawnLostChicken(isFree);
+          syncChickenState(true);
+        }
+        if (!target) return;
+
+        if (!inPlace) {
+          emitter.emit('travel', { label: `Đang tìm chú gà ${target.hint}` });
+          try {
+            for (let attempt = 0; attempt < 3; attempt++) {
+              const live = env.coop.getLostChickens().find((c) => c.id === target!.id) ?? env.coop.nearestLostChicken(mover.x, mover.z);
+              if (!live) return;
+              target = live;
+              if (Math.hypot(live.x - mover.x, live.z - mover.z) <= 1.45) break;
+              const goal = nearestFree(live.x, live.z, 4);
+              const ok = await mover.walkTo(goal.x, goal.z, { stopNear: { x: live.x, z: live.z, r: 1.15 } });
+              if (!ok || token !== opId || disposed) return;
+            }
+          } finally {
+            emitter.emit('travel', { label: null });
+          }
+        }
+        if (token !== opId || disposed || !env) return;
+        const latest = env.coop.getLostChickens().find((c) => c.id === target!.id) ?? env.coop.nearestLostChicken(mover.x, mover.z, 3.2);
+        if (!latest) return;
+        if (Math.hypot(latest.x - mover.x, latest.z - mover.z) > 0.2) {
+          await mover.turnTo(angleTo(mover.x, mover.z, latest.x, latest.z));
+        }
+        if (token !== opId || disposed) return;
+        emitter.emit('actionStart', { action: 'catchChicken' });
+        let caughtOk = false;
+        await playerRig.playGesture('catchChicken', {
+          onCue: () => {
+            if (token !== opId || disposed || !env) return;
+            const res = env.coop.catchLostChicken(latest.id);
+            if (res) {
+              caughtOk = true;
+              carriedChickenPlumage = res.plumage;
+              playerRig?.setCarry('chicken');
+              syncChickenState(true);
+            }
+          },
+        });
+        if (token !== opId || disposed || !caughtOk) return;
+        playerRig.setCarry('chicken');
+        syncChickenState(true);
+        emitter.emit('actionDone', { action: 'catchChicken' });
+        return;
+      }
+
+      if (action === 'returnChicken') {
+        if (carriedChickenPlumage === null) return;
+        if (!inPlace) {
+          const ok = await walkAndFaceInteractable('chickenCoop', token);
+          if (!ok || token !== opId || disposed) return;
+        }
+        emitter.emit('actionStart', { action: 'returnChicken' });
+        await playerRig.playGesture('returnChicken', {
+          onCue: () => {
+            if (token !== opId || disposed) return;
+            const pl = carriedChickenPlumage ?? 0;
+            carriedChickenPlumage = null;
+            playerRig?.setCarry(null);
+            env?.coop.returnChickenToCoop(pl);
+            escapeCooldown = 48 + Math.random() * 24;
+            syncChickenState(true);
+          },
+        });
+        if (token !== opId || disposed) return;
+        emitter.emit('actionDone', { action: 'returnChicken' });
+        return;
+      }
+
       // ── Đi tới điểm tương tác & xoay mặt (trừ khi inPlace) ──
       const targetId = targetInteractableFor(action);
       if (!inPlace) {
@@ -971,7 +1132,7 @@ export function createWorld(): World {
       }
 
       // ── Các hành động có cử chỉ & đạo cụ riêng ──
-      const gestureMap: Record<Exclude<ActionId, 'pray' | 'bow' | 'sweep'>, {
+      const gestureMap: Record<Exclude<ActionId, 'pray' | 'bow' | 'sweep' | 'catchChicken' | 'returnChicken'>, {
         gesture: GestureId;
         fx?: Parameters<Environment['playEffect']>[0];
         fxAt?: Vec2;
@@ -985,6 +1146,7 @@ export function createWorld(): World {
         release: { gesture: 'release', fx: 'release', fxAt: { x: 13.0, z: 14 } },
         loc: { gesture: 'loc', fx: 'loc', fxAt: targetPos },
         wish: { gesture: 'wish', fx: 'ribbon', fxAt: targetPos },
+        feedChicken: { gesture: 'feedChicken', fx: 'chickenFeed', fxAt: targetPos },
       };
 
       const spec = gestureMap[action];
@@ -1001,6 +1163,7 @@ export function createWorld(): World {
         },
       });
       if (token !== opId || disposed) return;
+      if (carriedChickenPlumage !== null) playerRig.setCarry('chicken');
       emitter.emit('actionDone', { action });
     },
 
@@ -1137,6 +1300,43 @@ export function createWorld(): World {
     },
 
     getPlayer: () => ({ x: mover.x, z: mover.z, ry: mover.ry }),
+
+    getChickenState: () => currentChickenState(),
+
+    goToLostChicken() {
+      if (disposed || !env) return false;
+      if (carriedChickenPlumage !== null) {
+        void world.perform('returnChicken');
+        return true;
+      }
+      const near = env.coop.nearestLostChicken(mover.x, mover.z);
+      if (!near) return false;
+      if (seatedSlot !== null) standUpInternal();
+      const token = cancelActiveOp();
+      void (async () => {
+        emitter.emit('travel', { label: `Đang đi tìm gà thất lạc (${near.hint})` });
+        try {
+          for (let attempt = 0; attempt < 2; attempt++) {
+            if (!env || token !== opId || disposed) return;
+            const live = env.coop.getLostChickens().find((c) => c.id === near.id) ?? env.coop.nearestLostChicken(mover.x, mover.z);
+            if (!live) return;
+            if (Math.hypot(live.x - mover.x, live.z - mover.z) <= 1.95) break;
+            const goal = nearestFree(live.x, live.z, 4);
+            const ok = await mover.walkTo(goal.x, goal.z, { stopNear: { x: live.x, z: live.z, r: 1.75 } });
+            if (!ok || token !== opId || disposed) return;
+          }
+        } finally {
+          emitter.emit('travel', { label: null });
+        }
+        if (!env || token !== opId || disposed) return;
+        const latest = env.coop.getLostChickens().find((c) => c.id === near.id) ?? env.coop.nearestLostChicken(mover.x, mover.z);
+        if (latest && Math.hypot(latest.x - mover.x, latest.z - mover.z) > 0.2) {
+          await mover.turnTo(angleTo(mover.x, mover.z, latest.x, latest.z));
+        }
+        nearbyAcc = 0.25;
+      })();
+      return true;
+    },
 
     dispose() {
       if (disposed) return;

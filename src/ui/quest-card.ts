@@ -3,20 +3,29 @@
  * 3 việc hôm nay (nút Đi/Mở), thưởng làm đủ, "Bảy đóa sen" theo chuỗi giữ lửa và lịch sắp tới
  * (rằm / mùng một, công phu chung 05:00 · 18:00 giờ Việt Nam).
  */
-import type { AppContext, ProgressView } from '@/core/contracts';
+import type { AppContext, ChickenState, ProgressView, SpotId } from '@/core/contracts';
 import { TASK_ALL_BONUS } from '@/core/quests';
 import { nextSpecial } from '@/core/lunar';
 import { load, save } from '@/core/store';
+import { SPOTS } from '@/world/layout';
 import { esc, fmt } from './dom';
-import { icon } from './icons';
+import { icon, type IconName } from './icons';
 import { tierIcon } from './tier-icon';
 import { runDailyTask, taskIcon, taskVerb } from './task-run';
 
 export interface QuestCard {
   readonly el: HTMLElement;
   update(v: ProgressView): void;
+  setChicken(st: ChickenState): void;
   destroy(): void;
 }
+
+const QUICK_SPOTS: { id: SpotId; label: string; icon: IconName }[] = [
+  { id: 'hall', label: 'Chánh điện', icon: 'home' },
+  { id: 'yard', label: 'Ao sen', icon: 'lotus' },
+  { id: 'bodhi', label: 'Cây bồ đề', icon: 'tree' },
+  { id: 'coop', label: 'Chuồng gà', icon: 'chicken' },
+];
 
 const VN_MS = 7 * 3_600_000;
 
@@ -61,6 +70,9 @@ export function createQuestCard(ctx: AppContext, opts: { onLayout?: () => void }
     <div class="qc__body" id="qc-body">
       <ul class="qc__tasks"></ul>
       <p class="qc__bonus"></p>
+      <div class="qc__quick" role="group" aria-label="Lối đi nhanh">
+        ${QUICK_SPOTS.map((s) => `<button type="button" class="qc__spot" data-spot="${s.id}">${icon(s.icon, { size: 15 })}<span>${esc(s.label)}</span>${s.id === 'coop' ? '<i class="qc__spot-dot" hidden aria-hidden="true"></i>' : ''}</button>`).join('')}
+      </div>
       <p class="qc__lotus"></p>
       <ul class="qc__soon"></ul>
     </div>`;
@@ -70,9 +82,30 @@ export function createQuestCard(ctx: AppContext, opts: { onLayout?: () => void }
   const toggle = q<HTMLButtonElement>('.qc__toggle');
   const body = q('.qc__body');
   const tasksEl = q('.qc__tasks');
+  const quickEl = q('.qc__quick');
+  const coopBtn = q<HTMLButtonElement>('.qc__spot[data-spot="coop"]');
+  const coopDot = q<HTMLElement>('.qc__spot-dot');
 
   meBtn.addEventListener('click', () => void ctx.openPanel('journey'));
   toggle.addEventListener('click', () => { open = !open; save('quest:open', open); paintOpen(); opts.onLayout?.(); });
+  quickEl.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-spot]');
+    if (!b) return;
+    const id = b.dataset.spot as SpotId;
+    const st = ctx.world.getChickenState();
+    if (id === 'coop' && st.carrying) {
+      void ctx.world.perform('returnChicken');
+      return;
+    }
+    if (id === 'coop' && st.lostCount > 0) {
+      if (ctx.world.goToLostChicken()) {
+        ctx.toast(`Đang đi tìm gà thất lạc${st.hintSpot ? ` (${st.hintSpot})` : ''}…`);
+        return;
+      }
+    }
+    ctx.world.goTo(id);
+    ctx.toast(`Đang đi tới ${SPOTS[id].name}…`);
+  });
   tasksEl.addEventListener('click', (e) => {
     const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-task]');
     if (!b) return;
@@ -151,12 +184,28 @@ export function createQuestCard(ctx: AppContext, opts: { onLayout?: () => void }
     first = false;
   }
 
+  function setChicken(st: ChickenState): void {
+    const active = st.carrying || st.lostCount > 0;
+    coopDot.hidden = !active;
+    coopBtn.classList.toggle('is-alert', st.lostCount > 0 && !st.carrying);
+    coopBtn.classList.toggle('is-carry', st.carrying);
+    const labelSpan = coopBtn.querySelector('span') as HTMLElement;
+    labelSpan.textContent = st.carrying ? 'Về chuồng' : st.lostCount > 0 ? `Gà lạc (${st.lostCount})` : 'Chuồng gà';
+    coopBtn.title = st.carrying
+      ? 'Đưa gà thất lạc về chuồng sau chùa'
+      : st.lostCount > 0
+        ? `Đang có gà thất lạc${st.hintSpot ? ` ${st.hintSpot}` : ''} — bấm để đi tìm`
+        : 'Đi tới chuồng gà sau chùa';
+  }
+
   paintOpen();
+  setChicken(ctx.world.getChickenState());
   const soonTimer = window.setInterval(paintSoon, 60_000);
   const offProfile = ctx.bus.on('profile', () => update(ctx.progress.view()));
   return {
     el,
     update,
+    setChicken,
     destroy() { window.clearInterval(soonTimer); offProfile(); el.remove(); },
   };
 }

@@ -2,7 +2,7 @@
 // - Cache-first cho /assets/* và /icons/*
 // - Network-first cho điều hướng HTML (rơi về cache hoặc /offline.html khi mất mạng)
 // - Không bao giờ lưu /api/* hoặc /ws
-const CACHE_NAME = 'chua-ran-v6';
+const CACHE_NAME = 'chua-ran-v7';
 const PRECACHE = ['/offline.html', '/favicon.svg', '/manifest.webmanifest'];
 
 self.addEventListener('install', (event) => {

@@ -6,8 +6,8 @@ import type { ActionId, AppContext, DailyTask, PanelId, SpotId } from '@/core/co
 import type { IconName } from './icons';
 
 export const PANEL_IDS = new Set<string>(['journey', 'rank', 'beads', 'chant', 'meditate', 'dharma', 'today', 'wardrobe', 'lantern', 'que', 'wish', 'rooms', 'settings', 'feedback', 'account', 'share', 'friends', 'install', 'sayings', 'listen', 'walkMeditation']);
-export const SPOT_IDS = new Set<string>(['yard', 'bodhi', 'meditate', 'quanam', 'well', 'hall']);
-export const ACTION_IDS = new Set<string>(['pray', 'bow', 'sweep', 'incense', 'flowers', 'candle', 'bell', 'lantern', 'que', 'release', 'loc', 'wish']);
+export const SPOT_IDS = new Set<string>(['yard', 'bodhi', 'meditate', 'quanam', 'well', 'hall', 'coop']);
+export const ACTION_IDS = new Set<string>(['pray', 'bow', 'sweep', 'incense', 'flowers', 'candle', 'bell', 'lantern', 'que', 'release', 'loc', 'wish', 'feedChicken', 'catchChicken', 'returnChicken']);
 
 /** Việc này mở một bảng (Mở) hay cần đi trong sân chùa (Đi). */
 export function taskVerb(t: DailyTask): 'Mở' | 'Đi' {
@@ -21,6 +21,7 @@ const KIND_ICON: Partial<Record<DailyTask['kind'], IconName>> = {
   meditateSeconds: 'meditate', sitSeconds: 'cushion', sweepRound: 'broom', walkSpot: 'footsteps', lantern: 'lantern',
   flowers: 'flower', candle: 'candle', bell: 'bell', que: 'sticks', release: 'fish', loc: 'leaf', wish: 'ribbon',
   listenSeconds: 'headphones', greet: 'heart', quanam: 'sparkle', mindfulSeconds: 'leaf', communitySeconds: 'users', today: 'calendar',
+  chickenRescue: 'chicken', chickenFeed: 'grain',
 };
 export const taskIcon = (t: DailyTask): IconName => KIND_ICON[t.kind] ?? 'lotus';
 
