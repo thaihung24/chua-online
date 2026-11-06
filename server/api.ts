@@ -201,13 +201,16 @@ export function registerApi(app: Express, ctx: ApiCtx): { sweep(): void } {
   const DUMMY_SALT = crypto.randomBytes(16);
   const dummyHashP = hashPw('dummy-password', DUMMY_SALT);
 
-  // ── Sức khoẻ / phòng / nhạc chùa chung ──
+  // ── Sức khoẻ / phòng / nhạc chùa chung / giọng niệm Phật ──
   const AUDIO_EXT = new Set(['.mp3', '.m4a', '.ogg', '.wav', '.aac', '.flac']);
   const AUDIO_MIME: Record<string, string> = {
     '.mp3': 'audio/mpeg', '.m4a': 'audio/mp4', '.ogg': 'audio/ogg', '.wav': 'audio/wav', '.aac': 'audio/aac', '.flac': 'audio/flac',
   };
   const publicMusicDir = path.join(ROOT, 'public', 'music');
   const distMusicDir = path.join(opts.distDir, 'music');
+  const publicChantDir = path.join(ROOT, 'public', 'chant');
+  const distChantDir = path.join(opts.distDir, 'chant');
+  const BUILTIN_CHANT_IDS = new Set(['nam-tram', 'chuong-mo', 'nu-trong', 'hop-xuong']);
   let musicStartedAt = Date.now();
 
   function normalizeMusicUrl(raw: string): string | null {
@@ -240,42 +243,79 @@ export function registerApi(app: Express, ctx: ApiCtx): { sweep(): void } {
     return out;
   }
 
-  // Trực tiếp phục vụ `/music/<file>` từ `public/music/` (không cần build lại khi chép nhạc mới).
-  app.get('/music/:file', async (req, res, next) => {
-    const raw = req.params.file;
-    if (!raw || raw.includes('/') || raw.includes('\\') || raw.includes('\0') || raw.startsWith('.')) return next();
-    const ext = path.extname(raw).toLowerCase();
-    if (!AUDIO_EXT.has(ext)) return next();
-    for (const dir of [publicMusicDir, distMusicDir]) {
-      const full = path.join(dir, raw);
-      let st: fss.Stats | null = null;
-      try { const s = await fs.stat(full); if (s.isFile()) st = s; } catch { st = null; }
-      if (!st) continue;
-      res.setHeader('Content-Type', AUDIO_MIME[ext] ?? 'application/octet-stream');
-      res.setHeader('Cache-Control', 'no-cache');
-      res.setHeader('Accept-Ranges', 'bytes');
-      const range = req.headers.range;
-      if (typeof range === 'string' && range.startsWith('bytes=')) {
-        const [sStr, eStr] = range.slice(6).split('-');
-        const start = sStr ? parseInt(sStr, 10) : 0;
-        const end = eStr ? Math.min(st.size - 1, parseInt(eStr, 10)) : st.size - 1;
-        if (!Number.isFinite(start) || !Number.isFinite(end) || start < 0 || start > end || start >= st.size) {
-          res.setHeader('Content-Range', `bytes */${st.size}`);
-          res.status(416).end();
+  async function listChantTracks(): Promise<{ id: string; name: string; url: string; custom: boolean }[]> {
+    const byBase = new Map<string, { id: string; name: string; url: string; custom: boolean; ext: string }>();
+    for (const dir of [publicChantDir, distChantDir]) {
+      let names: string[] = [];
+      try { names = await fs.readdir(dir); } catch { continue; }
+      names.sort((a, b) => a.localeCompare(b, 'vi'));
+      for (const f of names) {
+        const ext = path.extname(f).toLowerCase();
+        if (!AUDIO_EXT.has(ext) || f.startsWith('.') || f.startsWith('_')) continue;
+        const base = path.basename(f, ext);
+        const key = base.toLowerCase();
+        const isBuiltinBase = BUILTIN_CHANT_IDS.has(key);
+        const isCustomOverride = isBuiltinBase && ext !== '.m4a';
+        const prev = byBase.get(key);
+        // Nếu người dùng chép `nam-tram.mp3` đè cạnh `nam-tram.m4a` mặc định → ưu tiên tệp người dùng.
+        if (prev && !(isCustomOverride && prev.ext === '.m4a')) continue;
+        byBase.set(key, {
+          id: isBuiltinBase ? key : `custom:${base}`,
+          name: base,
+          url: `/chant/${encodeURIComponent(f)}`,
+          custom: !isBuiltinBase || isCustomOverride,
+          ext,
+        });
+      }
+    }
+    return [...byBase.values()].map(({ id, name, url, custom }) => ({ id, name, url, custom }));
+  }
+
+  function makeAudioHandler(dirs: string[]) {
+    return async (req: Request, res: Response, next: () => void): Promise<void> => {
+      const raw = req.params.file;
+      if (!raw || raw.includes('/') || raw.includes('\\') || raw.includes('\0') || raw.startsWith('.')) { next(); return; }
+      const ext = path.extname(raw).toLowerCase();
+      if (!AUDIO_EXT.has(ext)) { next(); return; }
+      for (const dir of dirs) {
+        const full = path.join(dir, raw);
+        let st: fss.Stats | null = null;
+        try { const s = await fs.stat(full); if (s.isFile()) st = s; } catch { st = null; }
+        if (!st) continue;
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Headers', 'range');
+        res.setHeader('Content-Type', AUDIO_MIME[ext] ?? 'application/octet-stream');
+        res.setHeader('Cache-Control', 'public, max-age=300');
+        res.setHeader('Accept-Ranges', 'bytes');
+        const range = req.headers.range;
+        if (typeof range === 'string' && range.startsWith('bytes=')) {
+          const [sStr, eStr] = range.slice(6).split('-');
+          const start = sStr ? parseInt(sStr, 10) : 0;
+          const end = eStr ? Math.min(st.size - 1, parseInt(eStr, 10)) : st.size - 1;
+          if (!Number.isFinite(start) || !Number.isFinite(end) || start < 0 || start > end || start >= st.size) {
+            res.setHeader('Content-Range', `bytes */${st.size}`);
+            res.status(416).end();
+            return;
+          }
+          res.status(206);
+          res.setHeader('Content-Range', `bytes ${start}-${end}/${st.size}`);
+          res.setHeader('Content-Length', String(end - start + 1));
+          if (req.method === 'HEAD') { res.end(); return; }
+          fss.createReadStream(full, { start, end }).on('error', () => res.destroy()).pipe(res);
           return;
         }
-        res.status(206);
-        res.setHeader('Content-Range', `bytes ${start}-${end}/${st.size}`);
-        res.setHeader('Content-Length', String(end - start + 1));
-        fss.createReadStream(full, { start, end }).on('error', () => res.destroy()).pipe(res);
+        res.setHeader('Content-Length', String(st.size));
+        if (req.method === 'HEAD') { res.end(); return; }
+        fss.createReadStream(full).on('error', () => res.destroy()).pipe(res);
         return;
       }
-      res.setHeader('Content-Length', String(st.size));
-      fss.createReadStream(full).on('error', () => res.destroy()).pipe(res);
-      return;
-    }
-    next();
-  });
+      next();
+    };
+  }
+
+  // Trực tiếp phục vụ `/music/<file>` và `/chant/<file>` từ `public/` (không cần build lại khi chép tệp mới).
+  app.get('/music/:file', makeAudioHandler([publicMusicDir, distMusicDir]));
+  app.get('/chant/:file', makeAudioHandler([publicChantDir, distChantDir]));
 
   if (opts.persist) {
     void fs.mkdir(publicMusicDir, { recursive: true }).then(() => {
@@ -294,11 +334,17 @@ export function registerApi(app: Express, ctx: ApiCtx): { sweep(): void } {
         watcher.on('error', () => undefined);
       } catch { /* bỏ qua nếu hệ thống không hỗ trợ watch */ }
     }).catch(() => undefined);
+    void fs.mkdir(publicChantDir, { recursive: true }).catch(() => undefined);
   }
 
   app.get('/api/music', async (_req, res) => {
     const tracks = await listMusicTracks();
     res.json({ ok: true, tracks, startedAt: musicStartedAt, serverNow: Date.now() });
+  });
+
+  app.get('/api/chant', async (_req, res) => {
+    const tracks = await listChantTracks();
+    res.json({ ok: true, tracks });
   });
 
   app.post('/api/admin/music', async (req, res) => {

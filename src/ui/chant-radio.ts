@@ -2,9 +2,10 @@
  * Bộ điều khiển radio "Nghe niệm Phật" dùng chung giữa nút `#hud-listen` và hộp thoại `listen`.
  * Ghi `listenSeconds` định kỳ mỗi 30 giây và xả phần giây lẻ (>= 5s) khi dừng để không mất tinh tấn.
  */
-import { CHANT_VOICES } from '@/audio/voices';
+import { CHANT_VOICES, mergeRemoteChantTracks } from '@/audio/voices';
 import type { AppContext } from '@/core/contracts';
 import { load } from '@/core/store';
+import { API_ORIGIN, apiUrl } from '@/net/api';
 
 const TICK_SEC = 30;
 const MIN_FLUSH_SEC = 5;
@@ -15,6 +16,7 @@ const state = {
   startedAt: 0,
   reportedSec: 0,
   timer: 0,
+  syncedAt: 0,
   ctx: null as AppContext | null,
 };
 
@@ -36,12 +38,42 @@ export function onChantRadioChange(fn: (on: boolean) => void): () => void {
   return () => subs.delete(fn);
 }
 
+/** Đồng bộ danh sách tệp niệm Phật riêng trong `public/chant/` từ máy chủ (nếu có). */
+export async function syncRemoteChantVoices(ctx?: AppContext): Promise<void> {
+  const now = Date.now();
+  if (now - state.syncedAt < 15_000) return;
+  state.syncedAt = now;
+  try {
+    const r = await fetch(apiUrl('/api/chant'), { credentials: API_ORIGIN ? 'include' : 'same-origin' });
+    if (!r.ok || !(r.headers.get('content-type') || '').includes('application/json')) return;
+    const d = (await r.json()) as { tracks?: { id: string; name: string; url: string; custom?: boolean }[] };
+    if (!Array.isArray(d.tracks)) return;
+    const changed = mergeRemoteChantTracks(d.tracks, apiUrl);
+    if (changed) {
+      const targetCtx = ctx ?? state.ctx;
+      if (state.on && targetCtx) targetCtx.audio.setChantRadio(true, state.voice);
+      notify();
+    }
+  } catch {
+    /* dùng danh sách giọng tích hợp sẵn */
+  }
+}
+
 export function startChantRadio(ctx: AppContext, voice?: string): void {
   const v = voice || state.voice || defaultChantVoice();
   state.ctx = ctx;
   state.voice = v;
   ctx.audio.unlock();
+  const s = ctx.audio.settings();
+  if (!s.master || !s.chant || s.ambientVolume < 0.08) {
+    ctx.audio.configure({
+      master: true,
+      chant: true,
+      ...(s.ambientVolume < 0.08 ? { ambientVolume: 0.6 } : {}),
+    });
+  }
   ctx.audio.setChantRadio(true, v);
+  void syncRemoteChantVoices(ctx);
   if (state.on) {
     notify();
     return;

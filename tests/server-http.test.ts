@@ -336,3 +336,37 @@ describe('lưu trữ & tắt êm', () => {
     await s2.close();
   });
 });
+
+describe('âm thanh niệm Phật (/api/chant & /chant/:file)', () => {
+  it('liệt kê giọng niệm mặc định + tệp tùy chỉnh và hỗ trợ HTTP Range + CORS', async () => {
+    const tmp = await startTest({});
+    try {
+      const distChant = path.join(tmp.dir, 'dist', 'chant');
+      await fs.mkdir(distChant, { recursive: true });
+      await fs.writeFile(path.join(distChant, 'quan-am.mp3'), Buffer.alloc(512, 0x55));
+
+      const s = await startTest({ distDir: path.join(tmp.dir, 'dist') });
+      try {
+        const h = new Http(s.url);
+        const list = await h.get('/api/chant');
+        expect(list.status).toBe(200);
+        expect(list.json.ok).toBe(true);
+        const ids = (list.json.tracks as { id: string }[]).map((t) => t.id);
+        expect(ids).toEqual(expect.arrayContaining(['nam-tram', 'chuong-mo', 'nu-trong', 'hop-xuong', 'custom:quan-am']));
+        expect(ids).not.toContain('custom:_mo-hit');
+
+        const rangeRes = await fetch(s.url + '/chant/chuong-mo.m4a', { headers: { Range: 'bytes=0-127' } });
+        expect(rangeRes.status).toBe(206);
+        expect(rangeRes.headers.get('content-type')).toBe('audio/mp4');
+        expect(rangeRes.headers.get('access-control-allow-origin')).toBe('*');
+        expect(rangeRes.headers.get('accept-ranges')).toBe('bytes');
+        const chunk = await rangeRes.arrayBuffer();
+        expect(chunk.byteLength).toBe(128);
+      } finally {
+        await s.close();
+      }
+    } finally {
+      await tmp.close();
+    }
+  });
+});

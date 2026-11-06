@@ -15,8 +15,9 @@ export class Group {
     this.out.gain.linearRampToValueAtTime(1, t + fadeIn);
     this.out.connect(dest);
   }
-  add<T extends AudioScheduledSourceNode>(s: T, t: number): T {
-    s.start(t);
+  add<T extends AudioScheduledSourceNode>(s: T, t: number, offset?: number): T {
+    if (offset !== undefined && 'buffer' in s) (s as unknown as AudioBufferSourceNode).start(t, offset);
+    else s.start(t);
     this.srcs.push(s);
     return s;
   }

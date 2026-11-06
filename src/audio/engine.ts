@@ -160,6 +160,8 @@ export class Engine {
   private voices: { s: number; e: number }[] = [];
   private mos: MoLoop[] = [];
   private moHits: number[] = [];
+  /** Mẫu tiếng mõ thu thật một nhịp (`/chant/_mo-hit.wav`), dùng khi chạy trên trình duyệt. */
+  moSample: AudioBuffer | null = null;
   readonly ambient: Ambient;
   readonly chant: ChantRadio;
 
@@ -269,7 +271,7 @@ export class Engine {
     return Math.pow(this.volume, 1.5);
   }
   get radioGain(): number {
-    return Math.min(1.6, 0.65 * Math.pow(this.volume / 0.6, 1.5));
+    return Math.min(1.5, 0.88 * Math.pow(this.volume / 0.6, 1.15));
   }
   private applyVolume(instant: boolean): void {
     const t = this.now();
@@ -281,6 +283,7 @@ export class Engine {
     set(this.ambRevVol.gain, this.ambientGain);
     set(this.chantBus.gain, this.radioGain);
     set(this.chantRevVol.gain, this.radioGain);
+    this.chant.syncStreamVolume();
   }
   get night(): number {
     return this.nightV;
@@ -299,6 +302,27 @@ export class Engine {
     if (n >= MAX_VOICES && !high) return false;
     this.voices.push({ s: t, e: t + dur });
     return true;
+  }
+
+  /** Giải mã trước mẫu tiếng mõ thu thật từ `ArrayBuffer` hoặc danh sách URL. */
+  async loadMoSample(rawOrUrls: ArrayBuffer | null | Promise<ArrayBuffer | null>, fallbackUrls: string[] = []): Promise<void> {
+    if (this.offline || this.moSample) return;
+    try {
+      let ab = await rawOrUrls;
+      if (!ab && typeof fetch !== 'undefined') {
+        for (const u of fallbackUrls) {
+          if (!u) continue;
+          try {
+            const res = await fetch(u);
+            if (res.ok) { ab = await res.arrayBuffer(); break; }
+          } catch { /* thử URL kế tiếp */ }
+        }
+      }
+      if (!ab || ab.byteLength < 64) return;
+      this.moSample = await this.ctx.decodeAudioData(ab.slice(0));
+    } catch {
+      /* giữ bộ tổng hợp mõ dự phòng nếu giải mã thất bại */
+    }
   }
 
   /** Lên lịch một âm hiệu ứng tại thời điểm `t` (mặc định: ngay bây giờ). */
@@ -326,9 +350,9 @@ export class Engine {
   }
 
   private duckBase = 1;
-  /** Khi radio niệm Phật đang phát, hạ nhẹ âm nền thiên nhiên để giọng niệm nổi hơn. */
+  /** Khi radio niệm Phật đang phát, hạ nhẹ âm nền thiên nhiên để giọng niệm nổi rõ và thanh tịnh. */
   setRadioDuck(on: boolean): void {
-    this.duckBase = on ? 0.55 : 1;
+    this.duckBase = on ? 0.35 : 1;
     const t = this.now();
     for (const g of [this.duck.gain, this.duckRev.gain]) {
       if (this.offline) g.setValueAtTime(this.duckBase, t);

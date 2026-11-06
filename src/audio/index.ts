@@ -1,6 +1,7 @@
 // Điểm vào âm thanh: createAudio() → AudioApi. Quản lý AudioContext (iOS/Android an toàn), cài đặt lưu ở store, tạm dừng khi tab ẩn.
 import type { AudioApi, AudioSettings, MusicTrack, Sfx } from '@/core/contracts';
 import { load, save } from '@/core/store';
+import { apiUrl, API_ORIGIN } from '@/net/api';
 import { Engine } from './engine';
 import { DEFAULT_CHANT_VOICE } from './voices';
 
@@ -43,8 +44,23 @@ export function createAudio(): AudioApi {
   interface PendingLoop { bpm: number; stopped: boolean; stop: (() => void) | null }
   const loops = new Set<PendingLoop>();
 
+  const moSampleUrls = ['/chant/_mo-hit.wav', apiUrl('/chant/_mo-hit.wav')].filter((u, i, a) => Boolean(u) && a.indexOf(u) === i);
+  const moSampleBytes: Promise<ArrayBuffer | null> = typeof fetch !== 'undefined'
+    ? (async () => {
+        for (const u of moSampleUrls) {
+          try {
+            const res = await fetch(u);
+            if (res.ok) return await res.arrayBuffer();
+          } catch { /* thử URL kế tiếp */ }
+        }
+        return null;
+      })()
+    : Promise.resolve(null);
+
   function syncMusic(): void {
-    const shouldPlay = unlocked && wantAmbient && cfg.master && cfg.ambient && tracks.length > 0;
+    const radioActive = wantRadio && cfg.master && cfg.chant;
+    // Khi đang bật "Nghe niệm Phật", tạm dừng nhạc nền chung để không chồng hai bài lên nhau.
+    const shouldPlay = unlocked && !radioActive && wantAmbient && cfg.master && cfg.ambient && tracks.length > 0;
     if (!shouldPlay) {
       if (musicEl && !musicEl.paused) musicEl.pause();
       return;
@@ -62,6 +78,14 @@ export function createAudio(): AudioApi {
         trackIdx = (trackIdx + 1) % tracks.length;
         currentUrl = '';
         syncMusic();
+      });
+      musicEl.addEventListener('error', () => {
+        if (!musicEl || !API_ORIGIN) return;
+        const cur = tracks[trackIdx % tracks.length];
+        if (cur && cur.url.startsWith('/music/') && musicEl.src && !musicEl.src.startsWith(API_ORIGIN)) {
+          musicEl.src = apiUrl(cur.url);
+          void musicEl.play().catch(() => undefined);
+        }
       });
       musicEl.addEventListener('loadedmetadata', () => {
         if (!musicEl || tracks.length !== 1 || !Number.isFinite(musicEl.duration) || musicEl.duration <= 2 || !musicStartedAt) return;
@@ -85,15 +109,16 @@ export function createAudio(): AudioApi {
 
   function apply(): void {
     const hasCustomMusic = tracks.length > 0;
+    const radioActive = wantRadio && cfg.master && cfg.chant;
     syncMusic();
     if (!engine) return;
     engine.setEnabled(cfg.master, cfg.sfx);
-    engine.setVolume(hasCustomMusic && !wantRadio ? cfg.ambientVolume * 0.35 : cfg.ambientVolume);
+    engine.setVolume(hasCustomMusic && !radioActive ? cfg.ambientVolume * 0.35 : cfg.ambientVolume);
     engine.setNight(wantNight);
-    // Khi có bài nhạc riêng (YouTube/MP3), giữ lại 35% lớp tiếng gió/suối/chim tự nhiên của chùa (tắt pad nhạc tổng hợp để không đụng giai điệu).
+    // Khi có bài nhạc riêng hoặc đang nghe niệm Phật, giữ lớp gió/suối/chim tự nhiên nhẹ và tắt pad nhạc tổng hợp để không đụng tông.
     engine.ambient.setActive(wantAmbient && cfg.master && cfg.ambient);
-    engine.ambient.setPad(!hasCustomMusic && wantAmbient && cfg.master && cfg.ambient && cfg.chant);
-    engine.chant.set(wantRadio && cfg.master && cfg.chant, wantVoice);
+    engine.ambient.setPad(!hasCustomMusic && !radioActive && wantAmbient && cfg.master && cfg.ambient && cfg.chant);
+    engine.chant.set(radioActive, wantVoice);
     for (const l of loops) {
       if (l.stopped) continue;
       if (cfg.master && cfg.sfx) {
@@ -151,6 +176,7 @@ export function createAudio(): AudioApi {
         if (!C) { syncMusic(); return; }
         ctx = new C({ latencyHint: 'interactive' });
         engine = new Engine(ctx);
+        void engine.loadMoSample(moSampleBytes, moSampleUrls);
         // phát một bộ đệm câm để "mở khoá" iOS/Safari
         const b = ctx.createBuffer(1, 1, 22050);
         const s = ctx.createBufferSource();

@@ -49,20 +49,35 @@ function smallBell(v: Voice, t: number, f: number, amp: number, tau: number): vo
   v.tone('sine', f * 3.8, t, amp * 0.12, { attack: 0.002, tau: tau * 0.35 });
 }
 
-// ───────── Mõ gỗ ─────────
+// ───────── Mõ gỗ mít ─────────
 const mo: Fn = (e, t, o) => {
   const r = e.rnd;
-  const v = new Voice(e, o.bus, { send: 0.12, pan: (r() - 0.5) * 0.1 });
-  const f0 = 880 * o.pitch * (1 + (r() - 0.5) * 0.05);
-  const A = (0.85 + r() * 0.15) * o.vol;
-  // thân gỗ rỗng: vài mode giảm nhanh, hơi trượt xuống đầu tiếng
-  v.tone('sine', f0, t, 0.46 * A, { attack: 0.0007, tau: 0.05, fromFreq: f0 * 1.06, glideTau: 0.008 });
-  v.tone('sine', f0 * 1.47, t, 0.2 * A, { attack: 0.0007, tau: 0.032, fromFreq: f0 * 1.52, glideTau: 0.006 });
-  v.tone('sine', f0 * 2.31, t, 0.07 * A, { attack: 0.0007, tau: 0.018 });
-  v.tone('sine', f0 * 0.5, t, 0.2 * A, { attack: 0.001, tau: 0.075, fromFreq: f0 * 0.54, glideTau: 0.012 });
-  // cú gõ: nhiễu băng hẹp + tiếng "cộp" trầm
-  v.noise(t, 0.2 * A, { type: 'bandpass', freq: 1700 * o.pitch, q: 2.2, attack: 0.0006, tau: 0.0035 });
-  v.noise(t, 0.16 * A, { type: 'lowpass', freq: 650, q: 0.7, attack: 0.0008, tau: 0.012 });
+  const v = new Voice(e, o.bus, { send: 0.03, pan: (r() - 0.5) * 0.05 });
+  if (e.moSample) {
+    const src = e.ctx.createBufferSource();
+    src.buffer = e.moSample;
+    src.playbackRate.value = Math.min(1.6, Math.max(0.6, o.pitch)) * (1 + (r() - 0.5) * 0.004);
+    const g = e.ctx.createGain();
+    g.gain.value = (0.94 + r() * 0.06) * o.vol;
+    src.connect(g);
+    g.connect(v.out);
+    v.track(src);
+    src.start(t);
+    return;
+  }
+  const lp = lowpass(v, 2600 * Math.min(1.25, Math.max(0.8, o.pitch)), 0.8);
+  // Khoang rỗng mõ gỗ mít ổn định cao độ (±3 cent), đặt đúng vùng âm sắc nguyên âm "ô" ("cốc / cốp")
+  const f0 = 468 * o.pitch * (1 + (r() - 0.5) * 0.004);
+  const A = (0.93 + r() * 0.07) * o.vol;
+  // Mode 1 (khoang rỗng ~468 Hz) + Mode 2 (mép rãnh ~740 Hz) tạo âm "ố" tròn rỗng đặc trưng của mõ gỗ
+  v.tone('sine', f0, t, 0.62 * A, { attack: 0.0003, tau: 0.018, fromFreq: f0 * 1.035, glideTau: 0.0022, dest: lp });
+  v.tone('sine', f0 * 1.58, t, 0.34 * A, { attack: 0.0003, tau: 0.010, fromFreq: f0 * 1.63, glideTau: 0.0018, dest: lp });
+  // Mode 3 (vỏ gỗ cứng ~1030 Hz) + độ dày thớ gỗ mít (~290 Hz) tắt cực nhanh, không ngân đuôi kim loại
+  v.tone('sine', f0 * 2.2, t, 0.14 * A, { attack: 0.0002, tau: 0.0042, dest: lp });
+  v.tone('sine', f0 * 0.62, t, 0.18 * A, { attack: 0.0004, tau: 0.0095, fromFreq: f0 * 0.65, glideTau: 0.0025, dest: lp });
+  // Đầu dùi gỗ chạm mặt mõ: tiếng "c-" đanh gọn (không dùng nhiễu trầm gây tiếng "bụp" như trống da)
+  v.noise(t, 0.34 * A, { type: 'bandpass', freq: 820 * o.pitch, q: 2.8, attack: 0.0002, tau: 0.0036, kind: 'pink', dest: lp });
+  v.noise(t, 0.26 * A, { type: 'bandpass', freq: 1520 * o.pitch, q: 2.6, attack: 0.0002, tau: 0.002, dest: lp });
 };
 
 // ───────── Chuông đồng ─────────
@@ -122,15 +137,16 @@ const chime: Fn = (e, t, o) => {
 // ───────── Hạt gỗ ─────────
 const bead: Fn = (e, t, o) => {
   const r = e.rnd;
-  const v = new Voice(e, o.bus, { send: 0.1 });
+  const v = new Voice(e, o.bus, { send: 0.03 });
+  const lp = lowpass(v, 2800, 0.7);
   const hit = (tt: number, g: number, p: number): void => {
-    const f = 560 * o.pitch * p * (1 + (r() - 0.5) * 0.06);
-    v.tone('sine', f, tt, 0.3 * g * o.vol, { attack: 0.001, tau: 0.02, fromFreq: f * 1.12, glideTau: 0.006 });
-    v.tone('sine', f * 2.4, tt, 0.1 * g * o.vol, { attack: 0.001, tau: 0.012 });
-    v.noise(tt, 0.16 * g * o.vol, { type: 'bandpass', freq: 2300, q: 1.6, attack: 0.0008, tau: 0.0035 });
+    const f = 430 * o.pitch * p * (1 + (r() - 0.5) * 0.02);
+    v.tone('sine', f, tt, 0.28 * g * o.vol, { attack: 0.0004, tau: 0.0075, fromFreq: f * 1.09, glideTau: 0.0025, dest: lp });
+    v.tone('sine', f * 1.85, tt, 0.11 * g * o.vol, { attack: 0.0003, tau: 0.004, dest: lp });
+    v.noise(tt, 0.22 * g * o.vol, { type: 'bandpass', freq: 1650 * p, q: 2.0, attack: 0.0003, tau: 0.0022, dest: lp });
   };
   hit(t, 1, 1);
-  hit(t + 0.042 + r() * 0.01, 0.5, 0.92);
+  hit(t + 0.028 + r() * 0.006, 0.38, 0.93);
 };
 
 // ───────── Hương ─────────
@@ -263,7 +279,7 @@ const TABLE: Record<Sfx, Fn> = {
 
 /** Cân bằng độ lớn giữa các âm (đo bằng peak sau khi xuất WAV). */
 const TRIM: Record<Sfx, number> = {
-  mo: 0.55, bell: 1, bellBig: 1, bead: 1, incense: 1.8, flower: 0.9, candle: 2, lantern: 0.9,
+  mo: 0.72, bell: 1, bellBig: 1, bead: 0.95, incense: 1.8, flower: 0.9, candle: 2, lantern: 0.9,
   bow: 1, click: 1, chime: 1.6, levelUp: 0.55, sweep: 1.9, que: 0.8, splash: 1.9, ribbon: 2,
 };
 

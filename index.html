@@ -32,6 +32,7 @@
 
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png" />
     <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
 
     <script type="application/ld+json">
@@ -79,27 +80,37 @@
     <div class="boot" id="boot" role="status" aria-live="polite">
       <div class="boot__glow" aria-hidden="true"></div>
       <div class="boot__inner">
-        <svg class="boot__lotus" viewBox="0 0 160 130" width="150" height="122" aria-hidden="true" focusable="false">
+        <svg class="boot__lotus" viewBox="0 0 128 128" width="136" height="136" aria-hidden="true" focusable="false">
           <defs>
             <linearGradient id="bootGold" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#fbe3a2" />
-              <stop offset=".55" stop-color="#e0b25c" />
-              <stop offset="1" stop-color="#b9822f" />
+              <stop offset="0" stop-color="#fff4cf" />
+              <stop offset=".52" stop-color="#e5b861" />
+              <stop offset="1" stop-color="#ae721e" />
             </linearGradient>
-            <radialGradient id="bootHalo" cx="50%" cy="55%" r="55%">
-              <stop offset="0" stop-color="#f3c973" stop-opacity=".38" />
+            <linearGradient id="bootJade" x1="18%" y1="12%" x2="82%" y2="92%">
+              <stop offset="0" stop-color="#b8f7d6" />
+              <stop offset=".42" stop-color="#4ec695" />
+              <stop offset="1" stop-color="#155d42" />
+            </linearGradient>
+            <radialGradient id="bootHalo" cx="50%" cy="54%" r="54%">
+              <stop offset="0" stop-color="#f6d687" stop-opacity=".38" />
               <stop offset="1" stop-color="#f3c973" stop-opacity="0" />
             </radialGradient>
           </defs>
-          <circle cx="80" cy="66" r="62" fill="url(#bootHalo)" />
-          <g class="boot__petals" fill="none" stroke="url(#bootGold)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-            <path class="bp bp-c" d="M80 14c17 18 21 42 0 74-21-32-17-56 0-74z" fill="rgba(243,201,115,.14)" />
-            <path class="bp bp-l1" d="M62 38C42 42 30 56 28 76c2 18 20 28 52 28" fill="rgba(243,201,115,.08)" />
-            <path class="bp bp-r1" d="M98 38c20 4 32 18 34 38-2 18-20 28-52 28" fill="rgba(243,201,115,.08)" />
-            <path class="bp bp-l2" d="M54 68C34 68 18 76 12 92c6 10 24 14 46 12" />
-            <path class="bp bp-r2" d="M106 68c20 0 36 8 42 24-6 10-24 14-46 12" />
-            <path class="bp bp-b" d="M34 112c28 10 64 10 92 0" stroke-width="2" />
-            <path class="bp bp-b2" d="M50 121c20 5 40 5 60 0" stroke-width="1.6" opacity=".6" />
+          <circle cx="64" cy="60" r="56" fill="url(#bootHalo)" />
+          <g class="boot__petals" fill="none" stroke="url(#bootGold)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M64 7 C66.5 10 66.6 12.5 64 14.3 C61.4 12.5 61.5 10 64 7 Z" fill="#fff4cf" stroke="none" />
+            <path class="bp bp-c" d="M17 24.5 C23.5 29 34.5 28 46.5 22.8 C54.5 19.2 59.8 15.6 64 12.2 C68.2 15.6 73.5 19.2 81.5 22.8 C93.5 28 104.5 29 111 24.5 C105.2 31.6 92.8 33 79.5 28.5 C72.2 26 67.6 23.3 64 20.8 C60.4 23.3 55.8 26 48.5 28.5 C35.2 33 22.8 31.6 17 24.5 Z" fill="rgba(243,201,115,.22)" />
+            <path class="bp bp-l1" d="M58 35.5 C43 36 35.5 46 38.5 58 C40.8 66.5 48.5 70.8 57.5 71.8 C66.5 70.2 71.5 63.8 71 53.8 C70.5 43.5 65.8 35.2 58 35.5 Z" fill="rgba(92,201,155,.22)" />
+            <path class="bp bp-r1" d="M62 47 C56.5 47.8 53.8 52 55.8 57 C58.2 62.8 68.5 64.5 76.5 68.5 C85.5 73 88.2 80.2 83.2 86.8 C78.2 93.2 65.2 95.5 50 93.5 C39.5 92.1 31.8 87.6 28.8 80.5 C33.8 84.8 42 87.5 52 87.2 C63.8 86.8 72.5 83.8 74 79.4 C75.4 75 70.2 71.8 60.5 68.2 C49.2 64 43.8 57.8 45.2 49 C46.5 40.6 53.8 35.5 63.5 35.5 C71.5 35.5 78.8 38.6 82.2 43 C83.5 44.6 82.8 46.6 80.2 47.2 C75.5 48.2 68.5 46.2 62 47 Z" fill="url(#bootJade)" />
+            <circle cx="90" cy="46" r="3" fill="#fff4cf" />
+            <path class="bp bp-l2" d="M55 102 C32 103 17 95 14 82 C28 78 43 84 55 102 Z" fill="rgba(243,201,115,.1)" />
+            <path class="bp bp-r2" d="M73 102 C96 103 111 95 114 82 C100 78 85 84 73 102 Z" fill="rgba(243,201,115,.1)" />
+            <path class="bp bp-l1" d="M60 102 C42 98 32 87 36 73 C49 77 57 87 60 102 Z" fill="rgba(243,201,115,.14)" />
+            <path class="bp bp-r1" d="M68 102 C86 98 96 87 92 73 C79 77 71 87 68 102 Z" fill="rgba(243,201,115,.14)" />
+            <path class="bp bp-c" d="M64 70 C74.5 81 74.5 92 64 102.5 C53.5 92 53.5 81 64 70 Z" fill="rgba(251,227,162,.24)" />
+            <path class="bp bp-b" d="M33 108.8 Q64 115.5 95 108.8" stroke-width="2.2" />
+            <path class="bp bp-b2" d="M47 114.2 Q64 118.2 81 114.2" stroke-width="1.5" opacity=".68" />
           </g>
         </svg>
         <h1 class="boot__title">Chùa Rắn</h1>

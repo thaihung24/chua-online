@@ -1,90 +1,43 @@
-// Radio niệm Phật tổng hợp: mõ 80 bpm + giọng "A Di Đà Phật" bằng formant synth (sawtooth → bộ lọc formant) + drone + chuông nhỏ.
+// Radio "Nghe niệm Phật":
+// - Với các giọng có tệp thu âm thật (`nam-tram`, `nu-trong`, `hop-xuong`, hoặc tệp riêng trong `public/chant/`):
+//   giải mã qua WebAudio để lặp liền mạch không khe hở (hoặc phát luồng `<audio>` nếu tệp > 8MB), tự hoà âm & chỉnh âm lượng trên cả iOS/Android.
+// - Với chế độ `chuong-mo` (hoặc dự phòng khi mất mạng / xuất WAV ngoại tuyến):
+//   nhịp mõ gỗ mít ấm + chuông đồng + chuông gió và nền thiền êm dịu (không dùng sóng răng cưa giả giọng robot).
 import type { Engine } from './engine';
-import { Voice } from './engine';
-import { Group, loopNoise } from './ambient';
-import { midiToHz, cents } from './dsp';
-import { DEFAULT_CHANT_VOICE } from './voices';
+import { Group } from './ambient';
+import { DEFAULT_CHANT_VOICE, findChantVoice, type ChantVoiceInfo } from './voices';
 
-type Vowel = 'a' | 'i' | 'e';
-/** F1, F2, F3 (Hz) cho giọng nam; nhân với `fs` cho giọng khác. */
-const FORMANTS: Record<Vowel, [number, number, number]> = {
-  a: [800, 1150, 2750],
-  i: [310, 2250, 2950],
-  e: [640, 1080, 2600], // /ɐ/ trong "Phật"
+const MAX_DECODE_BYTES = 8 * 1024 * 1024;
+const MAX_BUFFER_CACHE = 4;
+
+interface InstrumentalProfile {
+  bpm: number;
+  moVol: number;
+  moPitch: number;
+  bellPitch: number;
+  droneGain: number;
+}
+
+const INST_PROFILES: Record<string, InstrumentalProfile> = {
+  'chuong-mo': { bpm: 72, moVol: 1.15, moPitch: 1, bellPitch: 0.85, droneGain: 0.022 },
+  'nam-tram': { bpm: 68, moVol: 1.1, moPitch: 0.96, bellPitch: 0.78, droneGain: 0.028 },
+  'nu-trong': { bpm: 76, moVol: 1.0, moPitch: 1.04, bellPitch: 1.0, droneGain: 0.025 },
+  'hop-xuong': { bpm: 72, moVol: 1.12, moPitch: 1.0, bellPitch: 0.88, droneGain: 0.03 },
 };
-const F_GAIN = [1, 0.62, 0.28];
-const F_BW = [95, 120, 180];
-
-interface Syl {
-  vowel: Vowel;
-  frac: number; // phần của một nhịp mà âm tiết ngân
-  onset: 'none' | 'd' | 'ph';
-  stop: boolean; // kết thúc bằng phụ âm tắc (t)
-}
-const SYLS: Syl[] = [
-  { vowel: 'a', frac: 0.8, onset: 'none', stop: false }, // A
-  { vowel: 'i', frac: 0.8, onset: 'd', stop: false }, // Di
-  { vowel: 'a', frac: 0.8, onset: 'd', stop: false }, // Đà
-  { vowel: 'e', frac: 0.58, onset: 'ph', stop: true }, // Phật
-];
-/** Độ cao (nửa cung trên chủ âm La) cho 4 âm tiết; đổi nhẹ từng vòng, kết về chủ âm. */
-const PATTERNS = [
-  [7, 7, 4, 0],
-  [7, 7, 4, 0],
-  [7, 9, 7, 4],
-  [7, 7, 4, 0],
-];
-
-interface Layer {
-  base: number; // MIDI của chủ âm
-  fs: number; // thang formant
-  g: number;
-  pan: number;
-  det: number; // cent
-  jitter: number; // giây
-  vib: number; // độ sâu rung (tỉ lệ)
-  bwScale: number;
-  prev: number; // cao độ âm tiết trước (MIDI)
-}
-interface VoiceDef {
-  layers: Omit<Layer, 'prev'>[];
-  wet: number;
-  bells: boolean;
-  /** mõ dày hơn (chuông mõ không lời) */
-  moLoud: number;
-}
-const VOICE_DEFS: Record<string, VoiceDef> = {
-  'nam-tram': {
-    layers: [{ base: 45, fs: 0.92, g: 1, pan: 0, det: 0, jitter: 0, vib: 0.005, bwScale: 1 }],
-    wet: 0.35, bells: true, moLoud: 0.7,
-  },
-  'nu-trong': {
-    layers: [{ base: 57, fs: 1.17, g: 0.62, pan: 0, det: 0, jitter: 0, vib: 0.008, bwScale: 1.4 }],
-    wet: 0.42, bells: true, moLoud: 0.65,
-  },
-  'hop-xuong': {
-    layers: [
-      { base: 45, fs: 0.92, g: 0.62, pan: -0.35, det: -6, jitter: 0.012, vib: 0.005, bwScale: 1 },
-      { base: 45, fs: 0.95, g: 0.55, pan: 0.3, det: 7, jitter: 0.03, vib: 0.006, bwScale: 1 },
-      { base: 57, fs: 1.15, g: 0.45, pan: -0.15, det: -5, jitter: 0.02, vib: 0.008, bwScale: 1.4 },
-      { base: 57, fs: 1.2, g: 0.42, pan: 0.45, det: 8, jitter: 0.04, vib: 0.008, bwScale: 1.4 },
-    ],
-    wet: 0.85, bells: true, moLoud: 0.6,
-  },
-  'chuong-mo': { layers: [], wet: 0.5, bells: true, moLoud: 1.6 },
-};
-
-const BPM = 80;
 
 export class ChantRadio {
   private on = false;
   private voiceId = DEFAULT_CHANT_VOICE;
+  private activeUrl = '';
   private group: Group | null = null;
-  private layers: Layer[] = [];
-  private def: VoiceDef = VOICE_DEFS[DEFAULT_CHANT_VOICE];
+  private streamEl: HTMLAudioElement | null = null;
+  private instrumental = false;
+  private inst: InstrumentalProfile = INST_PROFILES['chuong-mo']!;
   private next = 0;
   private beat = 0;
-  private rnd: () => number;
+  private seq = 0;
+  private readonly rnd: () => number;
+  private readonly cache = new Map<string, AudioBuffer>();
 
   constructor(private readonly e: Engine) {
     this.rnd = e.rnd;
@@ -95,77 +48,236 @@ export class ChantRadio {
   }
 
   set(on: boolean, voice?: string): void {
-    const v = voice && VOICE_DEFS[voice] ? voice : voice ? DEFAULT_CHANT_VOICE : this.voiceId;
-    if (on && this.on && v === this.voiceId) return;
+    const info = findChantVoice(voice ?? this.voiceId);
+    const v = info.id;
+    const nextUrl = info.url ?? '';
+    if (on && this.on && v === this.voiceId && nextUrl === this.activeUrl) return;
     if (!on && !this.on) {
       this.voiceId = v;
       return;
     }
     if (this.on) this.stopGroup();
     this.voiceId = v;
+    this.activeUrl = nextUrl;
     this.on = on;
-    if (on) this.startGroup();
+    if (on) this.startGroup(info);
     this.e.setRadioDuck(on);
   }
 
+  /** Làm mới nguồn phát nếu tệp giọng đang chọn vừa được cập nhật từ `/api/chant`. */
+  refreshVoice(): void {
+    if (!this.on) return;
+    const info = findChantVoice(this.voiceId);
+    if ((info.url ?? '') !== this.activeUrl) {
+      this.stopGroup();
+      this.activeUrl = info.url ?? '';
+      this.startGroup(info);
+    }
+  }
+
+  syncStreamVolume(): void {
+    if (this.streamEl) {
+      this.streamEl.volume = Math.min(1, Math.max(0, this.e.radioGain * 0.85));
+    }
+  }
+
   private stopGroup(): void {
+    this.seq++;
+    this.instrumental = false;
+    if (this.streamEl) {
+      try {
+        this.streamEl.pause();
+        this.streamEl.removeAttribute('src');
+        this.streamEl.load();
+      } catch { /* bỏ qua */ }
+      this.streamEl = null;
+    }
     const g = this.group;
     if (!g) return;
     const e = this.e;
-    g.stop(e.now(), e.offline ? 0.05 : 0.9);
+    g.stop(e.now(), e.offline ? 0.05 : 0.8);
     e.revMap.delete(g.out);
     this.group = null;
   }
 
-  private startGroup(): void {
+  private startGroup(info: ChantVoiceInfo): void {
     const e = this.e;
     const ctx = e.ctx;
-    const t = e.now() + 0.05;
-    this.def = VOICE_DEFS[this.voiceId];
-    this.layers = this.def.layers.map((l) => ({ ...l, prev: l.base + 7 }));
-    const g = new Group(e, e.chantBus, e.offline ? 0.05 : 1.2, t);
+    const t = e.now() + 0.04;
+    const g = new Group(e, e.chantBus, e.offline ? 0.05 : 0.9, t);
     e.revMap.set(g.out, e.chantRevIn);
     this.group = g;
-    // hồi âm của cả nhóm (giọng nhiều → vang hơn), tắt dần cùng nhóm
-    const gwet = ctx.createGain();
-    gwet.gain.value = this.def.wet;
-    g.out.connect(gwet);
-    gwet.connect(e.chantRevIn);
-    // drone nền: La1 + Mi2 + La2 êm
+    const seq = ++this.seq;
+
+    if (info.url && !e.offline && typeof fetch === 'function') {
+      this.instrumental = false;
+      const wet = ctx.createGain();
+      wet.gain.value = 0.08;
+      g.out.connect(wet);
+      wet.connect(e.chantRevIn);
+      void this.loadAndPlayRecording(info, g, seq);
+      return;
+    }
+
+    this.setupInstrumental(info.id, g, t);
+  }
+
+  private setupInstrumental(voiceId: string, g: Group, t: number): void {
+    const e = this.e;
+    const ctx = e.ctx;
+    this.instrumental = true;
+    this.inst = INST_PROFILES[voiceId] ?? INST_PROFILES['chuong-mo']!;
+
+    // Không dội thêm hồi âm tổng lên `g.out` để tiếng mõ giữ chất gỗ khô mộc mạc (chuông đồng đã có hồi âm riêng 0.42).
+    // Nền âm trầm chánh điện thật nhẹ (La1 + Mi2 + La2)
     const lp = ctx.createBiquadFilter();
     lp.type = 'lowpass';
-    lp.frequency.value = 520;
+    lp.frequency.value = 440;
     const dg = ctx.createGain();
-    dg.gain.value = 0.07;
+    dg.gain.value = this.inst.droneGain;
     lp.connect(dg);
     dg.connect(g.out);
     const dsend = ctx.createGain();
-    dsend.gain.value = 0.5;
+    dsend.gain.value = 0.45;
     dg.connect(dsend);
     dsend.connect(e.chantRevIn);
-    [[55, 'sine', 0.3], [82.41, 'sine', 0.35], [110, 'triangle', 0.35], [164.81, 'sine', 0.15]].forEach(([f, ty, a], i) => {
+    ([
+      [55, 'sine', 0.32],
+      [82.41, 'sine', 0.34],
+      [110, 'triangle', 0.28],
+      [164.81, 'sine', 0.14],
+    ] as const).forEach(([f, ty, a], i) => {
       const o = g.add(ctx.createOscillator(), t);
-      o.type = ty as OscillatorType;
-      o.frequency.value = f as number;
-      o.detune.value = (i - 1.5) * 3;
+      o.type = ty;
+      o.frequency.value = f;
+      o.detune.value = (i - 1.5) * 2.5;
       const vg = ctx.createGain();
-      vg.gain.value = a as number;
+      vg.gain.value = a;
       o.connect(vg);
       vg.connect(lp);
       const l = g.add(ctx.createOscillator(), t);
-      l.frequency.value = 0.05 + i * 0.017;
+      l.frequency.value = 0.045 + i * 0.015;
       const lg = ctx.createGain();
-      lg.gain.value = (a as number) * 0.3;
+      lg.gain.value = a * 0.28;
       l.connect(lg);
       lg.connect(vg.gain);
     });
-    this.next = t + 0.2;
+
+    this.next = t + 0.18;
     this.beat = 0;
   }
 
+  private async fetchAudioBytes(urls: string[]): Promise<{ url: string; ab?: ArrayBuffer; streamOnly?: boolean } | null> {
+    for (const u of urls) {
+      if (!u) continue;
+      try {
+        const res = await fetch(u);
+        if (!res.ok) continue;
+        const ct = (res.headers.get('content-type') || '').toLowerCase();
+        if (ct.includes('text/html')) continue;
+        const cl = Number(res.headers.get('content-length') || 0);
+        if (cl > MAX_DECODE_BYTES) return { url: u, streamOnly: true };
+        const ab = await res.arrayBuffer();
+        if (ab.byteLength > MAX_DECODE_BYTES) return { url: u, streamOnly: true };
+        if (ab.byteLength > 256) return { url: u, ab };
+      } catch {
+        /* thử URL dự phòng tiếp theo */
+      }
+    }
+    return null;
+  }
+
+  private async loadAndPlayRecording(info: ChantVoiceInfo, g: Group, seq: number): Promise<void> {
+    const e = this.e;
+    const ctx = e.ctx;
+    const urls = [info.url!, info.fallbackUrl ?? ''].filter(Boolean);
+    const cacheKey = urls[0]!;
+
+    let buf = this.cache.get(cacheKey);
+    if (!buf) {
+      const fetched = await this.fetchAudioBytes(urls);
+      if (seq !== this.seq || !this.on || this.group !== g) return;
+      if (!fetched) {
+        this.setupInstrumental(info.id, g, e.now() + 0.04);
+        return;
+      }
+      if (fetched.streamOnly) {
+        this.playViaAudioElement(fetched.url, info.id, g, seq);
+        return;
+      }
+      try {
+        buf = await ctx.decodeAudioData(fetched.ab!.slice(0));
+        if (this.cache.size >= MAX_BUFFER_CACHE) {
+          const oldest = this.cache.keys().next().value;
+          if (oldest) this.cache.delete(oldest);
+        }
+        this.cache.set(cacheKey, buf);
+      } catch {
+        if (seq !== this.seq || !this.on || this.group !== g) return;
+        this.playViaAudioElement(fetched.url, info.id, g, seq);
+        return;
+      }
+    }
+
+    if (seq !== this.seq || !this.on || this.group !== g) return;
+    const t0 = e.now() + 0.03;
+    const fade = ctx.createGain();
+    fade.gain.setValueAtTime(0, t0);
+    fade.gain.linearRampToValueAtTime(1, t0 + 0.55);
+    fade.connect(g.out);
+
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.loop = true;
+    src.connect(fade);
+    if (info.guardedLoop && buf.duration > 2.5) {
+      const ls = info.loopStart ?? 0.5;
+      const le = info.loopEnd != null && info.loopEnd <= buf.duration ? info.loopEnd : buf.duration - 0.5;
+      src.loopStart = ls;
+      src.loopEnd = le;
+      g.add(src, t0, ls);
+    } else {
+      g.add(src, t0);
+    }
+  }
+
+  private playViaAudioElement(url: string, voiceId: string, g: Group, seq: number): void {
+    if (typeof Audio === 'undefined') {
+      this.setupInstrumental(voiceId, g, this.e.now() + 0.04);
+      return;
+    }
+    const el = new Audio();
+    el.crossOrigin = 'anonymous';
+    el.preload = 'auto';
+    el.loop = true;
+    el.src = url;
+    this.streamEl = el;
+    this.syncStreamVolume();
+    el.addEventListener('error', () => {
+      if (seq !== this.seq || !this.on || this.group !== g) return;
+      this.streamEl = null;
+      this.setupInstrumental(voiceId, g, this.e.now() + 0.04);
+    }, { once: true });
+    try {
+      if ('createMediaElementSource' in this.e.ctx) {
+        const mediaCtx = this.e.ctx as AudioContext;
+        const node = mediaCtx.createMediaElementSource(el);
+        el.volume = 1;
+        node.connect(g.out);
+      }
+    } catch {
+      /* dùng âm lượng trực tiếp trên HTMLAudioElement */
+    }
+    void el.play().catch(() => {
+      if (seq !== this.seq || !this.on || this.group !== g) return;
+      this.streamEl = null;
+      this.setupInstrumental(voiceId, g, this.e.now() + 0.04);
+    });
+  }
+
   pump(until: number): void {
-    if (!this.on || !this.group) return;
-    const step = 60 / BPM;
+    if (!this.on || !this.group || !this.instrumental) return;
+    const step = 60 / this.inst.bpm;
     const now = this.e.now();
     if (this.next < now - 0.05) this.next = now + 0.05;
     let n = 0;
@@ -179,93 +291,10 @@ export class ChantRadio {
   private doBeat(t: number, b: number): void {
     const e = this.e;
     const g = this.group!;
-    const idx = b % 4;
-    const phrase = Math.floor(b / 4);
-    const def = this.def;
-    // mõ giữ nhịp
-    e.synth('mo', t, (idx === 0 ? 0.95 : 0.7) * def.moLoud * (0.92 + this.rnd() * 0.16), 1, g.out);
-    // chuông nhỏ đầu mỗi 4 vòng
-    if (def.bells && b % 16 === 0) e.synth('bell', t, 0.32 * (def.layers.length ? 1 : 2.2), 0.75, g.out);
-    if (!def.layers.length && b % 8 === 4) e.synth('chime', t + 0.05, 0.9, 0.9, g.out);
-    if (!def.layers.length) return;
-    const semis = PATTERNS[phrase % PATTERNS.length][idx];
-    for (const l of this.layers) this.syllable(l, SYLS[idx], semis, t + l.jitter * (0.4 + this.rnd()), 60 / BPM, g);
-  }
-
-  private syllable(l: Layer, syl: Syl, semis: number, t: number, step: number, g: Group): void {
-    const e = this.e;
-    const ctx = e.ctx;
-    const v = new Voice(e, g.out, { send: 0, pan: l.pan });
-    const dur = step * syl.frac;
-    const target = l.base + semis;
-    const f1 = midiToHz(target) * cents(l.det);
-    const f0 = midiToHz(l.prev) * cents(l.det);
-    l.prev = target;
-    const env = ctx.createGain();
-    const peak = l.g * 0.9;
-    env.gain.setValueAtTime(0, t);
-    env.gain.linearRampToValueAtTime(peak, t + 0.07);
-    env.gain.linearRampToValueAtTime(peak * 0.78, t + dur * 0.7);
-    const relStart = t + dur - (syl.stop ? 0.03 : 0.14);
-    env.gain.setValueAtTime(peak * 0.78, relStart);
-    env.gain.setTargetAtTime(0, relStart, syl.stop ? 0.012 : 0.05);
-    env.connect(v.out);
-
-    const src = ctx.createOscillator();
-    src.type = 'sawtooth';
-    src.frequency.setValueAtTime(f0, t);
-    src.frequency.setTargetAtTime(f1, t + 0.01, 0.035);
-    // rung giọng, vào chậm
-    const vib = ctx.createOscillator();
-    vib.frequency.value = 5.1 + this.rnd() * 0.8;
-    const vg = ctx.createGain();
-    vg.gain.setValueAtTime(0, t);
-    vg.gain.linearRampToValueAtTime(f1 * l.vib, t + dur * 0.6);
-    vib.connect(vg);
-    vg.connect(src.frequency);
-    const pre = ctx.createBiquadFilter();
-    pre.type = 'lowpass';
-    pre.frequency.value = 3600;
-    pre.Q.value = 0.5;
-    src.connect(pre);
-    const fm = FORMANTS[syl.vowel];
-    for (let k = 0; k < 3; k++) {
-      const bp = ctx.createBiquadFilter();
-      bp.type = 'bandpass';
-      const fc = fm[k] * l.fs;
-      bp.frequency.value = fc;
-      bp.Q.value = fc / (F_BW[k] * l.bwScale);
-      const fg = ctx.createGain();
-      fg.gain.value = F_GAIN[k] * 1.1;
-      pre.connect(bp);
-      bp.connect(fg);
-      fg.connect(env);
-    }
-    // hơi thở nhẹ qua formant 2
-    const end = t + dur + 0.5;
-    v.track(src);
-    v.track(vib);
-    src.start(t);
-    vib.start(t);
-    src.stop(end);
-    vib.stop(end);
-    if (syl.onset === 'ph') v.noise(t - 0.045, 0.05 * l.g, { type: 'highpass', freq: 3600, q: 0.7, attack: 0.012, tau: 0.03 });
-    if (syl.onset === 'd') v.noise(t, 0.015 * l.g, { type: 'bandpass', freq: 900, q: 1, attack: 0.004, tau: 0.015 });
-    if (syl.stop) v.noise(t + dur - 0.01, 0.04 * l.g, { type: 'bandpass', freq: 3800, q: 1.5, attack: 0.001, tau: 0.01 });
-    // hơi thở
-    const br = loopNoise(e, 'white');
-    const bbp = ctx.createBiquadFilter();
-    bbp.type = 'bandpass';
-    bbp.frequency.value = fm[1] * l.fs;
-    bbp.Q.value = 2;
-    const bg = ctx.createGain();
-    bg.gain.value = 0.045;
-    br.connect(bbp);
-    bbp.connect(bg);
-    bg.connect(env);
-    v.track(br);
-    br.start(t, this.rnd() * 2);
-    br.stop(end);
+    const p = this.inst;
+    // Tiếng gõ mõ đều đặn, mộc mạc, ổn định như gõ mõ tụng kinh / thiền định thực tế
+    e.synth('mo', t, p.moVol * (0.95 + this.rnd() * 0.07), p.moPitch, g.out);
+    if (b % 24 === 0) e.synth('bell', t, 0.48, p.bellPitch, g.out);
   }
 
   dispose(): void {

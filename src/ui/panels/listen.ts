@@ -1,11 +1,20 @@
 /**
- * Panel "Nghe niệm Phật" (hộp thoại): chọn giọng, phát/dừng radio niệm Phật tổng hợp,
+ * Panel "Nghe niệm Phật" (hộp thoại): chọn giọng niệm Phật thực tế hoặc tiếng gõ mõ tĩnh tâm,
  * đồng hồ thời gian nghe (ghi `listenSeconds` mỗi 30 giây và xả phần lẻ khi dừng).
  */
 import type { AppContext, PanelDef } from '@/core/contracts';
 import { save } from '@/core/store';
 import { CHANT_VOICES } from '@/audio/voices';
-import { defaultChantVoice, getChantRadioStartedAt, getChantRadioVoice, isChantRadioOn, onChantRadioChange, startChantRadio, stopChantRadio } from '@/ui/chant-radio';
+import {
+  defaultChantVoice,
+  getChantRadioStartedAt,
+  getChantRadioVoice,
+  isChantRadioOn,
+  onChantRadioChange,
+  startChantRadio,
+  stopChantRadio,
+  syncRemoteChantVoices,
+} from '@/ui/chant-radio';
 import { icon } from '@/ui/icons';
 import { createScope, dialogHead, h, haptic, liveRegion } from './practice-kit';
 
@@ -16,9 +25,9 @@ export const panel: PanelDef = {
   mount(root: HTMLElement, ctx: AppContext) {
     const scope = createScope();
     const live = liveRegion();
-    const voices = Array.isArray(CHANT_VOICES) ? CHANT_VOICES : [];
+    const getVoices = () => (Array.isArray(CHANT_VOICES) ? CHANT_VOICES : []);
     let voice = isChantRadioOn() ? getChantRadioVoice() : defaultChantVoice();
-    if (!voices.some((v) => v.id === voice)) voice = voices[0]?.id ?? '';
+    if (!getVoices().some((v) => v.id === voice)) voice = getVoices()[0]?.id ?? '';
 
     const playBtn = h('button', { type: 'button', class: 'listen-play', onclick: toggle });
     const status = h('div', { class: 'listen-status', 'aria-live': 'polite' });
@@ -26,11 +35,13 @@ export const panel: PanelDef = {
     const eq = h('span', { class: 'listen-eq', 'aria-hidden': 'true' }, [h('i'), h('i'), h('i'), h('i'), h('i')]);
     const list = h('div', { class: 'listen-voices', role: 'radiogroup', 'aria-label': 'Chọn giọng niệm' });
 
-    const vName = (): string => voices.find((v) => v.id === voice)?.name ?? 'Giọng niệm';
+    const vName = (): string => getVoices().find((v) => v.id === voice)?.name ?? 'Giọng niệm';
 
     function paint(): void {
+      const voices = getVoices();
       const on = isChantRadioOn();
       if (on && getChantRadioVoice()) voice = getChantRadioVoice();
+      if (!voices.some((v) => v.id === voice)) voice = voices[0]?.id ?? '';
       root.querySelector('.listen-hero')?.classList.toggle('is-on', on);
       playBtn.setAttribute('aria-pressed', String(on));
       playBtn.setAttribute('aria-label', on ? 'Dừng nghe niệm Phật' : 'Phát niệm Phật');
@@ -46,7 +57,7 @@ export const panel: PanelDef = {
       ])));
     }
     function paintClock(): void {
-      if (!isChantRadioOn()) { clock.textContent = 'Nghe nhẹ nhàng khi bạn đi dạo, làm việc hay ngồi thiền.'; return; }
+      if (!isChantRadioOn()) { clock.textContent = 'Nghe nhẹ nhàng khi bạn đi dạo trong chùa, làm việc hay ngồi thiền.'; return; }
       const m = Math.floor((Date.now() - getChantRadioStartedAt()) / 60_000);
       clock.textContent = m < 1 ? 'Vừa bắt đầu nghe' : `Đã nghe ${m} phút`;
     }
@@ -58,7 +69,7 @@ export const panel: PanelDef = {
       paint();
     }
     function toggle(): void {
-      if (!voices.length) { ctx.toast('Chưa tải được giọng niệm. Bạn thử lại sau nhé.', { kind: 'warn' }); return; }
+      if (!getVoices().length) { ctx.toast('Chưa tải được giọng niệm. Bạn thử lại sau nhé.', { kind: 'warn' }); return; }
       if (isChantRadioOn()) { stopChantRadio(); live.textContent = 'Đã dừng nghe niệm Phật'; }
       else { startChantRadio(ctx, voice); live.textContent = `Đang phát ${vName()}`; }
       haptic(10);
@@ -66,15 +77,16 @@ export const panel: PanelDef = {
     }
 
     root.append(h('div', { class: 'pk-dialog listen-dialog' }, [
-      dialogHead('Nghe niệm Phật', () => ctx.closePanel(), 'Tiếng niệm Phật tổng hợp, êm dịu — đóng hộp thoại vẫn nghe tiếp.'),
+      dialogHead('Nghe niệm Phật', () => ctx.closePanel(), 'Giọng niệm Phật trầm ấm, trang nghiêm — đóng hộp thoại vẫn nghe tiếp.'),
       h('div', { class: 'listen-hero' }, [h('div', { class: 'listen-halo', 'aria-hidden': 'true' }), playBtn]),
       status,
       clock,
-      h('h3', { class: 'pk-label', text: 'Giọng niệm' }),
+      h('h3', { class: 'pk-label', text: 'Giọng niệm & chuông mõ' }),
       list,
       live,
     ]));
     paint();
+    void syncRemoteChantVoices(ctx);
     const offRadio = onChantRadioChange(() => paint());
     scope.interval(paintClock, 5000);
     return () => { offRadio(); scope.dispose(); };

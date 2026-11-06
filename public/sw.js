@@ -2,7 +2,7 @@
 // - Cache-first cho /assets/* và /icons/*
 // - Network-first cho điều hướng HTML (rơi về cache hoặc /offline.html khi mất mạng)
 // - Không bao giờ lưu /api/* hoặc /ws
-const CACHE_NAME = 'chua-ran-v3';
+const CACHE_NAME = 'chua-ran-v6';
 const PRECACHE = ['/offline.html', '/favicon.svg', '/manifest.webmanifest'];
 
 self.addEventListener('install', (event) => {
@@ -30,6 +30,8 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
   if (url.pathname.startsWith('/api/') || url.pathname === '/ws') return;
+  // Không chặn luồng phát âm thanh hoặc yêu cầu Range (tránh lỗi 206 trên Safari/iOS).
+  if (req.headers.has('range') || url.pathname.startsWith('/music/') || url.pathname.startsWith('/chant/')) return;
 
   // Tài sản tĩnh có hash hoặc biểu tượng: ưu tiên bộ nhớ đệm.
   if (url.pathname.startsWith('/assets/') || url.pathname.startsWith('/icons/')) {

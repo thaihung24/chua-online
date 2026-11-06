@@ -34,20 +34,27 @@ export interface BuildSeoResult {
 const LOTUS_LOGO_SVG = `<svg viewBox="0 0 128 128" width="34" height="34" aria-hidden="true" focusable="false">
   <defs>
     <linearGradient id="seoGold" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#fff0c2"/>
-      <stop offset="52%" stop-color="#e5b861"/>
-      <stop offset="100%" stop-color="#b67d2b"/>
+      <stop offset="0%" stop-color="#fff4cf"/>
+      <stop offset="50%" stop-color="#e8bd63"/>
+      <stop offset="100%" stop-color="#ae721e"/>
+    </linearGradient>
+    <linearGradient id="seoJade" x1="18%" y1="12%" x2="82%" y2="92%">
+      <stop offset="0%" stop-color="#b8f7d6"/>
+      <stop offset="42%" stop-color="#4ec695"/>
+      <stop offset="100%" stop-color="#176145"/>
     </linearGradient>
   </defs>
-  <circle cx="64" cy="64" r="60" fill="#1d130b" stroke="url(#seoGold)" stroke-width="3" stroke-opacity="0.65"/>
-  <g stroke="url(#seoGold)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="rgba(243,201,115,0.22)">
-    <path d="M58 88 C32 91 15 82 12 65 C27 59 45 66 58 88 Z"/>
-    <path d="M70 88 C96 91 113 82 116 65 C101 59 83 66 70 88 Z"/>
-    <path d="M62 88 C37 85 24 67 30 39 C47 45 58 63 62 88 Z"/>
-    <path d="M66 88 C91 85 104 67 98 39 C81 45 70 63 66 88 Z"/>
-    <path d="M64 20 C80 40 81 64 64 88 C47 64 48 40 64 20 Z" fill="rgba(251,227,162,0.36)"/>
+  <circle cx="64" cy="64" r="60" fill="#1b1109" stroke="url(#seoGold)" stroke-width="3" stroke-opacity="0.72"/>
+  <path d="M17 24.5 C23.5 29 34.5 28 46.5 22.8 C54.5 19.2 59.8 15.6 64 12.2 C68.2 15.6 73.5 19.2 81.5 22.8 C93.5 28 104.5 29 111 24.5 C105.2 31.6 92.8 33 79.5 28.5 C72.2 26 67.6 23.3 64 20.8 C60.4 23.3 55.8 26 48.5 28.5 C35.2 33 22.8 31.6 17 24.5 Z" fill="url(#seoGold)"/>
+  <path d="M58 35.5 C43 36 35.5 46 38.5 58 C40.8 66.5 48.5 70.8 57.5 71.8 C66.5 70.2 71.5 63.8 71 53.8 C70.5 43.5 65.8 35.2 58 35.5 Z" fill="rgba(92,201,155,0.45)" stroke="url(#seoGold)" stroke-width="2.2"/>
+  <path d="M62 47 C56.5 47.8 53.8 52 55.8 57 C58.2 62.8 68.5 64.5 76.5 68.5 C85.5 73 88.2 80.2 83.2 86.8 C78.2 93.2 65.2 95.5 50 93.5 C39.5 92.1 31.8 87.6 28.8 80.5 C33.8 84.8 42 87.5 52 87.2 C63.8 86.8 72.5 83.8 74 79.4 C75.4 75 70.2 71.8 60.5 68.2 C49.2 64 43.8 57.8 45.2 49 C46.5 40.6 53.8 35.5 63.5 35.5 C71.5 35.5 78.8 38.6 82.2 43 C83.5 44.6 82.8 46.6 80.2 47.2 C75.5 48.2 68.5 46.2 62 47 Z" fill="url(#seoJade)" stroke="url(#seoGold)" stroke-width="2.2" stroke-linejoin="round"/>
+  <circle cx="90" cy="46" r="3.4" fill="#fff4cf"/>
+  <g stroke="url(#seoGold)" stroke-width="2.4" stroke-linejoin="round" fill="rgba(243,201,115,0.34)">
+    <path d="M55 102 C32 103 17 95 14 82 C28 78 43 84 55 102 Z"/>
+    <path d="M73 102 C96 103 111 95 114 82 C100 78 85 84 73 102 Z"/>
+    <path d="M64 70 C74.5 81 74.5 92 64 102.5 C53.5 92 53.5 81 64 70 Z" fill="rgba(251,227,162,0.52)"/>
   </g>
-  <path d="M32 97 Q64 106 96 97" fill="none" stroke="url(#seoGold)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M33 109 Q64 116 95 109" fill="none" stroke="url(#seoGold)" stroke-width="2.8" stroke-linecap="round"/>
 </svg>`;
 
 function esc(s: string): string {
@@ -249,6 +256,7 @@ function renderLayout(opts: LayoutOpts): string {
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="${esc(canonical)}" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
 
